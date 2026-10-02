@@ -1,0 +1,357 @@
+\documentclass[a4paper, 10pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage[margin=1.6cm, top=2cm, bottom=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+% --- Definizione Palette Colori ---
+\definecolor{primary}{RGB}{15, 45, 90}
+\definecolor{secondary}{RGB}{0, 102, 178}
+\definecolor{accent}{RGB}{200, 50, 50}
+\definecolor{boxbg}{RGB}{245, 248, 252}
+\definecolor{boxborder}{RGB}{180, 205, 235}
+\definecolor{warnbg}{RGB}{255, 248, 240}
+\definecolor{warnborder}{RGB}{240, 160, 80}
+
+% --- Configurazione Hyperref ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=secondary,
+    urlcolor=secondary,
+    pdftitle={Compendio di Calcolo delle Probabilita e Statistica - Formulario d'Esame},
+    pdfauthor={CPS - Federico II}
+}
+
+% --- Configurazione Intestazione e Piè di Pagina ---
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\small \textbf{Calcolo delle Probabilità e Statistica} -- Formulario d'Esame}
+\rhead{\small Università degli Studi di Napoli Federico II}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+
+% --- Formattazione Sezioni ---
+\titleformat{\section}{\Large\bfseries\color{primary}}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{secondary}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{primary}}{\thesubsubsection}{1em}{}
+
+% --- Riquadro Personalizzato ---
+\newcommand{\formulaBox}[2]{
+    \begin{center}
+    \fcolorbox{boxborder}{boxbg}{
+        \begin{minipage}{0.96\textwidth}
+            \textbf{\color{primary}#1}\\[1mm]
+            #2
+        \end{minipage}
+    }
+    \end{center}
+}
+
+\newcommand{\warnBox}[2]{
+    \begin{center}
+    \fcolorbox{warnborder}{warnbg}{
+        \begin{minipage}{0.96\textwidth}
+            \textbf{\color{accent}#1}\\[1mm]
+            #2
+        \end{minipage}
+    }
+    \end{center}
+}
+
+\begin{document}
+
+% --- Intestazione Documento ---
+\begin{center}
+    {\huge \textbf{\color{primary}Compendio di Calcolo delle Probabilità e Statistica}}\\[2mm]
+    {\Large \textbf{\color{secondary}Formulario Ragionato, Condizioni di Applicabilità e Prontuario d'Esame}}\\[1.5mm]
+    {\normalsize Università degli Studi di Napoli Federico II --- Corso di Laurea in Ingegneria Informatica / ICT}\\[1mm]
+    {\small \textit{Dalle basi fino alla Sezione 5.1.9 (fino a p. 93/99 di main.pdf) e Prontuario Stile Mattera}}
+\end{center}
+
+\vspace{-2mm}
+\hrule height 1pt
+\vspace{3mm}
+
+\tableofcontents
+\vspace{4mm}
+\hrule
+\vspace{4mm}
+
+% =========================================================================
+\section{Parte I: Fondamenti di Probabilità e Calcolo Combinatorio}
+% =========================================================================
+
+\subsection{Assiomi di Kolmogorov e Proprietà Fondamentali}
+Sia $\Omega$ lo spazio campionario e $\mathcal{F}$ la $\sigma$-algebra degli eventi. La misura di probabilità $\mathbb{P}: \mathcal{F} \to [0, 1]$ soddisfa:
+\begin{enumerate}
+    \item \textbf{Non-negatività:} $\mathbb{P}(A) \ge 0, \quad \forall A \in \mathcal{F}$
+    \item \textbf{Normalizzazione:} $\mathbb{P}(\Omega) = 1$
+    \item \textbf{Additività numerabile:} Se $A_1, A_2, \dots$ sono mutuamente disgiunti ($A_i \cap A_j = \emptyset$ per $i \neq j$), allora:
+    \[ \mathbb{P}\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} \mathbb{P}(A_i) \]
+\end{enumerate}
+
+\formulaBox{Proprietà Derivate Essenziali}{
+\begin{itemize}
+    \item \textbf{Evento complementare:} $\mathbb{P}(A^c) = 1 - \mathbb{P}(A)$ \qquad \textbf{Evento impossibile:} $\mathbb{P}(\emptyset) = 0$
+    \item \textbf{Monotonia:} $A \subseteq B \implies \mathbb{P}(A) \le \mathbb{P}(B)$
+    \item \textbf{Differenza di eventi:} $\mathbb{P}(A \setminus B) = \mathbb{P}(A) - \mathbb{P}(A \cap B)$
+    \item \textbf{Inclusione-Esclusione (Unione di due eventi):}
+    \[ \mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B) \]
+\end{itemize}
+}
+
+\subsection{Calcolo Combinatorio per Spazi Equiprobabili}
+In uno spazio finito equiprobabile: $\mathbb{P}(A) = \frac{|A|}{|\Omega|} = \frac{\text{casi favorevoli}}{\text{casi possibili}}$.
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Tipologia} & \textbf{L'ordine conta?} & \textbf{Con ripetizione?} & \textbf{Formula} \\
+\midrule
+Disposizioni semplici & Sì & No & $D_{n, k} = \frac{n!}{(n-k)!}$ \\
+Disposizioni con ripetizione & Sì & Sì & $D'_{n, k} = n^k$ \\
+Permutazioni semplici & Sì ($k=n$) & No & $P_n = n!$ \\
+Permutazioni con ripetizione & Sì & Sì & $P_n^{n_1, \dots, n_r} = \frac{n!}{n_1! n_2! \cdots n_r!}$ \\
+Combinazioni semplici & No & No & $C_{n, k} = \binom{n}{k} = \frac{n!}{k!(n-k)!}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Probabilità Condizionata, Fattorizzazione e Teorema di Bayes}
+\formulaBox{Regole Fondamentali di Probabilità Condizionata}{
+\begin{itemize}
+    \item \textbf{Definizione:} $\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}$, con $\mathbb{P}(B) > 0$.
+    \item \textbf{Regola della Catena (Fattorizzazione):} $\mathbb{P}(A \cap B) = \mathbb{P}(A \mid B)\mathbb{P}(B) = \mathbb{P}(B \mid A)\mathbb{P}(A)$.
+    \item \textbf{Legge della Probabilità Totale:} Sia $\{E_1, \dots, E_M\}$ una partizione di $\Omega$ ($\bigcup E_m = \Omega$, $E_i \cap E_j = \emptyset$):
+    \[ \mathbb{P}(A) = \sum_{m=1}^M \mathbb{P}(A \mid E_m)\mathbb{P}(E_m) \]
+    \item \textbf{Teorema di Bayes (Probabilità a Posteriori):}
+    \[ \mathbb{P}(E_k \mid A) = \frac{\mathbb{P}(A \mid E_k)\mathbb{P}(E_k)}{\mathbb{P}(A)} = \frac{\mathbb{P}(A \mid E_k)\mathbb{P}(E_k)}{\sum_{m=1}^M \mathbb{P}(A \mid E_m)\mathbb{P}(E_m)} \]
+\end{itemize}
+}
+
+\subsection{Indipendenza Stocastica tra Eventi}
+Due eventi $A$ e $B$ sono indipendenti se e solo se:
+\[ \mathbb{P}(A \cap B) = \mathbb{P}(A)\mathbb{P}(B) \iff \mathbb{P}(A \mid B) = \mathbb{P}(A) \quad (\text{se } \mathbb{P}(B) > 0) \]
+\textit{Attenzione:} Eventi disgiunti con probabilità non nulla non sono \textbf{mai} indipendenti, poiché $\mathbb{P}(A \cap B) = 0 \neq \mathbb{P}(A)\mathbb{P}(B)$.
+
+% =========================================================================
+\section{Parte II: Variabili Aleatorie Discrete}
+% =========================================================================
+
+Una variabile aleatoria discreta $X$ assume valori in un insieme finito o numerabile $\mathcal{X} = \{x_1, x_2, \dots\}$.
+
+\subsection{PMF, CDF e Momenti Discreti}
+\begin{itemize}
+    \item \textbf{Probability Mass Function (PMF):} $p_X(x) = \mathbb{P}(X = x)$ con $p_X(x) \ge 0$ e $\sum_{x \in \mathcal{X}} p_X(x) = 1$.
+    \item \textbf{Cumulative Distribution Function (CDF):} $F_X(x) = \mathbb{P}(X \le x) = \sum_{x_i \le x} p_X(x_i)$. È monotona crescente, a gradini, continua a destra.
+    \item \textbf{Valore Atteso (Media):} $\mathbb{E}[X] = \sum_{x \in \mathcal{X}} x \, p_X(x)$. Proprietà: $\mathbb{E}[aX + b] = a\mathbb{E}[X] + b$.
+    \item \textbf{LOTUS Discreto (Teorema del Valore Atteso):} Per $Y = g(X)$:
+    \[ \mathbb{E}[g(X)] = \sum_{x \in \mathcal{X}} g(x) \, p_X(x) \]
+\end{itemize}
+
+\subsection{Distribuzioni Notevoli Discrete}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Distribuzione} & \textbf{Alfabeto $\mathcal{X}$} & \textbf{PMF $p_X(k)$} & $\mathbb{E}[X]$ & $\operatorname{Var}(X)$ \\
+\midrule
+\textbf{Bernoulli} $\text{Ber}(p)$ & $\{0, 1\}$ & $p^k (1-p)^{1-k}$ & $p$ & $p(1-p)$ \\
+\textbf{Binomiale} $\text{Bin}(n, p)$ & $\{0, 1, \dots, n\}$ & $\binom{n}{k} p^k (1-p)^{n-k}$ & $np$ & $np(1-p)$ \\
+\textbf{Geometrica} $\text{Geom}(p)$ & $\{1, 2, 3, \dots\}$ & $(1-p)^{k-1} p$ & $\frac{1}{p}$ & $\frac{1-p}{p^2}$ \\
+\textbf{Poisson} $\text{Pois}(\lambda)$ & $\{0, 1, 2, \dots\}$ & $\frac{\lambda^k}{k!} e^{-\lambda}$ & $\lambda$ & $\lambda$ \\
+\textbf{Uniforme Discreta} & $\{1, \dots, M\}$ & $\frac{1}{M}$ & $\frac{M+1}{2}$ & $\frac{M^2 - 1}{12}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\formulaBox{Assenza di Memoria della Variabile Geometrica}{
+La variabile geometrica modella il numero di prove fino al primo successo:
+\[ \mathbb{P}(X > n + k \mid X > n) = \mathbb{P}(X > k) = (1-p)^k \]
+}
+
+\formulaBox{Tipico Quesito d'Esame Stile Mattera su Serie di Poisson}{
+Data la PMF $P(X=k) = A \frac{c^k}{k!}$ per $k \in \mathbb{N}_0$, per calcolare la costante $A$:
+\[ \sum_{k=0}^\infty P(X=k) = 1 \implies A \sum_{k=0}^\infty \frac{c^k}{k!} = A e^c = 1 \implies A = e^{-c} \]
+}
+
+% =========================================================================
+\section{Parte III: Momenti, Disuguaglianze e Variabili Multiple Discrete}
+% =========================================================================
+
+\subsection{Varianza, Deviazione Standard e Proprietà}
+\begin{itemize}
+    \item \textbf{Definizione di Varianza:} $\operatorname{Var}(X) = \sigma_X^2 = \mathbb{E}[(X - \mathbb{E}[X])^2] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$.
+    \item \textbf{Deviazione Standard:} $\sigma_X = \sqrt{\operatorname{Var}(X)}$.
+    \item \textbf{Proprietà di Scala:} $\operatorname{Var}(aX + b) = a^2 \operatorname{Var}(X), \quad \sigma_{aX + b} = |a| \sigma_X$.
+\end{itemize}
+
+\subsection{Disuguaglianze Fondamentali}
+\formulaBox{Disuguaglianze di Markov e Chebyshev}{
+\begin{itemize}
+    \item \textbf{Markov:} Sia $X$ una variabile aleatoria non negativa ($X \ge 0$), allora $\forall a > 0$:
+    \[ \mathbb{P}(X \ge a) \le \frac{\mathbb{E}[X]}{a} \]
+    \item \textbf{Chebyshev:} Per qualsiasi variabile $X$ con media $\mu$ e varianza finita $\sigma^2$, $\forall \epsilon > 0$:
+    \[ \mathbb{P}(|X - \mu| \ge \epsilon) \le \frac{\sigma^2}{\epsilon^2} \iff \mathbb{P}(|X - \mu| < \epsilon) \ge 1 - \frac{\sigma^2}{\epsilon^2} \]
+\end{itemize}
+}
+
+\subsection{Variabili Multiple Discrete e Tabelle Congiunte}
+\begin{itemize}
+    \item \textbf{PMF Congiunta:} $p_{X, Y}(x, y) = \mathbb{P}(X = x, Y = y)$, con $\sum_x \sum_y p_{X, Y}(x, y) = 1$.
+    \item \textbf{PMF Marginali:} $p_X(x) = \sum_{y} p_{X, Y}(x, y)$ (somma per riga), \quad $p_Y(y) = \sum_{x} p_{X, Y}(x, y)$ (somma per colonna).
+    \item \textbf{Indipendenza Stocastica:} $X \perp Y \iff p_{X, Y}(x, y) = p_X(x) \cdot p_Y(y), \quad \forall (x, y) \in \mathcal{X} \times \mathcal{Y}$.
+    \item \textbf{Covarianza:} $\operatorname{Cov}(X, Y) = \mathbb{E}[(X - \mu_X)(Y - \mu_Y)] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]$.
+    \item \textbf{Varianza della Somma:}
+    \[ \operatorname{Var}(aX + bY) = a^2 \operatorname{Var}(X) + b^2 \operatorname{Var}(Y) + 2ab\operatorname{Cov}(X, Y) \]
+    Se $X$ e $Y$ sono incorrelate ($\operatorname{Cov}(X, Y) = 0$), allora $\operatorname{Var}(X+Y) = \operatorname{Var}(X) + \operatorname{Var}(Y)$.
+    \item \textbf{Coefficiente di Correlazione di Pearson:}
+    \[ \rho_{XY} = \frac{\operatorname{Cov}(X, Y)}{\sigma_X \sigma_Y}, \qquad -1 \le \rho_{XY} \le 1 \]
+\end{itemize}
+
+% =========================================================================
+\section{Parte IV: Dal Discreto al Continuo (fino a Sez. 5.1.9)}
+% =========================================================================
+
+\subsection{Passaggio al Continuo e Densità di Probabilità (PDF)}
+\warnBox{Regola Aurea delle Variabili Continue}{
+Per qualsiasi variabile aleatoria continua $X$ e qualsiasi punto fissato $x_0 \in \mathbb{R}$:
+\[ \mathbb{P}(X = x_0) = 0 \implies \mathbb{P}(a \le X \le b) = \mathbb{P}(a < X \le b) = \mathbb{P}(a \le X < b) = \mathbb{P}(a < X < b) \]
+Non calcolare mai probabilità puntuali sostituendo il valore nella PDF!
+}
+
+La Funzione di Densità di Probabilità (PDF) $f_X(x)$ soddisfa:
+\begin{enumerate}
+    \item \textbf{Non-negatività:} $f_X(x) \ge 0, \quad \forall x \in \mathbb{R}$
+    \item \textbf{Condizione di Normalizzazione:} $\int_{-\infty}^{+\infty} f_X(x)\,dx = 1$
+    \item \textbf{Calcolo di probabilità su intervalli:} $\mathbb{P}(a \le X \le b) = \int_a^b f_X(x)\,dx$
+\end{enumerate}
+
+\subsection{Cumulative Distribution Function (CDF) Continua}
+\begin{itemize}
+    \item \textbf{Definizione:} $F_X(x) = \mathbb{P}(X \le x) = \int_{-\infty}^x f_X(t)\,dt$.
+    \item \textbf{Legame Fondamentale:} $f_X(x) = \frac{d}{dx} F_X(x)$ nei punti di continuità.
+    \item \textbf{Probabilità tramite CDF:} $\mathbb{P}(a < X \le b) = F_X(b) - F_X(a)$.
+    \item \textbf{Funzione di Sopravvivenza (CCDF):} $F_X^c(x) = \mathbb{P}(X > x) = 1 - F_X(x) = \int_x^{+\infty} f_X(t)\,dt$.
+\end{itemize}
+
+\subsection{Momenti per Variabili Continue}
+\begin{itemize}
+    \item \textbf{Valore Atteso:} $\mathbb{E}[X] = \int_{-\infty}^{+\infty} x f_X(x)\,dx$.
+    \item \textbf{LOTUS Continuo:} $\mathbb{E}[g(X)] = \int_{-\infty}^{+\infty} g(x) f_X(x)\,dx$.
+    \item \textbf{Momento Secondo e Varianza:} $\mathbb{E}[X^2] = \int_{-\infty}^{+\infty} x^2 f_X(x)\,dx, \quad \operatorname{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$.
+\end{itemize}
+
+\subsection{Trasformazione di Variabili Aleatorie Continue ($Y = g(X)$)}
+\formulaBox{Teorema Fondamentale di Trasformazione (Funzione Monotona)}{
+Sia $X$ con PDF $f_X(x)$ e sia $Y = g(X)$ con $g$ derivabile e strettamente monotona invertibile ($x = g^{-1}(y)$). Allora la PDF di $Y$ è:
+\[ f_Y(y) = f_X(g^{-1}(y)) \cdot \left| \frac{d}{dy} g^{-1}(y) \right| \]
+\textbf{Attenzione:} Ricordarsi sempre il \underline{valore assoluto} sulla derivata e determinare il nuovo supporto di $Y$!
+}
+
+\subsection{Distribuzioni Notevoli Continue}
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Distribuzione} & \textbf{Supporto} & \textbf{PDF $f_X(x)$} & $\mathbb{E}[X]$ & $\operatorname{Var}(X)$ \\
+\midrule
+\textbf{Uniforme} $\mathcal{U}[a, b]$ & $[a, b]$ & $\frac{1}{b-a}$ & $\frac{a+b}{2}$ & $\frac{(b-a)^2}{12}$ \\
+\textbf{Esponenziale} $\text{Exp}(\lambda)$ & $[0, +\infty)$ & $\lambda e^{-\lambda x} u(x)$ & $\frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$ \\
+\textbf{Gaussiana} $\mathcal{N}(\mu, \sigma^2)$ & $(-\infty, +\infty)$ & $\frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ & $\mu$ & $\sigma^2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\formulaBox{Standardizzazione Gaussiana e Funzione $Q(x)$}{
+Data $X \sim \mathcal{N}(\mu, \sigma^2)$, si definisce la variabile standardizzata $Z = \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1)$.
+\[ \mathbb{P}(X > x) = Q\left(\frac{x - \mu}{\sigma}\right), \qquad \mathbb{P}(X \le x) = 1 - Q\left(\frac{x - \mu}{\sigma}\right) = \Phi\left(\frac{x - \mu}{\sigma}\right) \]
+Proprietà di simmetria: $Q(-x) = 1 - Q(x)$.\\
+\textbf{Valori notevoli della funzione $Q(x)$}:
+$Q(0) = 0.5, \quad Q(1) \approx 0.1587, \quad Q(2) \approx 0.0228, \quad Q(3) \approx 0.0013$.
+}
+
+% =========================================================================
+\section{Parte V: Prontuario Operativo d'Esame ``Stile Mattera''}
+% =========================================================================
+
+\warnBox{Vincolo per la Sufficienza}{
+Ai fini del superamento dell'esame scritto, è \textbf{strettamente necessario} lo svolgimento corretto dell'\textbf{Esercizio 1} e del punto \textbf{a} dell'\textbf{Esercizio 2}.
+}
+
+\subsection{Esercizio 1: Risoluzione Guidata (Variabili Discrete)}
+Dati gli alfabeti $X \in \{0, 1\}$, $Y \in \{0, 2\}$ e le probabilità congiunte fornite nel testo:
+\begin{enumerate}
+    \item \textbf{PMF Marginali:} Costruire la tabella a doppia entrata. Sommare gli elementi per riga per ottenere $p_X(x)$ e per colonna per $p_Y(y)$. Verificare che $\sum p_X = 1$ e $\sum p_Y = 1$.
+    \item \textbf{PMF della Somma $T = X + Y$:}
+    \begin{itemize}
+        \item Individuare tutte le coppie $(x, y)$ con probabilità congiunta non nulla.
+        \item Calcolare $t = x + y$ per ciascuna coppia e raggruppare i valori uguali sommando le probabilità:
+        \[ p_T(t) = \sum_{(x, y): x+y=t} p_{X, Y}(x, y) \]
+    \end{itemize}
+    \item \textbf{PMF Condizionata (es. dato $X \cdot Y = 0$ oppure $X \cdot Y < 3$):}
+    \begin{itemize}
+        \item Calcolare la probabilità dell'evento condizionante $C$: $\mathbb{P}(C) = \sum_{(x,y) \in C} p_{X,Y}(x, y)$.
+        \item Per ogni valore $t$ assunto da $T$, calcolare:
+        \[ p_{T \mid C}(t) = \frac{\mathbb{P}(\{T = t\} \cap C)}{\mathbb{P}(C)} \]
+    \end{itemize}
+    \item \textbf{Verifica Indipendenza ed Entropia:}
+    \begin{itemize}
+        \item Calcolare $p_X(x) \cdot p_Y(y)$. Se esiste anche una sola cella $(x_0, y_0)$ in cui $p_{X, Y}(x_0, y_0) \neq p_X(x_0)p_Y(y_0)$, concludere formalmente che le variabili \textbf{non sono indipendenti}.
+        \item Entropia di Shannon: $H(X) = - \sum_x p_X(x) \log_2 p_X(x)$.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Esercizio 2: Risoluzione Guidata (Variabili Continue e Decisione)}
+Data la densità tipica $f_X(x) = A x e^{-x^2} u(x)$:
+\begin{enumerate}
+    \item \textbf{Calcolo della Costante di Normalizzazione $A$:}
+    \[ \int_{-\infty}^{+\infty} f_X(x)\,dx = 1 \implies A \int_0^{+\infty} x e^{-x^2}\,dx = A \left[ -\frac{1}{2} e^{-x^2} \right]_0^{+\infty} = A \left( 0 - \left(-\frac{1}{2}\right) \right) = \frac{A}{2} = 1 \implies \mathbf{A = 2} \]
+    Quindi $f_X(x) = 2x e^{-x^2} u(x)$ (Distribuzione di Rayleigh con parametro $\sigma = 1/\sqrt{2}$).
+    
+    \item \textbf{Trasformata $Y = \sqrt{X}$ oppure $Y = \ln(X)$:}
+    \begin{itemize}
+        \item Per $Y = \sqrt{X} \implies x = y^2$ con $y \ge 0$. La derivata dell'inversa è $\frac{dx}{dy} = 2y$.
+        \[ f_Y(y) = f_X(y^2) \cdot |2y| = 2(y^2) e^{-(y^2)^2} \cdot 2y = 4 y^3 e^{-y^4} u(y) \]
+        \item Per $Y = \ln(X) \implies x = e^y$ con $y \in (-\infty, +\infty)$. La derivata è $\frac{dx}{dy} = e^y$.
+        \[ f_Y(y) = f_X(e^y) \cdot e^y = 2e^y e^{-(e^y)^2} \cdot e^y = 2e^{2y} e^{-e^{2y}} \]
+    \end{itemize}
+
+    \item \textbf{Moda e Mediana di $Y$:}
+    \begin{itemize}
+        \item \textbf{Moda ($m_o$):} Punto di massimo di $f_Y(y)$. Si pone $\frac{d}{dy} f_Y(y) = 0$.
+        Ad esempio, per $f_Y(y) = 4y^3 e^{-y^4}$:
+        \[ \frac{d}{dy}(4y^3 e^{-y^4}) = 12y^2 e^{-y^4} - 16y^6 e^{-y^4} = 4y^2 e^{-y^4}(3 - 4y^4) = 0 \implies y^4 = \frac{3}{4} \implies m_o = \left(\frac{3}{4}\right)^{1/4} \]
+        \item \textbf{Mediana ($m_e$):} Valore tale che $\int_{-\infty}^{m_e} f_Y(y)\,dy = \frac{1}{2} \iff F_Y(m_e) = \frac{1}{2}$.
+        \[ F_Y(m_e) = \int_0^{m_e} 4y^3 e^{-y^4}\,dy = \left[ -e^{-y^4} \right]_0^{m_e} = 1 - e^{-m_e^4} = \frac{1}{2} \implies e^{-m_e^4} = \frac{1}{2} \implies m_e = (\ln 2)^{1/4} \]
+        Confronto: essendo $\ln 2 \approx 0.6931 < 0.75$, si ha $m_e < m_o$.
+    \end{itemize}
+
+    \item \textbf{Test di Decisione Binaria Ottimo (MAP / ML):}
+    Date le ipotesi $H_1: Z = X \sim f_1(z)$ e $H_2: Z = Y \sim f_2(z)$ con probabilità a priori $P(H_1)$ e $P(H_2)$:
+    \begin{itemize}
+        \item Si formula il \textbf{Rapporto di Verosimiglianza}:
+        \[ \Lambda(z) = \frac{f_{Z \mid H_1}(z)}{f_{Z \mid H_2}(z)} \gtrless_{H_2}^{H_1} \eta = \frac{P(H_2)}{P(H_1)} \]
+        \item Se le ipotesi sono equiprobabili ($P(H_1) = P(H_2) = 1/2$), la soglia è $\eta = 1$ (Criterio ML).
+        \item Sostituire il valore dell'osservazione $z$ assegnato dal compito e decidere $H_1$ se $\Lambda(z) > \eta$, altrimenti $H_2$.
+    \end{itemize}
+\end{enumerate}
+
+% =========================================================================
+\section{Checklist Salva-Esame (Errori Frequenti da Evitare)}
+% =========================================================================
+
+\begin{itemize}
+    \item[$\square$] \textbf{Normalizzazione:} Controlla sempre che la somma delle probabilità marginali e della variabile somma $T$ sia esattamente $1$.
+    \item[$\square$] \textbf{Integrali su semiasse positivo:} Quando nella PDF è presente il gradino $u(x)$, l'integrale va calcolato da $0$ a $+\infty$, non da $-\infty$.
+    \item[$\square$] \textbf{Modulo dello Jacobiano:} Nelle trasformazioni $Y = g(X)$, non dimenticare mai il valore assoluto $\left|\frac{dx}{dy}\right|$.
+    \item[$\square$] \textbf{Probabilità puntuale continua:} Ricorda che $\mathbb{P}(X = k) = 0$ sempre per variabili continue! Se il testo chiede $\mathbb{P}(Y \in \{0, \ln 3\})$, la risposta corretta è $0$.
+    \item[$\square$] \textbf{Indipendenza:} Per verificare che $X$ e $Y$ NON sono indipendenti, basta trovare una singola coppia $(x, y)$ con $p_{X,Y}(x,y) \neq p_X(x)p_Y(y)$.
+\end{itemize}
+
+\end{document}
