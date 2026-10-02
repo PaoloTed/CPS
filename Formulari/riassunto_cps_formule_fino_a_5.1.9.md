@@ -99,132 +99,153 @@ Una variabile aleatoria discreta $X: \Omega \to \mathcal{X}$ assume valori in un
 * **Teorema del Valore Atteso per Trasformazioni (LOTUS discreto):**
   Dato $Y = g(X)$:
   $$\mathbb{E}[g(X)] = \sum_{x \in \mathcal{X}} g(x) \, p_X(x)$$
-  *(Non serve calcolare esplicitamente la PMF di $Y$ per trovarne la media!)*
+  *(Non serve calcolare esplicitamente la PMF di $Y$ per tr### 2.2 Distribuzioni Notevoli Discrete: Guida Completa alla Scelta e Significato Fisico
 
----
+Le distribuzioni notevoli non sono formule da memorizzare passivamente, ma la formalizzazione matematica di precisi **meccanismi fisici di generazione dei dati**. 
 
-### 2.2 Distribuzioni Notevoli Discrete: Guida all'Uso e Significato Fisico
-
-Le distribuzioni notevoli non sono formule astratte, ma la formalizzazione matematica di precisi **meccanismi fisici di generazione dei dati**.
-
-#### Mappa di Scelta Immediata: «Cosa sta misurando la variabile $X$?»
+All'esame, per individuare all'istante quale distribuzione discreta utilizzare, poniti queste **tre domande sequenziali**:
+1. *È una sola prova con esito dicotomico?* $\implies$ **Bernoulli**
+2. *È una serie di prove indipendenti con probabilità costante $p$?*
+   * **Se il numero di prove $n$ è fissato a priori** e conto i successi $\implies$ **Binomiale**
+   * **Se il successo è fissato** (voglio il primo!) e conto quante prove servono $\implies$ **Geometrica**
+3. *Sto contando eventi indipendenti e rari che arrivano in un intervallo continuo (tempo/spazio)?* $\implies$ **Poisson**
 
 ```text
-                         COSA MISURA LA VARIABILE X?
-                                     │
-         ┌───────────────────────────┼───────────────────────────┐
-         ▼                           ▼                           ▼
-Un singolo evento            Una serie di prove           Eventi nel tempo/spazio
- (Sì / No)                   ripetute (successi)                 continuo
-         │                           │                           │
-   BERNOULLI                         │                        POISSON
-                             ┌───────┴───────┐
-                             ▼               ▼
-                      Fisso le prove    Fisso il successo
-                       e conto quanti    e conto quante prove
-                          successi           devo fare
-                             │               │
-                         BINOMIALE       GEOMETRICA
+                     ALBERO DI DECISIONE: VARIABILI DISCRETE
+                                       │
+         ┌─────────────────────────────┼─────────────────────────────┐
+         ▼                             ▼                             ▼
+Un singolo evento             Serie di prove ripetute       Eventi nel tempo/spazio
+  (Successo/Fallimento)          a probabilità $p$ cost.       continuo (tasso medio $\lambda$)
+         │                             │                             │
+   BERNOULLI                           │                          POISSON
+    $\{0, 1\}$                 ┌───────┴───────┐                 $\{0, 1, 2, \dots\}$
+                               ▼               ▼
+                        Fisso le prove $n$    Fisso il successo (1°)
+                         e conto quanti        e conto quante prove
+                            successi              devo tentare
+                               │               │
+                           BINOMIALE       GEOMETRICA
+                      $\{0, 1, \dots, n\}$   $\{1, 2, 3, \dots\}$
 ```
 
 ---
 
 #### 1. Distribuzione di Bernoulli: $\mathcal{B}(p)$
-* **L'intuizione fisica**: È l'atomo elementare della probabilità: una singola prova con due soli esiti possibili, codificati convenzionalmente come **Successo ($1$)** con probabilità $p$, o **Insuccesso ($0$)** con probabilità $1-p$.
-* **Perché esiste?** Perché rappresenta il "mattoncino base" per modellare qualsiasi fenomeno dicotomico e per costruire per somma le distribuzioni di conteggio.
+* **Meccanismo fisico**: Una singola prova con due soli esiti possibili: **Successo ($1$)** con probabilità $p$, oppure **Insuccesso ($0$)** con probabilità $1-p$.
 * **PMF e Momenti**:
   $$p_X(1) = p, \quad p_X(0) = 1-p \implies p_X(k) = p^k (1-p)^{1-k} \quad (k \in \{0, 1\})$$
   $$\mathbb{E}[X] = p, \qquad \operatorname{Var}(X) = p(1-p)$$
 * **Quando si usa all'esame?**
-  * Singolo lancio di una moneta (anche non bilanciata).
-  * Trasmissione di un singolo bit attraverso un canale binario simmetrico ($1$ se errato, $0$ se corretto).
-  * **Variabile indicatrice**: data una partizione o un evento $A$, la variabile $I_A$ vale $1$ se $A$ accade e $0$ altrimenti ($\mathbb{E}[I_A] = \mathbb{P}(A)$).
-* **Segnali nel testo**: *"Si consideri una prova con esito binario..."*, *"Sia $X \in \{0, 1\}$..."*.
+  * Singolo lancio di una moneta (anche truccata).
+  * Trasmissione di un singolo bit attraverso un canale rumoroso ($1$ se errato, $0$ se corretto).
+  * **Variabile indicatrice di un evento $A$ ($I_A$ o $\mathbf{1}_A$)**: vale $1$ se $A$ accade e $0$ altrimenti. Proprietà fondamentale: $\mathbb{E}[I_A] = \mathbb{P}(A)$ e $\operatorname{Var}(I_A) = \mathbb{P}(A)(1-\mathbb{P}(A))$.
+* **Frasi sentinella nel testo**: *"Si consideri una singola prova con esito binario..."*, *"Sia $X$ l'indicatore dell'evento $A$..."*, *"Un bit trasmesso..."*.
 
 ---
 
 #### 2. Distribuzione Binomiale: $\mathcal{B}(n, p)$
-* **L'intuizione fisica**: Ripeti la prova di Bernoulli per un numero **fissato a priori** di $n$ volte, in modo indipendente e nelle stesse identiche condizioni. La variabile $X$ conta: **«Quanti successi ho totalizzato su questi $n$ tentativi?»**
+* **Meccanismo fisico**: Si ripete la prova di Bernoulli per un numero **noto e fissato a priori di $n$ volte**, in modo rigorosamente indipendente e con probabilità di successo $p$ identica ad ogni prova. La variabile $X$ conta: **«Quanti successi ho ottenuto in questi $n$ tentativi?»**
 * **Perché la formula è strutturata così?**
   $$p_X(k) = \underbrace{\binom{n}{k}}_{\text{in quanti modi diversi}} \cdot \underbrace{p^k}_{\text{i } k \text{ successi}} \cdot \underbrace{(1-p)^{n-k}}_{\text{gli } n-k \text{ insuccessi}}, \quad k \in \{0, 1, \dots, n\}$$
-  Il coefficiente binomiale $\binom{n}{k}$ è indispensabile perché non importa in quali posizioni temporali si presentino i $k$ successi, ma solo che il loro conteggio finale sia $k$.
-* **Le 3 condizioni per poterla applicare**:
-  1. Il numero di prove $n$ è **costante e noto a priori**.
-  2. Gli esiti di ogni singola prova sono mutualmente indipendenti.
-  3. La probabilità di successo $p$ rimane rigorosamente costante ad ogni prova (estrazioni *con reimmissione*).
+  Il coefficiente binomiale $\binom{n}{k} = \frac{n!}{k!(n-k)!}$ conta in quanti ordini temporali distinti i $k$ successi possono distribuirsi all'interno degli $n$ slot di prova.
+* **Le 3 condizioni tassative di applicabilità**:
+  1. Numero di prove $n$ **costante e fissato a priori** (non dipende dagli esiti).
+  2. Esiti delle prove **mutualmente indipendenti**.
+  3. Probabilità $p$ costante ad ogni prova (ad es. estrazioni **con reimmissione**).
 * **Momenti**:
   $$\mathbb{E}[X] = np, \qquad \operatorname{Var}(X) = np(1-p)$$
 * **Quando si usa all'esame?**
-  * Trasmissione di pacchetti di $n$ bit: calcolare la probabilità che si verifichino esattamente $k$ errori di trasmissione.
-  * Controllo qualità: estrazione di un campione di $n$ prodotti con probabilità $p$ che ciascuno sia difettoso.
-* **Segnali nel testo**: *"Su $n$ prove indipendenti..."*, *"Si eseguono $n$ lanci..."*, *"Un blocco di $n$ simboli..."*.
+  * Trasmissione di pacchetti o blocchi di $n$ bit: probabilità di avere $k$ bit errati.
+  * Collaudo di lotti industriali: conteggio pezzi difettosi su un campione estratto di $n$ pezzi.
+* **Frasi sentinella nel testo**: *"Su $n$ prove indipendenti..."*, *"Si eseguono $n$ lanci consecutivi..."*, *"Un pacchetto di $n$ bit..."*.
+* **La trappola classica d'esame («Almeno un successo»)**:
+  Se il testo chiede *"calcolare la probabilità che si verifichi **almeno un successo** su $n$ tentativi"*, non sommare $\sum_{k=1}^n \binom{n}{k}\dots$, ma passa istantaneamente all'evento complementare:
+  $$\mathbb{P}(X \ge 1) = 1 - \mathbb{P}(X = 0) = 1 - \binom{n}{0}p^0(1-p)^n = 1 - (1-p)^n$$
 
 ---
 
 #### 3. Distribuzione Geometrica: $\mathcal{G}(p)$
-* **L'intuizione fisica**: È la dinamica complementare alla Binomiale.
-  * Nella Binomiale fissi le prove $n$ e conti i successi $k$.
-  * Nella Geometrica **fissi l'obiettivo (il primo successo!)** e la variabile aleatoria $X$ è il **numero di tentativi necessari per ottenerlo**.
+* **Meccanismo fisico**: È la prospettiva duale della Binomiale:
+  * Nella Binomiale **fissi le prove $n$** e conti quanti successi ottieni.
+  * Nella Geometrica **fissi il successo (il primo!)** e conti **quante prove devi effettuare prima di ottenerlo**.
+  * Qui il numero di tentativi $X$ è aleatorio e potenzialmente illimitato: $\mathcal{X} = \{1, 2, 3, \dots\}$.
 * **Perché la formula è strutturata così?**
   $$p_X(k) = (1-p)^{k-1} \cdot p, \quad k \in \{1, 2, 3, \dots\}$$
-  Per fermarsi esattamente al tentativo $k$, devi aver necessariamente collezionato $k-1$ fallimenti consecutivi (ciascuno con probabilità $1-p$) e aver fatto centro al $k$-esimo tentativo (probabilità $p$). L'ordine qui è rigidamente prefissato, perciò **non c'è alcun coefficiente binomiale**.
+  Per fermarsi esattamente al tentativo $k$, devi aver collezionato una sequenza obbligata di $k-1$ fallimenti consecutivi seguiti dal successo finale al tentativo $k$. L'ordine temporale è unico e rigido, dunque **non c'è alcun coefficiente binomiale**.
 * **Proprietà Cardine: Assenza di Memoria (*Memoryless* discreta)**:
-  $$\mathbb{P}(X > n + k \mid X > n) = \mathbb{P}(X > k)$$
-  Se hai già fallito $n$ volte, la probabilità di dover fare altri $k$ tentativi è identica a quella iniziale. Il sistema non accumula "stanchezza" o usura.
+  $$\mathbb{P}(X > n + k \mid X > n) = \mathbb{P}(X > k) = (1-p)^k$$
+  *Significato operativo*: Se hai già tentato $n$ volte senza successo, il fatto di aver fallito nel passato non aumenta né riduce la probabilità di successo futuro. Il sistema riparte da zero come se fosse la prima prova.
 * **Momenti**:
   $$\mathbb{E}[X] = \frac{1}{p}, \qquad \operatorname{Var}(X) = \frac{1-p}{p^2}$$
 * **Quando si usa all'esame?**
-  * Protocolli di ritrasmissione dati (ARQ): quanti tentativi servono affinché un frame venga ricevuto correttamente.
-  * Tentativi di accesso / login prima di inserire la credenziale esatta.
-  * Affidabilità a tempo discreto: cicli di accensione prima del primo guasto.
-* **Segnali nel testo**: *"Si ripete la prova fino al primo successo..."*, *"Numero di tentativi necessari affinché..."*.
+  * Protocolli di ritrasmissione a tempo discreto (es. ARQ Stop-and-Wait): numero di invii fino al primo ACK ricevuto.
+  * Tentativi di connessione o di autenticazione fino al primo accesso riuscito.
+  * Prove di vita a cicli discreti (accensioni prima del primo guasto).
+* **Frasi sentinella nel testo**: *"Si ripete l'esperimento finché non si ottiene un successo per la prima volta..."*, *"Numero di tentativi necessari per..."*, *"Al primo successo il processo si arresta..."*.
 
 ---
 
 #### 4. Distribuzione di Poisson: $\mathcal{P}(\lambda)$
-* **L'intuizione fisica**: È la **legge degli eventi rari nel tempo o nello spazio continuo**.
-  * Nasce come limite asintotico della Binomiale quando il numero potenziale di prove tende all'infinito ($n \to \infty$) e la probabilità del singolo evento diventa infinitesima ($p \to 0$), mentre il numero medio di eventi attesi $\lambda = n \cdot p$ resta finito e costante.
-* **Perché è essenziale in informatica e ingegneria?**
-  Perché nella realtà non si conosce quasi mai il numero totale potenziale di utenti $n$ (quante persone nel mondo potrebbero inviare una richiesta a un server?), ma si può misurare sperimentalmente la **frequenza media di arrivo $\lambda$** (es. $\lambda = 5$ richieste al secondo).
+* **Meccanismo fisico**: È la **legge degli eventi rari nel continuo temporale o spaziale**.
+  * Nasce come limite asintotico della Binomiale quando il numero potenziale di prove tende a infinito ($n \to \infty$) e la probabilità del singolo evento diventa infinitesima ($p \to 0$), mantenendo costante e finito il prodotto $\lambda = n \cdot p$.
+* **Perché è essenziale in informatica e telecomunicazioni?**
+  Perché in un sistema reale (es. un server web o una cella radio) non si conosce il numero totale $n$ di utenti connessi, ma si misura sperimentalmente il **tasso medio di arrivo $\lambda$** (es. $\lambda = 5 \text{ pacchetti al millisecondo}$).
 * **PMF e Momenti**:
   $$p_X(k) = \frac{\lambda^k}{k!} e^{-\lambda}, \quad k \in \mathbb{N}_0 = \{0, 1, 2, \dots\}$$
   $$\mathbb{E}[X] = \operatorname{Var}(X) = \lambda$$
-  *(Media e varianza coincidono esattamente: questa è la "firma" inconfondibile della Poisson).*
+  *(Uguaglianza tra media e varianza: è la firma inconfondibile della distribuzione di Poisson).*
 * **Quando si usa all'esame?**
-  * Arrivo di chiamate a un centralino, accessi HTTP a un server web, arrivo di pacchetti su un'interfaccia di rete.
-  * Conteggio di difetti per unità di lunghezza (su fibra ottica) o per unità di superficie (su wafer di silicio).
-  * **Esercizio tipico d'esame (stile Mattera)**: Viene assegnata una PMF del tipo:
-    $$P(X = k) = A \frac{c^k}{k!}, \quad k \in \mathbb{N}_0$$
-    Riconoscendo la serie esponenziale $\sum_{k=0}^{\infty} \frac{c^k}{k!} = e^c$, si impone la normalizzazione:
-    $$A \sum_{k=0}^{\infty} \frac{c^k}{k!} = A e^c = 1 \implies A = e^{-c}$$
-    e si deduce che $X \sim \mathcal{P}(c)$.
-* **Segnali nel testo**: *"In media avvengono $\lambda$ eventi per unità di tempo..."*, *"Eventi indipendenti e rari..."*, *"Formula con $k!$ a denominatore e potenze a numeratore"*.
+  * Conteggio di arrivi: chiamate a un centralino, accessi HTTP a un server web, interruzioni hardware per secondo.
+  * Conteggio difetti: numero di imperfezioni su un cavo in fibra ottica di lunghezza fissata.
+  * **Tipico quesito d'esame (Stile Mattera)**: Viene assegnata una PMF su $\mathbb{N}_0$ con un parametro ignoto $A$:
+    $$P(X = k) = A \frac{c^k}{k!}, \quad k \in \{0, 1, 2, \dots\}$$
+    Riconoscendo lo sviluppo in serie di Taylor dell'esponenziale $\sum_{k=0}^{\infty} \frac{c^k}{k!} = e^c$, si impone:
+    $$\sum_{k=0}^{\infty} P(X = k) = 1 \implies A \sum_{k=0}^{\infty} \frac{c^k}{k!} = A e^c = 1 \implies A = e^{-c}$$
+    e si deduce che $X \sim \mathcal{P}(c)$ con media $c$.
+* **Frasi sentinella nel testo**: *"In media arrivano $\lambda$ eventi al minuto..."*, *"Processo di arrivo di pacchetti..."*, *"Formula con $k!$ a denominatore e potenze a numeratore"*.
 
 ---
 
 #### 5. Distribuzione Uniforme Discreta: $\mathcal{U}(\{x_1, \dots, x_M\})$
-* **L'intuizione fisica**: Discende dal *principio di ragione insufficiente* di Laplace: quando uno spazio di possibilità finite $M$ non presenta alcun elemento fisico, simmetrico o logico che favorisca un esito rispetto a un altro, ciascun esito ha la stessa identica probabilità.
+* **Meccanismo fisico**: Discende dal *principio di ragione insufficiente* di Laplace: quando uno spazio finito di $M$ elementi non presenta alcun motivo per favorire un esito rispetto agli altri, tutti gli esiti sono equiprobabili.
 * **PMF e Momenti**:
   $$p_X(x_i) = \frac{1}{M}, \quad \forall i \in \{1, \dots, M\}$$
-  $$\mathbb{E}[X] = \frac{1}{M} \sum_{i=1}^M x_i$$
-  Se i valori sono gli interi consecutivi $\{0, 1, \dots, M-1\}$:
+  Per valori interi consecutivi $\{0, 1, \dots, M-1\}$:
   $$\mathbb{E}[X] = \frac{M-1}{2}, \qquad \operatorname{Var}(X) = \frac{M^2 - 1}{12}$$
 * **Quando si usa all'esame?**
-  * Lancio di dadi a $M$ facce non truccati o estrazione di carte.
-  * Scelta pseudo-casuale di un canale di trasmissione o di uno slot temporale (TDMA) tra $M$ disponibili.
-  * Funzioni hash ideali con partizionamento equo tra $M$ bucket.
-* **Segnali nel testo**: *"Equiprobabili"*, *"Scelta puramente casuale tra $M$ opzioni"*, *"Dado non truccato"*.
+  * Lancio di dadi equi a $M$ facce o estrazione di numeri/carte.
+  * Scelta pseudo-casuale uniforme di uno slot trasmissivo tra $M$ disponibili (TDMA).
+  * Funzione di hash ideale che distribuisce le chiavi in modo uniforme tra $M$ bucket.
+* **Frasi sentinella nel testo**: *"Perfettamente equiprobabili"*, *"Un dado non truccato"*, *"Scelta puramente casuale tra $M$ alternative"*.
 
 ---
 
-#### Tabella Riassuntiva Comparativa per le Prove d'Esame
+#### 6. Il Caso Speciale dell'Esame Mattera: Tabelle Congiunte senza Nome
+> [!IMPORTANT]
+> **Attenzione alla struttura dell'Esercizio 1 d'esame**:
+> Nella quasi totalità delle prove scritte (stile Mattera), l'Esercizio 1 presenta variabili discrete $X$ e $Y$ con alfabeti cortissimi (es. $X \in \{0, 1\}$ e $Y \in \{0, 2\}$ oppure $X \in \{0, 2\}$ e $Y \in \{1, 3\}$).
+> * **Queste variabili NON appartengono a una famiglia notevole (non sono né Binomiali né di Poisson)**.
+> * Si gestiscono compilando la **matrice congiunta $p_{X,Y}(x,y)$**:
+>   * Marginali: somme per righe e per colonne.
+>   * Somma $T = X+Y$: raggruppamento delle coppie $(x,y)$ che danno lo stesso valore $t$.
+>   * Indipendenza: verifica se per ogni cella vale $p_{X,Y}(x,y) = p_X(x)p_Y(y)$.
 
-| Distribuzione | Cosa conta la variabile $X$? | Parametri | Alfabeto $\mathcal{X}$ | PMF $p_X(k)$ | Firma distintiva |
+---
+
+#### Tabella Sinottica Comparativa per il Riconoscimento Rapido
+
+| Distribuzione | Cosa conta la variabile $X$? | Parametri | Alfabeto $\mathcal{X}$ | PMF $p_X(k)$ | Condizione discriminante |
 | :--- | :--- | :---: | :---: | :---: | :--- |
-| **Bernoulli** | Singola prova dicotomica (Sì/No) | $p$ | $\{0, 1\}$ | $p^k (1-p)^{1-k}$ | $\mathbb{E}[X] = p$ |
-| **Binomiale** | Numero di successi su $n$ prove | $n, p$ | $\{0, 1, \dots, n\}$ | $\binom{n}{k} p^k (1-p)^{n-k}$ | $n$ fissato a priori, con reimmissione |
-| **Geometrica** | Prove necessarie fino al 1° successo | $p$ | $\{1, 2, 3, \dots\}$ | $(1-p)^{k-1} p$ | Assenza di memoria a tempo discreto |
-| **Poisson** | Eventi in tempo/spazio continuo | $\lambda$ | $\{0, 1, 2, \dots\}$ | $\frac{\lambda^k}{k!} e^{-\lambda}$ | $\mathbb{E}[X] = \operatorname{Var}(X) = \lambda$ |
+| **Bernoulli** | Singola prova (0 o 1) | $p$ | $\{0, 1\}$ | $p^k (1-p)^{1-k}$ | Una sola esecuzione dicotomica |
+| **Binomiale** | Numero di successi su $n$ prove | $n, p$ | $\{0, 1, \dots, n\}$ | $\binom{n}{k} p^k (1-p)^{n-k}$ | $n$ prove indipendenti fissate a priori |
+| **Geometrica** | Tentativi necessari fino al 1° successo | $p$ | $\{1, 2, 3, \dots\}$ | $(1-p)^{k-1} p$ | Numero di prove aleatorio (memoryless) |
+| **Poisson** | Eventi in tempo/spazio continuo | $\lambda$ | $\{0, 1, 2, \dots\}$ | $\frac{\lambda^k}{k!} e^{-\lambda}$ | Tasso medio $\lambda$, supporto illimitato $\mathbb{N}_0$ |
+| **Uniforme** | Scelta equiprobabile tra $M$ opzioni | $M$ | $\{x_1, \dots, x_M\}$ | $\frac{1}{M}$ | Tutte le probabilità sono identiche |
+
+---
+
+### 2.3 PMF Condizionale e Funzioni di Variabili Discretembda}$ | $\mathbb{E}[X] = \operatorname{Var}(X) = \lambda$ |
 | **Uniforme** | Scelta perfettamente equiprobabile | $M$ | $\{x_1, \dots, x_M\}$ | $\frac{1}{M}$ | Tutte le masse sono identiche |
 
 ### 2.3 PMF Condizionale e Funzioni di Variabili Discrete
@@ -367,75 +388,140 @@ $$\mathbb{E}[X] = \int_{-\infty}^{+\infty} x \, f_X(x) dx$$
 
 ---
 
-### 4.5 Distribuzioni Notevoli Continue (Sez. 5.1.5 - 5.1.8)
+### 4.5 Distribuzioni Notevoli Continue: Guida Completa alla Scelta
+
+Per individuare quale distribuzione continua governa il fenomeno esaminato, poniti questa domanda: **«Qual è la natura fisica della grandezza misurata?»**
+
+```text
+                     ALBERO DI DECISIONE: VARIABILI CONTINUE
+                                       │
+         ┌─────────────────────────────┼─────────────────────────────┐
+         ▼                             ▼                             ▼
+Attesa continua / durata      Equiprobabilità su un         Somma di disturbi /
+ prima del primo evento         intervallo limitato          rumore fisico (TLC)
+         │                             │                             │
+    ESPONENZIALE                   UNIFORME                      GAUSSIANA
+$[0, \infty)$, memoryless            $[a, b]$             $\mathbb{R}, \mathcal{N}(\mu, \sigma^2)$
+                                                                     │
+                                                        ┌────────────┴────────────┐
+                                                        ▼                         ▼
+                                                 Ampiezza inviluppo         Code pesanti /
+                                                 due gaussiane ortogonali   rumore a impulsi
+                                                        │                         │
+                                                     RAYLEIGH                 LAPLACIANA
+                                               $Ax e^{-x^2}u(x)$             $\frac{\lambda}{2}e^{-\lambda|x|}$
+```
+
+---
 
 #### 1. Distribuzione Uniforme Continua: $X \sim \mathcal{U}(a, b)$ con $a < b$
+* **Meccanismo fisico**: La variabile può cadere in qualsiasi punto dell'intervallo $[a, b]$ senza alcuna preferenza o polarizzazione.
 * **Supporto:** $[a, b]$
-* **PDF:**
+* **PDF e CDF:**
   $$f_X(x) = \begin{cases} \frac{1}{b - a} & a \le x \le b \\ 0 & \text{altrove} \end{cases} = \frac{1}{b - a} [u(x - a) - u(x - b)]$$
-* **CDF:**
   $$F_X(x) = \begin{cases} 0 & x < a \\ \frac{x - a}{b - a} & a \le x \le b \\ 1 & x > b \end{cases}$$
-* **Media:** $\mathbb{E}[X] = \frac{a + b}{2}$
-* **Varianza:** $\operatorname{Var}(X) = \frac{(b - a)^2}{12}$
-* **Quando si usa:** Errore di quantizzazione round-off, fase casuale di un segnale sinusoidale ($\mathcal{U}(-\pi, \pi)$), arrivi casuali senza preferenza.
+* **Momenti:** $\mathbb{E}[X] = \frac{a + b}{2}, \quad \operatorname{Var}(X) = \frac{(b - a)^2}{12}$
+* **Quando si usa all'esame?**
+  * Errore di quantizzazione / arrotondamento (round-off): $X \sim \mathcal{U}[-\frac{\Delta}{2}, \frac{\Delta}{2}]$.
+  * Fase casuale di un'oscillazione sinusoidale / portante: $\Theta \sim \mathcal{U}[-\pi, \pi]$ o $\mathcal{U}[0, 2\pi]$.
+  * Ritardo di propagazione casuale compreso tra due estremi noti.
+* **Frasi sentinella nel testo**: *"Uniformemente distribuita nell'intervallo..."*, *"Priva di polarizzazione tra $a$ e $b$"*.
 
 ---
 
 #### 2. Distribuzione Esponenziale: $X \sim \mathcal{E}(\lambda)$ con $\lambda > 0$
+* **Meccanismo fisico**: Modella il **tempo continuo di attesa** fino al verificarsi del primo evento (o la durata di vita di un componente che non soffre di usura). È il corrispondente continuo della Geometrica.
 * **Supporto:** $[0, +\infty)$
 * **Cosa indica $\lambda$ (Lambda)?**
-  * **Significato fisico:** $\lambda$ è il **tasso medio di accadimento** (*rate parameter* o frequenza media degli eventi per unità di tempo o di spazio). Ad esempio: $\lambda = 3 \text{ richieste/secondo}$ o $\lambda = 0.01 \text{ guasti/ora}$.
-  * **Unità di misura:** è l'inverso dell'unità di misura di $X$, ovvero $[\text{tempo}]^{-1}$.
-  * **Legame fondamentale con la media:** $\mathbb{E}[X] = \frac{1}{\lambda}$. 
-    * Se il tasso è $\lambda = 2 \text{ pacchetti/secondo}$, il tempo medio di attesa tra due pacchetti è $\frac{1}{2} = 0.5 \text{ secondi}$.
-    * *All'aumentare di $\lambda$*, gli eventi avvengono più frequentemente e il tempo medio di attesa si accorcia ($\mathbb{E}[X] \to 0$).
-  * **Effetto sulla forma della PDF:**
-    * L'altezza massima del picco in $x = 0$ è pari proprio a $\lambda$ ($f_X(0) = \lambda$).
-    * Un $\lambda$ alto genera una curva che parte molto in alto e decade ripidamente a zero (attese brevi concentrate vicino a 0).
-    * Un $\lambda$ basso genera una curva piatta e allungata (attese mediamente più lunghe).
-  * **Tasso di guasto costante (*Hazard rate*):** $h(x) = \frac{f_X(x)}{1 - F_X(x)} = \frac{\lambda e^{-\lambda x}}{e^{-\lambda x}} = \lambda$. Significa che l'intensità di rischio non varia nel tempo (nessun invecchiamento o usura).
-* **PDF:**
+  * $\lambda$ è il **tasso medio di accadimento** per unità di tempo.
+  * Legame con la media: $\mathbb{E}[X] = \frac{1}{\lambda}$. Più alto è $\lambda$, più frequenti sono gli eventi e più breve è il tempo medio di attesa.
+  * Tasso di guasto costante (*Hazard rate*): $h(t) = \frac{f(t)}{1-F(t)} = \lambda$ (nessun invecchiamento fisico).
+* **PDF e CDF:**
   $$f_X(x) = \lambda e^{-\lambda x} u(x)$$
-* **CDF:**
   $$F_X(x) = (1 - e^{-\lambda x}) u(x)$$
-* **Coda (CCDF):** $\mathbb{P}(X > x) = e^{-\lambda x}$ (per $x \ge 0$)
-* **Media:** $\mathbb{E}[X] = \frac{1}{\lambda}$
-* **Varianza:** $\operatorname{Var}(X) = \frac{1}{\lambda^2}$
-* **Proprietà Cardine - Assenza di Memoria (*Memoryless*):**
+* **Coda (CCDF / Affidabilità):** $\mathbb{P}(X > x) = e^{-\lambda x}$ (per $x \ge 0$)
+* **Momenti:** $\mathbb{E}[X] = \frac{1}{\lambda}, \quad \operatorname{Var}(X) = \frac{1}{\lambda^2}$
+* **Proprietà Cardine - Assenza di Memoria (*Memoryless* continua):**
   $$\mathbb{P}(X > s + t \mid X > s) = \mathbb{P}(X > t) \quad \forall s, t \ge 0$$
-* **Quando si usa:** Tempo di attesa tra eventi in processi di Poisson, durata fino al guasto per shock esterni senza usura, tempo di servizio di una coda.
+* **Quando si usa all'esame?**
+  * Tempo di interarrivo tra pacchetti consecutivi in reti a coda $M/M/1$.
+  * Durata fino al guasto per shock ambientali casuali.
+  * Tempo di servizio / elaborazione di una richiesta in un server.
+* **Frasi sentinella nel testo**: *"Tempo di attesa fino al prossimo arrivo..."*, *"Tempo di vita con tasso di guasto costante $\lambda$..."*.
 
 ---
 
-#### 3. Distribuzione Laplaciana (Doppia Esponenziale): $X \sim \mathcal{L}(\lambda)$ con $\lambda > 0$
+#### 3. Distribuzione Gaussiana (Normale): $X \sim \mathcal{N}(\mu, \sigma^2)$
+* **Meccanismo fisico**: È la distribuzione regina della statistica applicata e delle telecomunicazioni. Per il **Teorema del Limite Centrale (TLC)**, la somma di un numero elevato di contributi casuali indipendenti tende asintoticamente a una variabile Gaussiana, a prescindere dalla distribuzione dei singoli addendi.
 * **Supporto:** $\mathbb{R} = (-\infty, +\infty)$
-* **Cosa indica $\lambda$ (Lambda)?**
-  * **Significato matematico:** $\lambda$ è il **parametro di decadimento (o fattore di scala)** delle due ali esponenziali simmetriche attorno a zero ($e^{-\lambda |x|}$).
-  * **Ruolo sulla dispersione:** Regola la larghezza della campana cuspidale (a punta):
-    * Poiché la varianza è $\operatorname{Var}(X) = \frac{2}{\lambda^2}$, più grande è $\lambda$, più la campana è stretta e appuntita attorno a $x = 0$ (minore incertezza/dispersione).
-    * Al contrario, un $\lambda$ piccolo rende le code più pesanti e allargate verso $\pm\infty$.
-  * Spesso in letteratura tecnica si usa il parametro di scala $b = \frac{1}{\lambda}$, per cui la densità si riscrive come $\frac{1}{2b} e^{-|x|/b}$.
 * **PDF:**
+  $$f_X(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x - \mu)^2}{2\sigma^2}}$$
+* **Momenti:** $\mathbb{E}[X] = \mu, \quad \operatorname{Var}(X) = \sigma^2$
+* **Come si risolve all'esame? (Standardizzazione e Funzione $Q(x)$)**:
+  Non si calcola mai l'integrale a mano! Si passa alla variabile normale standard $Z = \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1)$:
+  $$\mathbb{P}(X > x) = Q\left(\frac{x - \mu}{\sigma}\right), \qquad \mathbb{P}(X \le x) = 1 - Q\left(\frac{x - \mu}{\sigma}\right) = \Phi\left(\frac{x - \mu}{\sigma}\right)$$
+  dove $Q(x) = \frac{1}{\sqrt{2\pi}} \int_x^{+\infty} e^{-t^2/2} dt$.
+* **Proprietà e valori notevoli di $Q(x)$ da ricordare a memoria**:
+  * Simmetria: $Q(-x) = 1 - Q(x)$.
+  * $Q(0) = 0.5$ (la metà dell'area è a destra dello zero).
+  * $Q(1) \approx 0.1587 \quad (\approx 16\%)$
+  * $Q(2) \approx 0.0228 \quad (\approx 2.3\%)$
+  * $Q(3) \approx 0.00135 \quad (\approx 0.13\%)$
+* **Quando si usa all'esame?**
+  * Rumore termico additivo bianco gaussiano (AWGN) nei canali di telecomunicazione.
+  * Errore di misura complessivo risultante da molteplici disturbi fisici indipendenti.
+  * Approssimazione normale per Binomiali con $n$ grande ($np > 5$).
+* **Frasi sentinella nel testo**: *"Rumore gaussiano con potenza $\sigma^2$..."*, *"Segnale disturbato da rumore termico AWGN..."*, *"Distribuzione normale con media $\mu$ e varianza $\sigma^2$..."*.
+
+---
+
+#### 4. Il Modello di Rayleigh / Decadimento Quadratico (Il "Classico" Mattera)
+* **Forma analitica ricorrente d'esame**:
+  $$f_X(x) = A x e^{-x^2} u(x)$$
+* **Origine fisica**: Rappresenta l'ampiezza dell'inviluppo di un segnale in presenza di due componenti gaussiane ortogonali indipendenti a media nulla $R = \sqrt{X_1^2 + X_2^2}$ (canale radio con fading di Rayleigh / multipath).
+* **I passaggi operativi obbligatori all'esame**:
+  1. **Determinazione immediata di $A$**:
+     $$\int_0^{+\infty} x e^{-x^2} dx = \left[ -\frac{1}{2} e^{-x^2} \right]_0^{+\infty} = \frac{1}{2} \implies A \cdot \frac{1}{2} = 1 \implies \mathbf{A = 2}$$
+  2. **Trasformazioni tipiche ($Y = \sqrt{X}$ oppure $Y = \ln X$)**:
+     * $Y = \sqrt{X} \implies x = y^2, \, \left|\frac{dx}{dy}\right| = 2y \implies f_Y(y) = 2(y^2)e^{-y^4} \cdot 2y = 4y^3 e^{-y^4} u(y)$.
+     * $Y = \ln X \implies x = e^y, \, \left|\frac{dx}{dy}\right| = e^y \implies f_Y(y) = 2e^{2y} e^{-e^{2y}}$.
+  3. **Calcolo di Moda e Mediana**:
+     * **Moda ($m_o$)**: si annulla la derivata prima: $\frac{d}{dy} f_Y(y) = 0$.
+     * **Mediana ($m_e$)**: si impone l'area a sinistra pari a $1/2$: $F_Y(m_e) = \frac{1}{2}$.
+* **Frasi sentinella nel testo**: *"Sia $X$ con densità $f(x) = A x \exp(-x^2) u(x)$..."*, *"Si valuti il parametro di normalizzazione $A$..."*.
+
+---
+
+#### 5. Distribuzione Laplaciana (Doppia Esponenziale): $X \sim \mathcal{L}(\lambda)$ con $\lambda > 0$
+* **Meccanismo fisico**: Due ali esponenziali simmetriche incollate attorno a zero ($e^{-\lambda |x|}$).
+* **Supporto:** $\mathbb{R} = (-\infty, +\infty)$
+* **PDF e CDF:**
   $$f_X(x) = \frac{\lambda}{2} e^{-\lambda |x|}$$
-* **CDF:**
   $$F_X(x) = \begin{cases} \frac{1}{2} e^{\lambda x} & x \le 0 \\ 1 - \frac{1}{2} e^{-\lambda x} & x > 0 \end{cases}$$
-* **Media:** $\mathbb{E}[X] = 0$ (perché $x f_X(x)$ è una funzione dispari integrata su intervallo simmetrico).
-* **Varianza:** $\operatorname{Var}(X) = \frac{2}{\lambda^2}$
-* **Quando si usa:** Modellazione di rumore impulsivo, coefficienti di compressione audio/video (es. DCT/wavelet nel JPEG/MP3), errori a code più larghe della Gaussiana.
+* **Momenti:** $\mathbb{E}[X] = 0, \quad \operatorname{Var}(X) = \frac{2}{\lambda^2}$
+* **Quando si usa all'esame?** Rumore a impulsi (*impulsive noise*), coefficienti di trasformata (DCT/wavelet nei codec JPEG/MP3), errori di stima simmetrici a code più pesanti della Gaussiana.
 
 ---
 
-#### 4. Distribuzione di Cauchy: $X \sim \mathcal{C}(a, b)$ con $a \in \mathbb{R}$ e $b > 0$
+#### 6. Distribuzione di Cauchy: $X \sim \mathcal{C}(a, b)$ con $a \in \mathbb{R}$ e $b > 0$
 * **Supporto:** $\mathbb{R} = (-\infty, +\infty)$
-* **Parametri:** $a$ è la posizione (picco/moda/mediana), $b$ è la scala.
-* **PDF:**
-  $$f_X(x) = \frac{1}{b\pi} \frac{1}{1 + \left(\frac{x - a}{b}\right)^2}$$
-* **CDF:**
-  $$F_X(x) = \frac{1}{2} + \frac{1}{\pi} \arctan\left(\frac{x - a}{b}\right)$$
-* **Media:** **NON DEFINITA** (l'integrale diverge: code pesanti $\sim \frac{1}{x^2}$).
-* **Valore Principale di Cauchy:**
-  $$\lim_{H \to \infty} \int_{-H}^{H} x f_X(x) dx = a$$
-* **Quando si usa:** Rapporto tra due variabili gaussiane standard $Z = X/Y$ con $X, Y \sim \mathcal{N}(0, 1)$; proiezione su parete di un fascio luminoso rotante ad angolo uniforme (problema del faro); risonanze quantistiche / decadimenti (distribuzione di Breit-Wigner).
+* **PDF e CDF:**
+  $$f_X(x) = \frac{1}{b\pi} \frac{1}{1 + \left(\frac{x - a}{b}\right)^2}, \qquad F_X(x) = \frac{1}{2} + \frac{1}{\pi} \arctan\left(\frac{x - a}{b}\right)$$
+* **Media:** **NON DEFINITA** (le code decadono come $1/x^2$, l'integrale del primo momento non converge assolutamente).
+* **Quando si usa all'esame?** Rapporto tra due variabili gaussiane standard $Z = X/Y$ con $X, Y \sim \mathcal{N}(0, 1)$, problema geometrico del fascio rotante (faro che spazza una parete).
+
+---
+
+#### Tabella Sinottica Comparativa delle Variabili Continue
+
+| Distribuzione | Supporto | PDF $f_X(x)$ | $\mathbb{E}[X]$ | $\operatorname{Var}(X)$ | Quando riconoscerla |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **Uniforme** | $[a, b]$ | $\frac{1}{b-a}$ | $\frac{a+b}{2}$ | $\frac{(b-a)^2}{12}$ | Ignoranza a priori o quantizzazione |
+| **Esponenziale** | $[0, +\infty)$ | $\lambda e^{-\lambda x} u(x)$ | $\frac{1}{\lambda}$ | $\frac{1}{\lambda^2}$ | Attese continue tra arrivi, memoryless |
+| **Gaussiana** | $(-\infty, +\infty)$ | $\frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ | $\mu$ | $\sigma^2$ | Rumore termico AWGN, somma di effetti (TLC) |
+| **Rayleigh (Mattera)** | $[0, +\infty)$ | $2x e^{-x^2} u(x)$ | $\frac{\sqrt{\pi}}{2}$ | $\frac{4-\pi}{4}$ | Esercizio 2 esame scritto ($A=2$), inviluppo |
+| **Laplaciana** | $(-\infty, +\infty)$ | $\frac{\lambda}{2} e^{-\lambda |x|}$ | $0$ | $\frac{2}{\lambda^2}$ | Rumore impulsivo a campana appuntita |
+| **Cauchy** | $(-\infty, +\infty)$ | $\frac{1}{\pi(1+x^2)}$ | Non def. | Non def. | Rapporto di due gaussiane $X/Y$ |
 
 ---
 

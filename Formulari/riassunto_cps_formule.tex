@@ -157,6 +157,17 @@ Una variabile aleatoria discreta $X$ assume valori in un insieme finito o numera
 \end{itemize}
 
 \subsection{Distribuzioni Notevoli Discrete}
+
+\formulaBox{Guida alla Scelta: Come Riconoscere la Distribuzione Discreta}{
+\begin{itemize}
+    \item \textbf{Bernoulli $\text{Ber}(p)$}: Un solo tentativo con due soli esiti possibili ($0$ o $1$, es. bit trasmesso, moneta).
+    \item \textbf{Binomiale $\text{Bin}(n, p)$}: Il numero di prove $n$ è \textbf{fisso e noto a priori}; prove indipendenti con $p$ costante; conta quanti successi $k \in \{0, \dots, n\}$ si ottengono.
+    \item \textbf{Geometrica $\text{Geom}(p)$}: Il numero di prove \textbf{non è fisso}; conta quanti tentativi servono per ottenere il \textbf{primo successo} (gode dell'assenza di memoria).
+    \item \textbf{Poisson $\text{Pois}(\lambda)$}: Conta il numero di eventi rari che si verificano in un continuo (tempo/spazio) con tasso medio $\lambda$ costante ($\mathbb{E}[X] = \operatorname{Var}(X) = \lambda$).
+    \item \textbf{Uniforme Discreta}: Scelta equiprobabile tra $M$ alternative (es. dadi non truccati, slot TDMA).
+\end{itemize}
+}
+
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
@@ -171,6 +182,11 @@ Una variabile aleatoria discreta $X$ assume valori in un insieme finito o numera
 \end{tabular}
 \end{center}
 
+\formulaBox{Regola d'Oro: Probabilità di ``Almeno un Successo''}{
+In una Binomiale su $n$ prove indipendenti, la probabilità che si verifichi \textbf{almeno un successo} si calcola sempre tramite l'evento complementare (nessun successo):
+\[ \mathbb{P}(X \ge 1) = 1 - \mathbb{P}(X = 0) = 1 - (1-p)^n \]
+}
+
 \formulaBox{Assenza di Memoria della Variabile Geometrica}{
 La variabile geometrica modella il numero di prove fino al primo successo:
 \[ \mathbb{P}(X > n + k \mid X > n) = \mathbb{P}(X > k) = (1-p)^k \]
@@ -179,6 +195,10 @@ La variabile geometrica modella il numero di prove fino al primo successo:
 \formulaBox{Tipico Quesito d'Esame Stile Mattera su Serie di Poisson}{
 Data la PMF $P(X=k) = A \frac{c^k}{k!}$ per $k \in \mathbb{N}_0$, per calcolare la costante $A$:
 \[ \sum_{k=0}^\infty P(X=k) = 1 \implies A \sum_{k=0}^\infty \frac{c^k}{k!} = A e^c = 1 \implies A = e^{-c} \]
+}
+
+\warnBox{Nota Fondamentale sull'Esercizio 1 (Tabelle Congiunte)}{
+All'esame scritto, l'Esercizio 1 presenta quasi sempre variabili $X \in \{0, 1\}$ e $Y \in \{0, 2\}$: \textbf{non appartengono a una distribuzione notevole classica}. Si risolvono compilando la matrice congiunta (somme per riga/colonna, verifica indipendenza cella per cella).
 }
 
 % =========================================================================
@@ -256,6 +276,16 @@ Sia $X$ con PDF $f_X(x)$ e sia $Y = g(X)$ con $g$ derivabile e strettamente mono
 }
 
 \subsection{Distribuzioni Notevoli Continue}
+
+\formulaBox{Guida alla Scelta: Come Riconoscere la Distribuzione Continua}{
+\begin{itemize}
+    \item \textbf{Uniforme $\mathcal{U}[a, b]$}: Ignoranza completa o equiprobabilità continua (errore di quantizzazione, fase casuale di portante $\Theta \in [0, 2\pi]$).
+    \item \textbf{Esponenziale $\text{Exp}(\lambda)$}: Tempo continuo di attesa fino al 1° evento o durata di vita senza usura (gode dell'assenza di memoria continua).
+    \item \textbf{Gaussiana $\mathcal{N}(\mu, \sigma^2)$}: Somma di molti effetti casuali indipendenti (Teorema Limite Centrale), rumore termico AWGN. Si risolve standardizzando $Z = \frac{X-\mu}{\sigma}$ con la funzione $Q(x)$.
+    \item \textbf{Rayleigh / Decadimento Quadratico (Stile Mattera)}: Densità $f_X(x) = 2x e^{-x^2} u(x)$. Modella l'inviluppo di segnali con rumore gaussiano su canali radio.
+\end{itemize}
+}
+
 \begin{center}
 \begin{tabular}{lcccc}
 \toprule
@@ -264,6 +294,7 @@ Sia $X$ con PDF $f_X(x)$ e sia $Y = g(X)$ con $g$ derivabile e strettamente mono
 \textbf{Uniforme} $\mathcal{U}[a, b]$ & $[a, b]$ & $\frac{1}{b-a}$ & $\frac{a+b}{2}$ & $\frac{(b-a)^2}{12}$ \\
 \textbf{Esponenziale} $\text{Exp}(\lambda)$ & $[0, +\infty)$ & $\lambda e^{-\lambda x} u(x)$ & $\frac{1}{\lambda}$ & $\frac{1}{\lambda^2}$ \\
 \textbf{Gaussiana} $\mathcal{N}(\mu, \sigma^2)$ & $(-\infty, +\infty)$ & $\frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ & $\mu$ & $\sigma^2$ \\
+\textbf{Rayleigh (Mattera)} & $[0, +\infty)$ & $2x e^{-x^2} u(x)$ & $\frac{\sqrt{\pi}}{2}$ & $\frac{4-\pi}{4}$ \\
 \bottomrule
 \end{tabular}
 \end{center}
