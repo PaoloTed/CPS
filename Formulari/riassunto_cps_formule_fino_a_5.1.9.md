@@ -110,26 +110,6 @@ All'esame, per individuare all'istante quale distribuzione discreta utilizzare, 
    * **Se il successo è fissato** (voglio il primo!) e conto quante prove servono $\implies$ **Geometrica**
 3. *Sto contando eventi indipendenti e rari che arrivano in un intervallo continuo (tempo/spazio)?* $\implies$ **Poisson**
 
-```text
-                     ALBERO DI DECISIONE: VARIABILI DISCRETE
-                                       │
-         ┌─────────────────────────────┼─────────────────────────────┐
-         ▼                             ▼                             ▼
-Un singolo evento             Serie di prove ripetute       Eventi nel tempo/spazio
-  (Successo/Fallimento)          a probabilità $p$ cost.       continuo (tasso medio $\lambda$)
-         │                             │                             │
-   BERNOULLI                           │                          POISSON
-    $\{0, 1\}$                 ┌───────┴───────┐                 $\{0, 1, 2, \dots\}$
-                               ▼               ▼
-                        Fisso le prove $n$    Fisso il successo (1°)
-                         e conto quanti        e conto quante prove
-                            successi              devo tentare
-                               │               │
-                           BINOMIALE       GEOMETRICA
-                      $\{0, 1, \dots, n\}$   $\{1, 2, 3, \dots\}$
-```
-
----
 
 #### 1. Distribuzione di Bernoulli: $\mathcal{B}(p)$
 * **Meccanismo fisico**: Una singola prova con due soli esiti possibili: **Successo ($1$)** con probabilità $p$, oppure **Insuccesso ($0$)** con probabilità $1-p$.
