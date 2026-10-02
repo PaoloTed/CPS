@@ -1,0 +1,290 @@
+% !TeX root = ../../main.tex
+\section{Relazione tra Misura, Variabile Aleatoria e Distribuzione}
+
+Per fare chiarezza su quanto detto, analizziamo le differenze e le relazioni tra i concetti chiave.
+
+\paragraph{Definizioni Fondamentali}
+\begin{itemize}
+    \item \textbf{La Misura di Probabilità ($\mathbb{P}$):} È una funzione che prende in ingresso un \textit{evento} (un insieme di risultati) e restituisce un numero reale compreso tra 0 e 1. Essa quantifica quanto è probabile che accada quel certo evento.
+    
+    \item \textbf{La Variabile Aleatoria ($X$):} È una funzione che prende un singolo risultato astratto ($\omega \in \Omega$) e lo trasforma in un numero reale.
+    \\Serve a tradurre un risultato "fisico" o astratto in un valore quantitativo.
+    \\\textit{Esempio:} "Esce la faccia del Re di cuori" $\xrightarrow{X}$ "vale 10 punti".
+\end{itemize}
+
+\subsection{La Distribuzione (Misura Indotta)}
+
+La misura di probabilità indotta sullo spazio misurabile di arrivo $(E, \mathcal{F})$ da una variabile aleatoria $X$, a partire dalla misura originale $\mathbb{P}$ su $(\Omega, \mathcal{E})$, è detta \textbf{distribuzione}, \textbf{legge} o \textbf{probabilità di X}, ed è indicata con $P_X$.
+
+In pratica, è la misura associata alla variabile aleatoria. Mentre la misura originale $\mathbb{P}$ agisce sugli eventi dello spazio campionario, la distribuzione $P_X$ restituisce la probabilità dei valori numerici in output.
+
+\textbf{Concetto chiave:}
+\begin{quote}
+    È la misura $\mathbb{P}$ che è stata \textbf{"trasportata"} sui numeri reali tramite la variabile aleatoria $X$.
+\end{quote}
+
+
+Ovviamente, la forma e il comportamento della distribuzione $P_X$ dipendono interamente dalla definizione della variabile aleatoria $X$.
+
+\subsection{Tipologie di Distribuzioni}
+
+Le distribuzioni si dividono in due grandi famiglie in base alla natura del loro codominio:
+
+\begin{enumerate}
+    \item \textbf{Discrete:} Se la funzione $X$ mappa i risultati su un insieme di numeri che si possono \textit{contare} (insieme numerabile).
+    \item \textbf{Continue:} Se il codominio è un intervallo continuo di numeri reali.
+\end{enumerate}
+
+A differenza delle variabili continue (dove la probabilità in un singolo punto esatto è matematicamente zero), nelle distribuzioni discrete la probabilità è concentrata in \textbf{"grumi"} o \textbf{"masse"} su specifici punti.
+
+La funzione di massa di probabilità $p_X(x)$ risponde alla domanda:
+\[
+\text{"\textbf{Esattamente quanta probabilità è accumulata su questo specifico numero?}"}
+\]
+
+\subsection{La Variabile di Bernoulli}
+
+\paragraph{Definizione e Spazio Campione}
+Consideriamo un esperimento che prevede una sola esecuzione ($N = 1$), come il singolo lancio di una moneta. Lo spazio campione in questo caso si riduce agli esiti di base: $\Omega = \{C, T\}$.
+\\Definiamo la variabile aleatoria indicatrice $X$, la quale mappa l'esito dell'esperimento in un dominio numerico strettamente binario:
+\[ X: \omega \in \Omega \longrightarrow X(\omega) \in \{0, 1\} \]
+Convenzionalmente, associamo il valore $1$ al successo ("Testa") e il valore $0$ all'insuccesso ("Croce").
+
+\paragraph{Funzione di Massa di Probabilità (PMF)}
+La distribuzione di probabilità per una variabile di Bernoulli, denotata con la scrittura $X \sim \mathcal{B}(p)$, è definita in modo assiomatico dalle probabilità dei due unici eventi possibili:
+\[ 
+\mathbb{P}(X = x) = 
+\begin{cases} 
+p & \text{se } x = 1 \\ 
+q = 1 - p & \text{se } x = 0 
+\end{cases} 
+\]
+Al fine di operare analiticamente, possiamo unificare i due casi in un'unica espressione compatta, valida per l'intero alfabeto $x \in \{0, 1\}$:
+\[ p_X(x) = p^x q^{1-x} \]
+
+\subsection{Esempio: Il Conteggio Bernoulliano}
+
+Per applicare concretamente i concetti appena esposti, consideriamo un esperimento fondamentale nella teoria della probabilità: il lancio ripetuto di una moneta. Questo scenario è il prototipo del cosiddetto \textbf{Processo di Bernoulli}.
+
+\paragraph{Descrizione dell'Esperimento}
+Immaginiamo di lanciare una moneta per $N$ volte consecutive. Possiamo modellare questo fenomeno attraverso tre ipotesi chiave:
+\begin{itemize}
+    \item \textbf{Esiti binari:} Ogni singolo lancio ammette solo due risultati: "Testa" ($T$), che chiameremo successo, e "Croce" ($C$), che chiameremo insuccesso.
+    \item \textbf{Probabilità costanti:} La moneta ha una probabilità $p$ (con $0 < p < 1$) di dare "Testa". Di conseguenza, la probabilità di ottenere "Croce" sarà $q = 1 - p$.
+    \item \textbf{Indipendenza:} Assumiamo che i lanci siano statisticamente indipendenti; l'esito di un lancio non influenza in alcun modo quelli precedenti o successivi.
+\end{itemize}
+
+\paragraph{Ora Passiamo dallo Spazio Campione alla Variabile Aleatoria}
+Lo spazio campione $\Omega$ è costituito dall'insieme di tutte le possibili sequenze di risultati (le $N$-ple). Un evento elementare generico $\omega \in \Omega$ si presenta come una stringa ordinata del tipo:
+\[ \omega = (C, C, T, T, C, \dots, C, T, T) \]
+
+Il nostro obiettivo non è analizzare l'ordine esatto, ma il numero complessivo di successi. Definiamo quindi la variabile aleatoria $X_N$ che "conta" quante volte esce "Testa" negli $N$ lanci:
+\[ X_N: \omega \in \Omega \longrightarrow X_N(\omega) \in \{0, 1, \dots, N\} \]
+Diremo che $X_N(\omega) = k$ se la sequenza $\omega$ contiene esattamente $k$ successi.
+
+
+\subsubsection{Costruzione della Probabilità}
+
+Per determinare la probabilità che si verifichino esattamente $k$ successi ($P(X_N=k)$), procediamo per gradi sfruttando l'indipendenza degli eventi.
+
+\paragraph{1. Analisi di una singola configurazione}
+Consideriamo una specifica sequenza $\omega^*$ che soddisfa la condizione di avere $k$ teste e $N-k$ croci. Per fissare le idee, immaginiamo la sequenza in cui appaiono prima tutte le teste e poi tutte le croci. Grazie all'indipendenza stocastica, la probabilità congiunta è semplicemente il prodotto delle singole probabilità:
+
+\[
+\mathbb{P}(\omega^*) = \mathbb{P}(\underbrace{T \cap \dots \cap T}_{k} \cap \underbrace{C \cap \dots \cap C}_{N-k}) = p^k q^{N-k}
+\]
+Questa rappresenta la probabilità di una singola, specifica sequenza in cui i risultati si presentano in un ordine ben preciso.
+È fondamentale notare che qualsiasi altra sequenza con lo stesso numero di teste e croci (anche se in ordine diverso) avrà la \textbf{stessa identica probabilità}, poiché il prodotto è commutativo.
+
+\paragraph{2. Il ruolo della Combinatoria}
+Poiché gli eventi elementari sono mutuamente esclusivi, la probabilità totale dell'evento "ottenere $k$ teste" è la somma delle probabilità di tutte le sequenze favorevoli.
+\\Dobbiamo quindi chiederci: \textit{quante sono le sequenze distinte di lunghezza $N$ che contengono esattamente $k$ teste?}
+\\La risposta è fornita dal \textbf{coefficiente binomiale}:
+\[ C_{N,k} = \binom{N}{k} \]
+L'insieme di queste sequenze costituisce l'evento composto $\Omega_{N,k}$.
+
+\subsection{La Distribuzione Binomiale}
+
+Unendo il conteggio combinatorio con la probabilità della singola sequenza, otteniamo la \textbf{Funzione di Massa di Probabilità} (PMF) Binomiale.
+\\La probabilità che la variabile aleatoria $X_N$ assuma valore $k$ è data da:
+
+\begin{equation}
+\boxed{p_{X_N}(k) = \mathbb{P}(X_N = k) = \binom{N}{k} p^k q^{N-k}}
+\end{equation}
+
+Quando una variabile segue questa legge, si usa la notazione sintetica $X_N \sim \mathcal{B}(N, p)$.
+
+\paragraph{Verifica di Normalizzazione}
+Una proprietà essenziale di ogni PMF è che la somma delle probabilità su tutto l'alfabeto sia pari a 1. Nel nostro caso, sfruttando il celebre \textbf{Teorema del Binomio di Newton}, osserviamo che:
+
+\[
+\sum_{k=0}^{N} p_{X_N}(k) = \sum_{k=0}^{N} \binom{N}{k} p^k q^{N-k} = (p + q)^N
+\]
+
+Poiché $p$ e $q$ sono complementari ($p+q=1$), otteniamo $(1)^N = 1$, confermando che la distribuzione è ben definita.
+
+\paragraph{Valore Atteso}
+Infine, calcoliamo la media statistica della distribuzione. Applicando la definizione di valore atteso, si dimostra che:
+
+\begin{equation}
+\mathbb{E}[X_N] = \sum_{k=0}^{N} k \cdot \binom{N}{k} p^k q^{N-k} = Np
+\end{equation}
+
+Il risultato $\mathbb{E}[X_N] = Np$ è coerente con l'intuizione: se ripetiamo un esperimento $N$ volte con probabilità di successo $p$, ci aspettiamo in media $N \cdot p$ successi.
+\\\\Alla luce di questa formulazione, risulta evidente come la Variabile Aleatoria Binomiale $X_N$, definita per $N$ lanci, non sia altro che la somma di $N$ variabili di Bernoulli indipendenti e identicamente distribuite (i.i.d.).
+
+\subsection{La Distribuzione Uniforme Discreta}
+
+Se la variabile di Bernoulli modellava una situazione con esattamente 2 esiti, la \textbf{Variabile Uniforme} modella situazioni in cui tutti gli esiti possibili hanno la \textbf{stessa probabilità} di verificarsi (sono equiprobabili).
+\\Questa distribuzione concerne tutti gli esempi classici visti fino ad ora, come il lancio di un dado onesto, l'estrazione di una carta da un mazzo completo, ecc.
+
+\paragraph{Definizioni}
+Una variabile aleatoria $X$ si dice \textit{uniformemente distribuita} su un insieme (alfabeto) $\mathcal{X}$ (e si indica con $X \sim \mathcal{U}(\mathcal{X})$) se:
+\begin{itemize}
+    \item L'insieme dei valori possibili ha cardinalità finita $M$ (ossia $|\mathcal{X}| = M$).
+    \item Ogni singolo valore $x \in \mathcal{X}$ ha probabilità $1/M$.
+\end{itemize}
+
+La sua funzione di massa di probabilità è quindi definita come:
+
+\begin{equation}
+\boxed{p_X(x) = \mathbb{P}(X=x) = \frac{1}{M}, \quad \forall x \in \mathcal{X}}
+\end{equation}
+
+Ovviamente $p_X(x)$ soddisfa le condizioni necessarie per essere una pmf (valori positivi e somma unitaria).
+
+\paragraph{Esempio Classico}
+Consideriamo il lancio di un dado a 6 facce onesto.
+\begin{itemize}
+    \item \textbf{Alfabeto:} $\mathcal{X} = \{1, 2, 3, 4, 5, 6\}$.
+    \item \textbf{Cardinalità:} $M = 6$.
+    \item \textbf{Probabilità puntuale:} La probabilità che esca un numero specifico (es. il 4) è:
+    \[ \mathbb{P}(X=4) = \frac{1}{6} \]
+\end{itemize}
+
+\subsubsection{Valore Atteso (Media)}
+
+Il calcolo della media è immediato. Applicando la definizione generale:
+
+\begin{equation}
+\mathbb{E}[X] = \sum_{x \in \mathcal{X}} x \cdot p_X(x) = \sum_{x \in \mathcal{X}} x \cdot \frac{1}{M} = \frac{1}{M} \sum_{x \in \mathcal{X}} x
+\end{equation}
+
+Poiché la probabilità $1/M$ è costante, la portiamo fuori dalla sommatoria. È ovvio notare che, in questo caso specifico, la media della variabile aleatoria \textbf{coincide con la media aritmetica} di tutti i possibili valori dell'alfabeto.
+
+\subsubsection{Un Caso Notevole: Interi consecutivi da 0}
+
+Un caso molto interessante, frequente in informatica, si ha quando l'alfabeto è costituito dai numeri interi da $0$ a $M-1$.
+\[ \mathcal{X} = \{0, 1, \dots, M-1\} \]
+
+Che succede al valore atteso in questo caso? Per calcolarlo sfruttiamo la \textbf{formula della somma dei primi interi} (sommatoria di Gauss).
+
+\begin{enumerate}
+    \item Dobbiamo sommare i numeri da $0$ a $M-1$.
+    \item Ricordiamo che la somma da $1$ a $n$ è data da $\frac{n(n+1)}{2}$.
+    \item Nel nostro caso il numero più alto è $n = M-1$.
+    \item Sostituendo nella formula della somma:
+    \[ \text{Somma} = \sum_{i=0}^{M-1} i = \frac{(M-1)((M-1)+1)}{2} = \frac{(M-1)M}{2} \]
+    \item Ora calcoliamo la media dividendo per $M$ (come richiesto dalla formula della media uniforme):
+    
+    \begin{equation}
+    \begin{aligned}
+    \mathbb{E}[X] &= \frac{1}{M} \cdot \text{Somma} \\
+    &= \frac{1}{M} \cdot \frac{M(M-1)}{2}
+    \end{aligned}
+    \end{equation}
+    
+    \item Semplificando $M$, otteniamo la formula finale per questo caso specifico:
+    
+    \begin{equation}
+    \boxed{\mathbb{E}[X] = \frac{M-1}{2}}
+    \end{equation}
+\end{enumerate}
+
+\paragraph{Esempio numerico}
+Ipotizziamo di avere una cifra decimale generata a caso (da 0 a 9). In questo caso $M=10$.
+\begin{itemize}
+    \item I valori sono $\{0, 1, \dots, 9\}$.
+    \item Applicando la formula appena ricavata:
+    \[ \mathbb{E}[X] = \frac{10-1}{2} = \frac{9}{2} = 4.5 \]
+    \item Il valore atteso è $4.5$.
+\end{itemize}
+
+\subsection{La Distribuzione di Poisson}
+
+Prima di definire formalmente questa distribuzione, consideriamo uno scenario intuitivo per comprenderne l'utilità.
+
+\paragraph{Esempio: Il Call Center}
+Immaginiamo di lavorare in un call center. Analizzando i dati storici, sappiamo che, \textbf{in media}, riceviamo \textbf{5 chiamate all'ora}.
+\\Tuttavia, il fatto che la media sia 5 non garantisce che nella prossima ora riceveremo \textit{esattamente} 5 chiamate. Essendo un fenomeno aleatorio:
+\begin{itemize}
+    \item In un'ora potremmo riceverne 3 (bassa attività).
+    \item In un'altra potremmo riceverne 8 (picco di attività).
+    \item In un'altra ancora potremmo non riceverne nessuna (0).
+\end{itemize}
+
+La distribuzione di Poisson nasce proprio per rispondere a domande specifiche su questi conteggi, del tipo:
+\begin{quote}
+    \textit{"Sapendo che la media è 5 chiamate/ora, qual è la probabilità che nella prossima ora ne arrivino esattamente 7?"}
+\end{quote}
+
+È la distribuzione di riferimento per modellare il conteggio di \textbf{eventi rari} che si verificano in un intervallo continuo di tempo, spazio o volume.
+
+\paragraph{Il Parametro $\lambda$ e le Condizioni}
+Tutta la distribuzione ruota attorno a un solo parametro fondamentale, $\lambda$ (Lambda), che rappresenta l'\textbf{intensità media} del processo:
+
+\[ \lambda = \text{numero medio di eventi attesi nell'intervallo} \]
+
+Affinché si possa applicare il modello di Poisson, devono valere tre ipotesi:
+\begin{enumerate}
+    \item \textbf{Indipendenza:} L'accadimento di un evento non influenza la probabilità che ne accada un altro (es. ricevere una chiamata ora non cambia la probabilità di riceverne una tra un minuto).
+    \item \textbf{Stazionarietà:} Il tasso medio $\lambda$ è costante nel tempo considerato.
+    \item \textbf{Non contemporaneità:} La probabilità che due eventi accadano nello stesso identico istante è trascurabile.
+\end{enumerate}
+
+\subsubsection{Derivazione come limite della Binomiale}
+
+La formula di Poisson non è arbitraria, ma si ottiene matematicamente come caso limite della distribuzione Binomiale.
+
+Immaginiamo di suddividere il nostro intervallo di tempo (l'ora del call center) in $N$ sotto-intervalli piccolissimi (es. millisecondi).
+\begin{itemize}
+    \item Sia $N \to \infty$ (numero di sotto-intervalli tendente all'infinito).
+    \item Sia $p \to 0$ (probabilità di ricevere una chiamata nel singolo millisecondo è quasi nulla).
+    \item Manteniamo però costante il prodotto $N \cdot p = \lambda$ (la media totale delle chiamate nell'ora resta 5).
+\end{itemize}
+
+Partiamo dalla PMF Binomiale e sostituiamo $p$ con $\frac{\lambda}{N}$:
+N.B: ${p} = \frac{\lambda}{N}$
+\[
+\mathbb{P}(X=k) = \lim_{N \to \infty} \binom{N}{k} \left( \frac{\lambda}{N} \right)^k \left( 1 - \frac{\lambda}{N} \right)^{N-k}
+\]
+
+Espandiamo i termini per calcolare il limite:
+
+\begin{equation}
+\begin{aligned}
+\mathbb{P}(X=k) &= \lim_{N \to \infty} \frac{N!}{k!(N-k)!} \cdot \frac{\lambda^k}{N^k} \cdot \left( 1 - \frac{\lambda}{N} \right)^N \cdot \left( 1 - \frac{\lambda}{N} \right)^{-k} \\
+&= \frac{\lambda^k}{k!} \lim_{N \to \infty} \underbrace{\frac{N(N-1)\dots(N-k+1)}{N^k}}_{\to 1} \cdot \underbrace{\left( 1 - \frac{\lambda}{N} \right)^N}_{\to e^{-\lambda}} \cdot \underbrace{\left( 1 - \frac{\lambda}{N} \right)^{-k}}_{\to 1}
+\end{aligned}
+\end{equation}
+
+Dove abbiamo sfruttato il limite notevole $\lim_{x \to \infty} (1 - \frac{\lambda}{x})^x = e^{-\lambda}$.
+
+\paragraph{Funzione di Massa di Probabilità}
+Il risultato del limite ci fornisce la formula della PMF per una variabile Poissoniana $X \sim \text{Pois}(\lambda)$:
+
+\begin{equation}
+\boxed{p_X(k) = \mathbb{P}(X=k) = \frac{\lambda^k \cdot e^{-\lambda}}{k!}, \quad k \in \{0, 1, 2, \dots\}}
+\end{equation}
+
+Dove $e$ è il numero di Nepero ($e \approx 2.718$).
+
+\paragraph{Proprietà: Media e Varianza}
+Una caratteristica unica ed elegante della distribuzione di Poisson è che il valore atteso e la varianza coincidono e sono pari al parametro stesso.
+
+\begin{equation}
+\mathbb{E}[X] = \lambda \quad \text{e} \quad \text{Var}(X) = \lambda
+\end{equation}
+
+Questo implica che in un processo di Poisson, se aumenta il numero medio di eventi attesi (es. un call center più grande), aumenta proporzionalmente anche l'incertezza (la variabilità) attorno a tale media.
+

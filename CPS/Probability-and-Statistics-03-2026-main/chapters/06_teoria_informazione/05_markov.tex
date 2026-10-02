@@ -1,0 +1,201 @@
+% ==========================================
+% NUOVO ARGOMENTO: SORGENTI MARKOVIANE
+% ==========================================
+
+\chapter{Le Sorgenti Markoviane}
+
+Abbiamo visto che gestire una sorgente con memoria tenendo traccia dell'infinita storia passata è impossibile. Le \textbf{Catene di Markov} introducono un'ipotesi semplificativa estremamente potente per modellare queste sorgenti, introducendo il concetto di \textit{"memoria a breve termine"}.
+
+Sia $X(n) \in \mathcal{X}$ una sequenza aleatoria su un alfabeto discreto $\mathcal{X}$ di cardinalità $M$. 
+Si definisce Catena di Markov un processo in cui la probabilità di estrarre un certo simbolo al tempo $n$, dato tutto lo "storico" dei simboli emessi dall'inizio, è uguale alla probabilità calcolata conoscendo \textbf{solo il suo immediato predecessore} $X(n-1)$.
+
+Formalmente:
+\begin{equation}
+    f_{X(n)|X(n-1),\dots,X(1)}(x_n|x_{n-1},\dots,x_1) = f_{X(n)|X(n-1)}(x_n|x_{n-1})
+\end{equation}
+
+\begin{quote}
+    \textbf{Significato concettuale:} In una catena di Markov, il passato e il futuro sono condizionatamente indipendenti. \textit{Il futuro dipende dal passato solo ed esclusivamente attraverso il presente.} Se conosco lo stato attuale, sapere come ci sono arrivato non mi fornisce alcuna informazione aggiuntiva su dove andrò domani.
+\end{quote}
+
+\subsection{La Matrice di Transizione}
+
+D'ora in poi assumiamo, per semplicità notazionale, che l'alfabeto sia numerico: $\mathcal{X} = \{1, 2, \dots, M\}$.
+Le dinamiche di questa sorgente sono completamente descritte da una matrice quadrata $M \times M$, chiamata \textbf{Matrice di Transizione} $\mathbf{P}$:
+
+\begin{equation}
+\mathbf{P} = \begin{bmatrix}
+    f_{X(n)|X(n-1)}(1|1) & f_{X(n)|X(n-1)}(2|1) & \dots & f_{X(n)|X(n-1)}(M|1) \\
+    f_{X(n)|X(n-1)}(1|2) & f_{X(n)|X(n-1)}(2|2) & \dots & f_{X(n)|X(n-1)}(M|2) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    f_{X(n)|X(n-1)}(1|M) & f_{X(n)|X(n-1)}(2|M) & \dots & f_{X(n)|X(n-1)}(M|M)
+\end{bmatrix}
+\end{equation}
+
+Per capire come leggere questa matrice, analizziamone le proprietà riga per riga:
+\begin{itemize}
+    \item La generica riga $i$-esima risponde a questa domanda: \textit{"Se la sorgente ha appena emesso il simbolo $i$ (stato corrente), qual è la probabilità che emetta il simbolo $1, 2, \dots, M$ nel prossimo istante?"}
+    \item Di conseguenza, \textbf{la somma di tutte le probabilità su una singola riga deve fare esattamente 1}. Questo perché, partendo da uno stato, la sorgente dovrà necessariamente emettere un simbolo (transitare in un nuovo stato o rimanere nello stesso) al passo successivo.
+\end{itemize}
+
+\subsection{Proprietà delle Catene di Markov}
+
+In generale, le probabilità all'interno della matrice $\mathbf{P}$ potrebbero cambiare nel tempo. Tuttavia, per i nostri scopi, imponiamo due proprietà strutturali fondamentali:
+
+\begin{enumerate}
+    \item \textbf{Catena Omogenea (Tempo-invariante):} Una catena di Markov si dice omogenea quando le sue probabilità di transizione sono costanti nel tempo. In pratica, la matrice $\mathbf{P}$ è fissa: la probabilità di andare dallo stato 1 allo stato 2 è $p$, e rimarrà $p$ anche tra cento anni. Di conseguenza, il grafo logico che scaturisce da questa matrice non muta forma.
+    \item \textbf{Catena Indecomponibile (Fortemente Connessa):} Una catena si definisce indecomponibile se ogni nodo (stato) può essere raggiunto partendo da ogni altro nodo in un numero finito di passi. In termini di teoria dei grafi, significa che il grafo che rappresenta la catena è \textit{fortemente connesso} (non ci sono "vicoli ciechi" o scompartimenti stagni da cui non si può più uscire o rientrare).
+\end{enumerate}
+
+\subsection{Diagramma di Stato (Rappresentazione Grafica)}
+
+Una catena di Markov omogenea può essere rappresentata in modo molto intuitivo tramite un diagramma di stato. I nodi del grafo rappresentano gli stati ammissibili (i simboli dell'alfabeto), mentre gli archi orientati indicano le transizioni possibili, etichettate con la probabilità $p_{i,j}$ (probabilità di andare dallo stato $i$ allo stato $j$, corrispondente all'elemento della matrice $\mathbf{P}$).
+
+\vspace{0.5cm}
+\begin{center}
+% Assicurati di avere \usetikzlibrary{automata, positioning, arrows.meta} nel preambolo!
+\begin{tikzpicture}[
+    >=stealth,
+    node distance=3.5cm,
+    on grid,
+    auto,
+    thick,
+    % Stile per i nodi (stati)
+    state/.style={circle, draw, very thick, minimum size=1.5cm, align=center, fill=white}
+]
+
+    % Definizione dei Nodi
+    \node[state] (s1) {State \\ \#1};
+    \node[state] (s2) [above right=2cm and 4cm of s1] {State \\ \#2};
+    \node[state] (s3) [below right=2cm and 4cm of s2] {State \\ \#3};
+    \node[state] (sM) [below right=3cm and 2.5cm of s1] {State \\ \#M};
+
+    % Archi e transizioni
+    \path[->]
+        % Transizioni tra 1 e 2
+        (s1) edge[bend left=15] node[above left] {$p_{1,2}$} (s2)
+        (s2) edge[bend left=15] node[above] {$p_{2,1}$} (s1)
+        % Loop su 1 e 2
+        (s1) edge[loop left] node {$p_{1,1}$} (s1)
+        (s2) edge[loop right] node {$p_{2,2}$} (s2)
+        
+        % Transizioni verso 3
+        (s2) edge[bend left=15] node[above right] {$p_{2,3}$} (s3)
+        (s3) edge[bend left=10] node[above] {$p_{3,1}$} (s1)
+        
+        % Transizioni da/verso M
+        (s1) edge[bend right=15] node[below left] {$p_{1,M}$} (sM)
+        (sM) edge[bend right=15] node[below right] {$p_{M,3}$} (s3)
+        (sM) edge[bend left=10] node[right] {$p_{M,2}$} (s2)
+        ;
+
+\end{tikzpicture}
+\captionof{figure}{Rappresentazione di una catena di Markov mediante diagramma di stato.}
+\end{center}
+\vspace{0.5cm}
+
+\section{Caratterizzazione di Catene Omogenee}
+
+Ora che abbiamo definito le regole di transizione, vogliamo utilizzare questo modello matematico per rispondere a domande pratiche. 
+Una catena di Markov omogenea si dice \textbf{completamente caratterizzata} se conosciamo:
+\begin{enumerate}
+    \item La Matrice di Transizione $\mathbf{P}$.
+    \item La distribuzione di probabilità marginale (lo stato del sistema) in un istante iniziale noto.
+\end{enumerate}
+Con queste due sole informazioni, possiamo calcolare l'evoluzione del sistema all'infinito.
+
+\subsection{Probabilità di una Sequenza Temporale}
+
+Il primo problema da risolvere è: \textit{"Qual è la probabilità che la catena esegua un'esatta e specifica sequenza di passi uno dopo l'altro?"}
+
+Alla base di tutto c'è la \textbf{Regola della Catena} della probabilità. Se vogliamo che tre eventi $A, B, C$ si verifichino in sequenza, sappiamo che:
+\begin{equation*}
+    \mathbb{P}(A, B, C) = \mathbb{P}(A) \cdot \mathbb{P}(B|A) \cdot \mathbb{P}(C|A,B)
+\end{equation*}
+
+Tuttavia, siamo in una catena di Markov. L'ipotesi semplificativa ("memoria a breve termine") ci viene in soccorso: l'evento $C$ (il futuro) dipende da $A$ (il passato) \textit{solo attraverso} $B$ (il presente). Pertanto, il termine $\mathbb{P}(C|A,B)$ si semplifica drasticamente in $\mathbb{P}(C|B)$. La formula collassa in:
+\begin{equation*}
+    \mathbb{P}(A, B, C) = \mathbb{P}(A) \cdot \mathbb{P}(B|A) \cdot \mathbb{P}(C|B)
+\end{equation*}
+
+In parole povere: \textbf{la probabilità di un'intera sequenza è data dalla probabilità dello stato iniziale, moltiplicata per tutti i singoli salti successivi}.
+
+\subsubsection*{Formalizzazione per una sequenza di lunghezza $\ell$}
+Vogliamo calcolare la probabilità di una sequenza lunga $\ell$ passi che finisce all'istante temporale $n$. L'istante iniziale sarà quindi $n - \ell + 1$. 
+Chiamiamo questa sequenza di stati visitati $\mathbf{x}_{n-\ell+1:n} = (i_{n-\ell+1}, \dots, i_n)$.
+
+Applicando la regola appena dedotta, possiamo scrivere la probabilità congiunta usando la notazione di produttoria ($\prod$):
+\begin{equation}
+    f_{\mathbf{X}_{n-\ell+1:n}}(\mathbf{x}_{n-\ell+1:n}) = \underbrace{f_{X(n-\ell+1)}(i_{n-\ell+1})}_{\text{Prob. Stato Iniziale}} \cdot \underbrace{\prod_{k=0}^{\ell-2} f_{X(n-k)|X(n-k-1)}(i_{n-k} | i_{n-k-1})}_{\text{Tutte le transizioni successive}}
+\end{equation}
+
+Per comprendere bene l'indice della produttoria, scompattiamolo dall'ultimo passo a ritroso:
+\begin{itemize}
+    \item $k=0 \implies f_{X(n)|X(n-1)}(i_n | i_{n-1})$ (L'ultimo salto, per arrivare all'istante $n$)
+    \item $k=1 \implies f_{X(n-1)|X(n-2)}(i_{n-1} | i_{n-2})$ (Il penultimo salto)
+    \item \dots
+    \item $k=\ell-2 \implies f_{X(n-\ell+2)|X(n-\ell+1)}(i_{n-\ell+2} | i_{n-\ell+1})$ (Il primissimo cambio di stato partendo dall'istante iniziale).
+\end{itemize}
+
+\subsection{Evoluzione dello Stato e Formulazione Matriciale}
+
+Tutto il calcolo delle sequenze appena visto \textit{è possibile solo se} riusciamo a calcolare la probabilità di trovarci in un determinato stato iniziale $i$ a un certo istante $n$, ovvero la probabilità marginale $f_{X(n)}(i)$.
+
+Per calcolare questa probabilità, applichiamo il \textbf{Teorema della Probabilità Totale}: dobbiamo sommare le probabilità di tutti i possibili "percorsi" che ci portano allo stato $i$ partendo da un qualsiasi stato $j$ al passo precedente:
+\begin{equation}
+    f_{X(n)}(i) = \sum_{j=1}^{M} \underbrace{f_{X(n)|X(n-1)}(i|j)}_{\substack{\text{Prob. di saltare}\\ \text{da } j \text{ a } i}} \cdot \underbrace{f_{X(n-1)}(j)}_{\substack{\text{Prob. di essere}\\ \text{nello stato } j}}
+\end{equation}
+
+Possiamo esprimere questa stessa equazione in modo molto più compatto ed elegante sfruttando l'algebra lineare. 
+Definiamo il \textbf{vettore di stato} al tempo $n$ come un vettore colonna contenente le probabilità di trovarsi in ciascuno degli $M$ stati:
+\begin{equation}
+    \mathbf{f}(n) = \left[ f_{X(n)}(1), \dots, f_{X(n)}(M) \right]^T
+\end{equation}
+
+L'equazione della sommatoria precedente si traduce nel seguente prodotto matrice-vettore:
+\begin{equation}
+\label{eq:markov_evolution}
+    \boxed{ \mathbf{f}(n) = \mathbf{P}^T \mathbf{f}(n-1) }
+\end{equation}
+
+\textbf{Perché usiamo la Matrice Trasposta $\mathbf{P}^T$?} \\
+Ricordiamo che, per costruzione, l'elemento $\mathbf{P}_{j,i}$ della matrice originaria $\mathbf{P}$ rappresenta la transizione dalla riga $j$ (stato di partenza) alla colonna $i$ (stato di arrivo). 
+Tuttavia, nella nostra sommatoria, l'indice che varia è $j$ (le righe di $\mathbf{P}$), mentre l'indice di arrivo $i$ è fissato. Per le regole della moltiplicazione matriciale (riga per colonna), affinché il vettore colonna $\mathbf{f}(n-1)$ moltiplichi gli elementi corretti, dobbiamo "sdraiare" le colonne di $\mathbf{P}$ facendole diventare righe. Ecco perché è obbligatorio usare $\mathbf{P}^T$.
+
+Applicando iterativamente l'equazione \ref{eq:markov_evolution}, possiamo calcolare lo stato del sistema a qualsiasi istante futuro $n$, partendo da un istante passato noto $(n-i)$:
+\begin{equation}
+    \mathbf{f}(n) = (\mathbf{P}^T)^i \mathbf{f}(n-i)
+\end{equation}
+
+\subsection{Esempio Pratico: Previsioni Meteo}
+
+Per consolidare i concetti, consideriamo un sistema a $M=2$ stati: \textbf{Stato 1 = Sole}, \textbf{Stato 2 = Pioggia}.
+
+Supponiamo che oggi il meteo sia descritto dal seguente vettore di stato iniziale $\mathbf{f}$:
+\begin{equation*}
+    \mathbf{f} = \begin{bmatrix} f_1 \\ f_2 \end{bmatrix} = \begin{bmatrix} 0.3 \\ 0.7 \end{bmatrix} \begin{array}{l} \leftarrow \text{Prob. di Sole oggi} \\ \leftarrow \text{Prob. di Pioggia oggi} \end{array}
+\end{equation*}
+
+Sia data la matrice di transizione $\mathbf{P}$:
+\begin{equation*}
+    \mathbf{P} = \begin{bmatrix} 0.8 & 0.2 \\ 0.4 & 0.6 \end{bmatrix}
+\end{equation*}
+\textit{(Esempio di lettura: $\mathbf{P}_{1,1}=0.8$ significa che se oggi c'è Sole, c'è l'80\% di probabilità che domani ci sia ancora Sole. $\mathbf{P}_{2,1}=0.4$ significa che se oggi piove, domani c'è il 40\% di probabilità che esca il Sole).}
+
+Vogliamo calcolare il vettore di stato di domani, $\mathbf{f}'$.
+Se lo facessimo analiticamente per il Sole ($f'_1$), scriveremmo:
+\begin{align*}
+    \mathbb{P}(\text{Sole domani}) &= \left[ \mathbb{P}(\text{Sole oggi}) \cdot \mathbb{P}(\text{Sole} \to \text{Sole}) \right] + \left[ \mathbb{P}(\text{Pioggia oggi}) \cdot \mathbb{P}(\text{Pioggia} \to \text{Sole}) \right] \\
+    f'_1 &= (f_1 \cdot 0.8) + (f_2 \cdot 0.4)
+\end{align*}
+
+Applichiamo ora la formula matriciale $\mathbf{f}' = \mathbf{P}^T \mathbf{f}$. Dobbiamo prima trasporre la matrice $\mathbf{P}$:
+\begin{equation*}
+    \mathbf{P}^T = \begin{bmatrix} 0.8 & 0.4 \\ 0.2 & 0.6 \end{bmatrix}
+\end{equation*}
+Eseguiamo il prodotto riga per colonna:
+\begin{equation*}
+    \mathbf{f}' = \begin{bmatrix} 0.8 & 0.4 \\ 0.2 & 0.6 \end{bmatrix} \begin{bmatrix} f_1 \\ f_2 \end{bmatrix} = \begin{bmatrix} 0.8 f_1 + 0.4 f_2 \\ 0.2 f_1 + 0.6 f_2 \end{bmatrix}
+\end{equation*}
+
+Come si può notare, la prima riga del risultato vettoriale \textbf{coincide esattamente} con il calcolo logico effettuato analiticamente. Sostituendo i valori numerici di oggi, avremmo le previsioni per domani: $\mathbb{P}(\text{Sole domani}) = 0.8(0.3) + 0.4(0.7) = 0.52$.

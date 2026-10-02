@@ -1,0 +1,534 @@
+\subsection{Analisi della PMF Condizionale}
+
+Torniamo ad analizzare la PMF condizionale $p_{Y|X}(y|x)$.
+\\Se fisso un evento $\{X=x\}$ e faccio variare $Y$ su tutti i suoi valori possibili, la somma di queste probabilità farà sempre 1. Essendo una legge di probabilità, vale che:
+
+\begin{equation}
+p_{Y|X}(y|x) \ge 0
+\end{equation}
+
+\begin{equation}
+\sum_{y \in \mathcal{Y}} p_{Y|X}(y|x) = \mathbb{P}\left(\bigcup_{y \in \mathcal{Y}} \{Y=y\} \Big| \{X=x\}\right) = \mathbb{P}(\Omega | \{X=x\}) = 1
+\end{equation}
+
+\begin{itemize}
+    \item La parte $\mathbb{P}(\Omega | \{X=x\}) = 1$ è importante perché al posto di $\Omega$ possiamo inserire una qualsiasi partizione $\{E_i\}_{i=1}^n$ di $\Omega$.
+\end{itemize}
+
+Inoltre, applicando la definizione di probabilità, osserviamo che:
+\[
+\mathbb{P}(\{X=x\}) = \mathbb{P}\left(\bigcup_{y \in \mathcal{Y}} (\{X=x\} \cap \{Y=y\})\right) = \sum_{y \in \mathcal{Y}} \mathbb{P}(\{X=x\} \cap \{Y=y\}) 
+\]
+Esprimendo la probabilità dell'intersezione tramite la probabilità condizionata otteniamo:
+\[
+\sum_{y \in \mathcal{Y}} \mathbb{P}(\{X=x\} | \{Y=y\}) \cdot \mathbb{P}(\{Y=y\})
+\]
+
+Da cui possiamo riscrivere la \textbf{proprietà di marginalizzazione} della PMF congiunta in termini di PMF condizionali nella forma:
+
+\begin{equation}
+p_X(x) = \sum_{y \in \mathcal{Y}} p_{X,Y}(x,y) = \sum_{y \in \mathcal{Y}} p_{X|Y}(x|y) \cdot p_Y(y) \quad (1)
+\end{equation}
+
+\begin{equation}
+p_Y(y) = \sum_{x \in \mathcal{X}} p_{X,Y}(x,y) = \sum_{x \in \mathcal{X}} p_{Y|X}(y|x) \cdot p_X(x) \quad (2)
+\end{equation}
+
+Si noti che questa non è altro che la \textbf{legge della probabilità totale}:
+\begin{itemize}
+    \item L'equazione (1) è scritta per l'evento $\{X=x\}$ rispetto alla partizione $\Omega = \bigcup_{y \in \mathcal{Y}} \{Y=y\}$.
+    \item L'equazione (2) è scritta per l'evento $\{Y=y\}$ rispetto alla partizione $\Omega = \bigcup_{x \in \mathcal{X}} \{X=x\}$.
+\end{itemize}
+
+\subsubsection{Indipendenza e PMF Condizionale}
+Che succede se $X$ e $Y$ sono \textbf{indipendenti}?
+Se gli eventi sono indipendenti, vale che:
+
+\begin{equation}
+p_{Y|X}(y|x) = p_Y(y) \quad \text{e} \quad p_{X|Y}(x|y) = p_X(x)
+\end{equation}
+
+Concettualmente, sapere che è successa "quella cosa" (cioè conoscere il valore di una variabile) non aggiunge alcuna informazione per prevedere il comportamento dell'altra.
+
+\subsection{Regola della Catena (Chain Rule) per Variabili Multiple}
+
+Si consideri una terna di variabili aleatorie $(X, Y, Z)$, distribuite secondo una PMF congiunta $p_{X,Y,Z}(x,y,z)$ con $(x,y,z) \in \mathcal{X} \times \mathcal{Y} \times \mathcal{Z}$.
+
+Vogliamo calcolare la probabilità che queste tre variabili assumano contemporaneamente specifici valori. Per farlo, possiamo usare in modo iterativo (a matrioska) la \textbf{legge della probabilità composta}.
+Ricordiamo la regola base per due eventi: $\mathbb{P}(A \cap B) = \mathbb{P}(A|B)\mathbb{P}(B)$.
+
+Passo 1: Trattiamo la coppia $(X=x, Y=y)$ come se fosse un unico grande evento $A$, e $(Z=z)$ come l'evento $B$.
+\begin{equation}
+\mathbb{P}(X=x, Y=y, Z=z) = \mathbb{P}(X=x, Y=y \mid Z=z) \cdot \mathbb{P}(Z=z)
+\end{equation}
+
+Passo 2: Ora espandiamo il primo termine $\mathbb{P}(X=x, Y=y \mid Z=z)$. Applicando nuovamente la stessa regola, ma questa volta considerando che il tutto si svolge sotto la condizione "$Z=z$ è un dato di fatto", otteniamo:
+\begin{equation}
+\mathbb{P}(X=x, Y=y \mid Z=z) = \mathbb{P}(X=x \mid Y=y, Z=z) \cdot \mathbb{P}(Y=y \mid Z=z)
+\end{equation}
+
+Mettendo insieme i due passaggi, otteniamo la \textbf{Regola della Catena}:
+\begin{equation}
+\mathbb{P}(X=x, Y=y, Z=z) = \mathbb{P}(X=x \mid Y=y, Z=z) \cdot \mathbb{P}(Y=y \mid Z=z) \cdot \mathbb{P}(Z=z)
+\end{equation}
+
+Possiamo riscrivere questa formula utilizzando la notazione compatta delle PMF viste finora:
+Dalla definizione di probabilità condizionata sappiamo che $p_{X|Y,Z}(x|y,z) = \frac{p_{X,Y|Z}(x,y|z)}{p_{Y|Z}(y|z)}$, da cui deriva direttamente che:
+
+\begin{equation}
+\boxed{p_{X,Y,Z}(x,y,z) = p_Z(z) \cdot p_{Y|Z}(y|z) \cdot p_{X|Y,Z}(x|y,z)}
+\end{equation}
+
+\textit{Nota bene:} Questa regola vale sempre. L'ordine in cui si "estraggono" le variabili è arbitrario. Ogni permutazione dei pedici è valida (es. potevamo partire estraendo $X$, poi $Y$, poi $Z$).
+
+\subsubsection{Indipendenza nella Terna}
+
+Quando possiamo dire che una terna di variabili $(X, Y, Z)$ è composta da variabili mutuamente indipendenti?
+
+L'indipendenza totale si verifica se e solo se il condizionamento rispetto alle altre variabili non apporta alcuna informazione. Ovvero, per ogni possibile combinazione deve valere:
+\begin{align}
+    p_{X|Y,Z}(x|y,z) &= p_X(x) \\
+    p_{Y|X,Z}(y|x,z) &= p_Y(y) \\
+    p_{Z|X,Y}(z|x,y) &= p_Z(z)
+\end{align}
+
+Se queste condizioni sono rispettate, sostituendole nella regola della catena otteniamo che la probabilità congiunta è semplicemente il prodotto delle probabilità marginali (come avevamo generalizzato in precedenza):
+\[
+p_{X,Y,Z}(x,y,z) = p_X(x) \cdot p_Y(y) \cdot p_Z(z)
+\]
+
+\subsection{Esempio Pratico: Sorgente di Bit e Indipendenza}
+
+Si consideri una sorgente binaria che emetta tre bit, siano essi $(B_1, B_2, B_3)$ con $B_i \in \{0,1\}$. 
+Si assegnano due diverse leggi di probabilità congiunte, $p_{B_1, B_2, B_3}$ e $q_{B_1, B_2, B_3}$, riassunte nella seguente tabella (con $0 < \alpha < 1$):
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        $(b_1, b_2, b_3)$ & $p_{B_1,B_2,B_3}(b_1, b_2, b_3)$ & $q_{B_1,B_2,B_3}(b_1, b_2, b_3)$ \\
+        \hline
+        $000$ & $(1-\alpha)^3$ & $(1-\alpha)^2$ \\
+        $001$ & $\alpha(1-\alpha)^2$ & $0$ \\
+        $010$ & $\alpha(1-\alpha)^2$ & $0$ \\
+        $011$ & $\alpha^2(1-\alpha)$ & $\alpha(1-\alpha)$ \\
+        $100$ & $\alpha(1-\alpha)^2$ & $0$ \\
+        $101$ & $\alpha^2(1-\alpha)$ & $\alpha(1-\alpha)$ \\
+        $110$ & $\alpha^2(1-\alpha)$ & $\alpha^2$ \\
+        $111$ & $\alpha^3$ & $0$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Iniziamo osservando che $B_1, B_2$ e $B_3$ sono variabili aleatorie con alfabeto $\{0,1\}$. Vogliamo capire se queste variabili sono indipendenti tra loro a seconda che si usi la distribuzione $p$ o la distribuzione $q$.
+
+\subsubsection{Analisi per la PMF p: $(B_1, B_2)$ sono indipendenti?}
+
+Per verificare se due variabili sono indipendenti, devo verificare che l'accadere di $B_2$ non influenza la probabilità di accadere di $B_1$.
+
+\paragraph{Cosa ci dice la tabella?}
+\begin{itemize}
+    \item \textbf{Colonna $(b_1, b_2, b_3)$:} Mostra tutti gli scenari possibili. Ad esempio $"000" \implies B_1=0, B_2=0, B_3=0$.
+    \item \textbf{Colonna $p$:} Ti dice qual è la probabilità congiunta che si verifichi quello scenario specifico.
+\end{itemize}
+
+Per essere indipendenti, per \textbf{ogni} combinazione di $(b_1, b_2)$ deve valere la regola della fattorizzazione. Ad esempio:
+\[ p(B_1=0, B_2=0) \stackrel{?}{=} p(B_1=0) \cdot p(B_2=0) \]
+
+La tabella, però, ci dà i 3 bit insieme. Per trovare i "pezzi mancanti" (le probabilità marginali e delle singole coppie) dobbiamo usare la \textbf{marginalizzazione}.
+
+\paragraph{Calcoliamo $p(B_1=0, B_2=0)$}
+Sommiamo tutte le righe in cui i primi due bit sono 0, non importa quale sia il terzo:
+\begin{align*}
+p(B_1=0, B_2=0) &= p(000) + p(001) \\
+&= (1-\alpha)^3 + \alpha(1-\alpha)^2 \\
+&= (1-\alpha)^2 \cdot (1-\alpha+\alpha) \\
+&= (1-\alpha)^2
+\end{align*}
+
+\paragraph{Calcoliamo le singole probabilità: $p(B_1=0)$ e $p(B_2=0)$}
+Sommiamo tutte le righe in cui il primo bit è 0 (ovvero gli scenari $000, 001, 010, 011$):
+\begin{align*}
+p(B_1=0) &= p(000) + p(001) + p(010) + p(011) \\
+&= (1-\alpha)^3 + \alpha(1-\alpha)^2 + \alpha(1-\alpha)^2 + \alpha^2(1-\alpha) \\
+&= (1-\alpha) \cdot \left[ (1-\alpha)^2 + 2\alpha(1-\alpha) + \alpha^2 \right] \\
+&= (1-\alpha) \cdot \left[ 1 - 2\alpha + \alpha^2 + 2\alpha - 2\alpha^2 + \alpha^2 \right] \\
+&= (1-\alpha) \cdot [ 1 ] = (1-\alpha)
+\end{align*}
+Ripetendo il calcolo per la seconda colonna, si ottiene analogamente $p(B_2=0) = (1-\alpha)$.
+
+Ora possiamo rispondere alla domanda:
+\[ p(B_1=0, B_2=0) \stackrel{?}{=} p(B_1=0) \cdot p(B_2=0) \]
+\[ (1-\alpha)^2 = (1-\alpha) \cdot (1-\alpha) \quad \implies \text{\textbf{SI!} Allo scenario } (0,0) \text{ sono indipendenti.} \]
+
+\paragraph{Costruiamo le tabelle per facilitare il lavoro}
+Eseguendo lo stesso procedimento di marginalizzazione per le altre combinazioni (es. $B_1=0, B_2=1$), otteniamo le tabelle delle PMF congiunte per le coppie e le relative PMF marginali:
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|cc|c|}
+        \hline
+        $b_1$ & $b_2$ & $p_{B_1, B_2}(b_1, b_2)$ \\
+        \hline
+        $0$ & $0$ & $(1-\alpha)^2$ \\
+        $0$ & $1$ & $\alpha(1-\alpha)$ \\
+        $1$ & $0$ & $\alpha(1-\alpha)$ \\
+        $1$ & $1$ & $\alpha^2$ \\
+        \hline
+    \end{tabular}
+    \quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_1$ & $p_{B_1}(b_1)$ \\
+        \hline
+        $0$ & $1-\alpha$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+    \quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_2$ & $p_{B_2}(b_2)$ \\
+        \hline
+        $0$ & $1-\alpha$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Verificando tutte le combinazioni, notiamo che la fattorizzazione vale per ogni riga. Possiamo quindi affermare che \textbf{$(B_1, B_2)$ SONO INDIPENDENTI} rispetto alla distribuzione $p$ (e ripetendo il ragionamento, lo stesso vale per ogni altra coppia di bit).
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        $(b_1, b_2)$ & $p_{B_1, B_2}(b_1, b_2)$ \\
+        \hline
+        $00$ & $(1-\alpha)^2$ \\
+        $01$ & $\alpha(1-\alpha)$ \\
+        $10$ & $\alpha(1-\alpha)$ \\
+        $11$ & $\alpha^2$ \\
+        \hline
+    \end{tabular}
+    \quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $(b_1, b_3)$ & $p_{B_1, B_3}(b_1, b_3)$ \\
+        \hline
+        $00$ & $(1-\alpha)^2$ \\
+        $01$ & $\alpha(1-\alpha)$ \\
+        $10$ & $\alpha(1-\alpha)$ \\
+        $11$ & $\alpha^2$ \\
+        \hline
+    \end{tabular}
+    \quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $(b_2, b_3)$ & $p_{B_2, B_3}(b_2, b_3)$ \\
+        \hline
+        $00$ & $(1-\alpha)^2$ \\
+        $01$ & $\alpha(1-\alpha)$ \\
+        $10$ & $\alpha(1-\alpha)$ \\
+        $11$ & $\alpha^2$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_1$ & $p_{B_1}(b_1)$ \\
+        \hline
+        $0$ & $(1-\alpha)$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+    \quad\quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_2$ & $p_{B_2}(b_2)$ \\
+        \hline
+        $0$ & $(1-\alpha)$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+    \quad\quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_3$ & $p_{B_3}(b_3)$ \\
+        \hline
+        $0$ & $(1-\alpha)$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+\end{table}
+
+\subsubsection{Analisi per la PMF q}
+Se procediamo nello stesso identico modo per la distribuzione $q_{B_1,B_2,B_3}$, otteniamo le probabilità marginali $q(B_1=1) = \alpha$ e $q(B_3=1) = \alpha$.
+Se andiamo a calcolare la probabilità congiunta dell'evento $(B_1=1, B_3=1)$ usando la tabella, otteniamo:
+
+\[ q(B_1=1, B_3=1) = q(101) + q(111) = \alpha(1-\alpha) + 0 = \alpha(1-\alpha) \]
+
+Verifichiamo la condizione di indipendenza:
+\[ q(B_1=1, B_3=1) \stackrel{?}{=} q(B_1=1) \cdot q(B_3=1) \]
+\[ \alpha(1-\alpha) \neq \alpha \cdot \alpha = \alpha^2 \]
+
+Poiché l'uguaglianza non è verificata, \textbf{c'è una dipendenza}.
+
+\begin{center}
+    \begin{tabular}{|c|c|}
+        \hline
+        $(b_1, b_2)$ & $q_{B_1, B_2}(b_1, b_2)$ \\
+        \hline
+        $00$ & $(1-\alpha)^2$ \\
+        $01$ & $\alpha(1-\alpha)$ \\
+        $10$ & $\alpha(1-\alpha)$ \\
+        $11$ & $\alpha^2$ \\
+        \hline
+    \end{tabular}
+    \quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $(b_1, b_3)$ & $q_{B_1, B_3}(b_1, b_3)$ \\
+        \hline
+        $00$ & $(1-\alpha)^2$ \\
+        $01$ & $\alpha(1-\alpha)$ \\
+        $10$ & $\alpha^2$ \\
+        $11$ & $\alpha(1-\alpha)$ \\
+        \hline
+    \end{tabular}
+    \quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $(b_2, b_3)$ & $q_{B_2, B_3}(b_2, b_3)$ \\
+        \hline
+        $00$ & $(1-\alpha)^2$ \\
+        $01$ & $\alpha(1-\alpha)$ \\
+        $10$ & $\alpha^2$ \\
+        $11$ & $\alpha(1-\alpha)$ \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_1$ & $q_{B_1}(b_1)$ \\
+        \hline
+        $0$ & $(1-\alpha)$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+    \quad\quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_2$ & $q_{B_2}(b_2)$ \\
+        \hline
+        $0$ & $(1-\alpha)$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+    \quad\quad
+    \begin{tabular}{|c|c|}
+        \hline
+        $b_3$ & $q_{B_3}(b_3)$ \\
+        \hline
+        $0$ & $(1-\alpha)$ \\
+        $1$ & $\alpha$ \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\subsubsection{Conclusione}
+Ne concludiamo che le proprietà (marginali) dei singoli bit non contengono informazioni sufficienti su come i bit siano legati tra loro a livello globale.
+\begin{itemize}
+    \item La PMF $p$ genera 3 bit completamente indipendenti (casuali e slegati).
+    \item La PMF $q$ genera 3 bit che, se presi singolarmente, sembrano identici a quelli generati da $p$ (stesse probabilità marginali), ma in realtà nascondono una forte dipendenza tra il 3º bit e gli altri due. 
+    \\In questo caso \textbf{non vale la regola della moltiplicazione}, e non è possibile ricostruire l'intera tabella congiunta $q_{B_1,B_2,B_3}$ partendo solo dai singoli bit.
+\end{itemize}
+
+\subsection{Funzioni di Variabili Doppie}
+
+Fino ad ora abbiamo visto che possiamo definire una funzione di una singola variabile $Y = g(X)$ con $x \in \mathcal{X} \subseteq \mathbb{R} \longmapsto \mathbb{R}$. Questa funzione ci serve per definire le operazioni unitarie, come ad esempio il quadrato $Y = X^2$.
+
+Vogliamo ora estendere questo concetto a operazioni binarie, ternarie, ecc... (come ad esempio la somma $X+Y$).
+
+Siano $X$ e $Y$ due variabili aleatorie descritte da una PMF congiunta $p_{X,Y}(x,y)$, e sia $g(x,y)$ una funzione di due variabili il cui dominio includa $\mathcal{X} \times \mathcal{Y}$:
+\[
+g: (x,y) \in \mathcal{X} \times \mathcal{Y} \subseteq \mathbb{R}^2 \longmapsto \mathbb{R}
+\]
+Nasce così una nuova variabile aleatoria $Z = g(X,Y)$, definita per ogni $(x,y) \in \mathcal{X} \times \mathcal{Y}$. Vogliamo caratterizzare $Z$ in termini di PMF e media statistica.
+
+Per determinare l'alfabeto $\mathcal{Z}$ e la probabilità di $Z$, distinguiamo due casi:
+\begin{itemize}
+    \item \textbf{Se la funzione è biettiva ($|\mathcal{Z}| = |\mathcal{X}||\mathcal{Y}|$):} Allora esiste un unico punto $z = g(x,y)$ per cui vale l'uguaglianza diretta:
+    \begin{equation}
+        \mathbb{P}(Z=z) = p_Z(z) = p_{X,Y}(x(z), y(z))
+    \end{equation}
+    
+    \item \textbf{Se la funzione NON è biettiva ($|\mathcal{Z}| < |\mathcal{X}||\mathcal{Y}|$):} La precedente formula varrà solo per i punti in cui l'inversa è unica. Per i punti in cui l'inversa non esiste si verificherà un \textit{"collassamento delle probabilità"}. La probabilità di $z$ sarà la somma di tutte le probabilità congiunte delle coppie $(x,y)$ che danno come risultato $z$:
+    \begin{equation}
+        p_Z(z) = \sum_{\substack{x,y \in \mathcal{X} \times \mathcal{Y} \\ t.c. \ g(x,y)=z}} p_{X,Y}(x,y)
+    \end{equation}
+\end{itemize}
+
+\paragraph{Esempio Pratico: Somma di due dadi}
+Immagina di lanciare 2 dadi onesti e di farne la somma. Chiamiamo $X_1$ il dado 1 e $X_2$ il dado 2. 
+Definiamo $Y = X_1 + X_2$. Ci chiediamo, qual è la probabilità $\mathbb{P}(Y=3)$? 
+Applicando la regola del collassamento (poiché la somma non è biettiva), dobbiamo sommare tutti gli scenari che danno 3.
+\[
+\mathbb{P}(Y=3) = \mathbb{P}(X_1=1, X_2=2) + \mathbb{P}(X_1=2, X_2=1)
+\]
+
+-
+\newline
+Con riferimento alla trasformazione generica $Z = g(X,Y)$, il Teorema Fondamentale per il calcolo della Media si traduce in:
+\begin{equation}
+    \mathbb{E}[Z] = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} g(x,y)p_{X,Y}(x,y)
+\end{equation}
+
+Se la funzione è una \textbf{combinazione lineare} del tipo $Z = aX + bY$ (con $a$ e $b$ costanti deterministiche), la linearità del valore atteso ci permette di spezzare il calcolo sfruttando le probabilità marginali:
+\begin{equation}
+    \mathbb{E}[aX + bY] = a\mathbb{E}[X] + b\mathbb{E}[Y]
+\end{equation}
+
+Più in generale, per $m$ variabili aleatorie: $\mathbb{E}\left[\sum_{i=1}^m a_i X_i\right] = \sum_{i=1}^m a_i \mathbb{E}[X_i]$.
+
+\paragraph{Estensione a 3 variabili (Metodo iterativo)}
+Possiamo dimostrare questa proprietà per 3 variabili applicandola a cascata. Vogliamo calcolare $\mathbb{E}[aX_1 + bX_2 + cX_3]$.
+Poniamo momentaneamente $Y = aX_1 + bX_2$. Sostituendo otteniamo:
+\[
+\mathbb{E}[Y + cX_3] = \mathbb{E}[Y] + c\mathbb{E}[X_3]
+\]
+Risostituendo $Y$ con il suo valore originario:
+\[
+= \mathbb{E}[aX_1 + bX_2] + c\mathbb{E}[X_3] = a\mathbb{E}[X_1] + b\mathbb{E}[X_2] + c\mathbb{E}[X_3] \quad \dots \text{ecc.}
+\]
+
+\subsection{Teorema della Media Condizionata}
+
+Il Teorema della media condizionata (o legge dell'aspettativa totale) ci dice che puoi calcolare una media complessa fissando un valore, calcolando la media condizionata sapendo che quel valore è fisso, e infine facendo la "media di queste medie".
+
+Partiamo dalla definizione di $\mathbb{E}[g(X,Y)]$ ed esprimiamo la congiunta tramite la regola di Bayes ($p_{X,Y}(x,y) = p_{X|Y}(x|y)p_Y(y)$):
+\[
+\mathbb{E}[g(X,Y)] = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} g(x,y) p_{X|Y}(x|y)p_Y(y) = \sum_{y \in \mathcal{Y}} p_Y(y) \underbrace{\sum_{x \in \mathcal{X}} g(x,y) p_{X|Y}(x|y)}_{\text{Y è fissa mentre X varia}}
+\]
+
+Definiamo la parte tra parentesi graffe come $h(y)$. Questa rappresenta la media di $g(X,Y)$ eseguita rispetto alla PMF condizionata, ovvero la media condizionata sapendo che $Y=y$:
+\begin{equation}
+    h(y) = \mathbb{E}[g(X,Y) \mid Y=y]
+\end{equation}
+Quindi $h(y)$ restituisce la media condizionata dato un \textit{numero} specifico $y \in \mathcal{Y}$. 
+
+Se invece di pensare al singolo numero $y$ pensiamo a \textit{tutti i possibili valori}, allora stiamo considerando $h(Y)$, che a tutti gli effetti è a sua volta una \textbf{variabile aleatoria}. Pertanto, possiede una sua media statistica:
+\[
+\mathbb{E}[h(Y)] = \sum_{y \in \mathcal{Y}} h(y) \cdot p_Y(y) = \mathbb{E}[g(X,Y)]
+\]
+
+Arriviamo quindi alla formulazione finale del \textbf{Teorema della Media Condizionata}:
+\begin{equation}
+    \boxed{\mathbb{E}[Z] = \mathbb{E}[g(X,Y)] = \mathbb{E}[h(Y)] = \mathbb{E}[\mathbb{E}[g(X,Y) \mid Y]]}
+\end{equation}
+
+\paragraph{Esempio Pratico: I Dadi e la Media Condizionata}
+Tornando all'esempio della somma dei due dadi ($X_1 + X_2$), la via classica per calcolare la media sarebbe la somma diretta:
+\[
+\mathbb{E}[X_1 + X_2] = \sum_{x_1} \sum_{x_2} (x_1+x_2) \cdot p_{X_1, X_2}(x_1, x_2)
+\]
+Ma applicando il teorema della media condizionata, possiamo scrivere:
+\[
+\mathbb{E}[X_1+X_2] = \mathbb{E}[\mathbb{E}[X_1+X_2 \mid X_2]]
+\]
+In pratica, stiamo calcolando i singoli scenari per ogni valore del secondo dado e poi ne facciamo la media totale pesata sulle probabilità di $X_2$:
+\[
+= \mathbb{E}[X_1+X_2 \mid X_2=1]p(X_2=1) + \dots + \mathbb{E}[X_1+X_2 \mid X_2=6]p(X_2=6)
+\]
+
+\subsection{La Covarianza tra due variabili aleatorie}
+
+Data una singola variabile aleatoria, la sua PMF è la descrizione migliore e più completa che possiamo darne. Se invece vogliamo descriverla in modo sintetico, usiamo il valore atteso $\mathbb{E}[X]$ e la varianza $\text{Var}(X)$. 
+Tuttavia, se abbiamo due variabili aleatorie $X$ e $Y$, i singoli valori $\mathbb{E}[X]$, $\mathbb{E}[Y]$, $\text{Var}(X)$ e $\text{Var}(Y)$ \textbf{non sono sufficienti} per descrivere la loro probabilità congiunta. Manca un parametro fondamentale: la \textbf{Covarianza}.
+
+La covarianza è una misura che indica quanto due variabili aleatorie $X$ e $Y$ "variano insieme". Il suo valore può essere:
+\begin{itemize}
+    \item \textbf{Positivo:} le due variabili tendono a muoversi nella stessa direzione. Se $X$ aumenta, anche $Y$ aumenta. 
+    \\ \textit{Esempio pratico:} Poniamo $X = \text{"ore di studio"}$ e $Y = \text{"voto all'esame"}$. Queste due variabili hanno tipicamente una covarianza positiva.
+    \item \textbf{Negativo:} le due variabili si muovono in direzioni opposte. Se $X$ aumenta, $Y$ diminuisce.
+    \item \textbf{Nullo:} non c'è alcuna relazione lineare apparente tra le variabili (attenzione: questo \textbf{NON} significa automaticamente che siano indipendenti, come vedremo a breve).
+\end{itemize}
+
+\subsubsection{Definizioni Formali}
+Sia $(X, Y) \sim p_{X,Y}(x,y)$ con $(x,y) \in \mathcal{X} \times \mathcal{Y}$. 
+
+Si definisce \textbf{correlazione} tra $X$ e $Y$ la quantità:
+\begin{equation}
+    R_{X,Y} = \mathbb{E}[XY] = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} xy \cdot p_{X,Y}(x, y)
+\end{equation}
+
+Si definisce \textbf{covarianza} di $X$ e $Y$ la quantità:
+\begin{equation}
+    \sigma_{X,Y}^2 = \text{COV}[X, Y] = \mathbb{E}[(X - \mu_X)(Y - \mu_Y)] = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} (x - \mu_X)(y - \mu_Y) p_{X,Y}(x, y)
+\end{equation}
+
+\subsubsection{Proprietà della Covarianza}
+
+\paragraph{1. Relazione tra correlazione e covarianza}
+Svolgendo il prodotto all'interno del valore atteso della definizione di covarianza, e sfruttando la linearità della media, possiamo trovare una formula molto più comoda per i calcoli:
+\begin{align*}
+    \text{COV}[X, Y] &= \mathbb{E}[XY - \mu_X Y - \mu_Y X + \mu_X\mu_Y] \\
+    &= \mathbb{E}[XY] - \mu_X\mathbb{E}[Y] - \mu_Y\mathbb{E}[X] + \mu_X\mu_Y \\
+    &= \mathbb{E}[XY] - \mu_X\mu_Y - \mu_Y\mu_X + \mu_X\mu_Y \\
+    &= \mathbb{E}[XY] - \mu_X\mu_Y
+\end{align*}
+Otteniamo quindi la formula generale:
+\begin{equation}
+    \boxed{\text{COV}[X, Y] = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y]}
+\end{equation}
+\textit{Nota:} Se almeno una delle due variabili ha media nulla (es. $\mu_X = 0$), allora la covarianza coincide esattamente con la correlazione: $\text{COV}[X, Y] = R_{X,Y}$.
+
+\paragraph{2. Covarianza di una variabile con se stessa}
+Cosa succede se calcoliamo la covarianza tra $X$ e $X$?
+\[
+\text{COV}(X, X) = \mathbb{E}[X \cdot X] - \mathbb{E}[X]\mathbb{E}[X] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2
+\]
+Questa è esattamente la definizione di varianza! Quindi $\text{COV}(X, X) = \text{Var}(X)$.
+
+\paragraph{3. Incorrelazione vs Indipendenza}
+Due variabili aleatorie che hanno covarianza pari a zero ($\text{COV}[X, Y] = 0$) si dicono \textbf{incorrelate}.
+Se due variabili $X$ e $Y$ sono \textbf{indipendenti}, sappiamo che la probabilità congiunta si fattorizza e che il valore atteso del prodotto è il prodotto dei valori attesi ($\mathbb{E}[XY] = \mathbb{E}[X]\mathbb{E}[Y]$). Di conseguenza:
+\[
+\text{COV}(X, Y) = \mathbb{E}[XY] - \mathbb{E}[X]\mathbb{E}[Y] = \mathbb{E}[X]\mathbb{E}[Y] - \mathbb{E}[X]\mathbb{E}[Y] = 0
+\]
+Possiamo quindi affermare che \textbf{variabili indipendenti sono sempre incorrelate}.
+\textit{Attenzione però:} la proposizione inversa non è vera! L'incorrelazione non implica in genere l'indipendenza. Indica solo l'assenza di un legame \textit{lineare}.
+
+\paragraph{4. Disuguaglianza e Coefficiente di Correlazione}
+Il valore assoluto della covarianza è limitato dal prodotto delle deviazioni standard delle due variabili:
+\begin{equation}
+    |\text{COV}[X, Y]| \leq \sigma_X \sigma_Y
+\end{equation}
+Questo si può dimostrare studiando il valore atteso di un quadrato perfetto normalizzato. Poiché un quadrato è sempre $\geq 0$:
+\begin{align*}
+    0 &\leq \mathbb{E}\left[ \left( \frac{X - \mu_X}{\sigma_X} \pm \frac{Y - \mu_Y}{\sigma_Y} \right)^2 \right] \\
+    &= \underbrace{\mathbb{E}\left[ \left( \frac{X - \mu_X}{\sigma_X} \right)^2 \right]}_{=1} + \underbrace{\mathbb{E}\left[ \left( \frac{Y - \mu_Y}{\sigma_Y} \right)^2 \right]}_{=1} \pm 2\mathbb{E}\left[ \frac{(X - \mu_X)(Y - \mu_Y)}{\sigma_X \sigma_Y} \right] \\
+    &= 2 \pm 2 \frac{\text{COV}[X, Y]}{\sigma_X \sigma_Y}
+\end{align*}
+Affinché questa quantità sia sempre positiva o nulla per entrambi i segni ($\pm$), deve valere:
+\[
+-1 \leq \frac{\text{COV}[X, Y]}{\sigma_X \sigma_Y} \leq 1
+\]
+Questa quantità prende il nome di \textbf{coefficiente di correlazione} (o di covarianza) e si indica con $\rho_{X,Y}$:
+\begin{equation}
+    \rho_{X,Y} = \frac{\text{COV}[X, Y]}{\sigma_X \sigma_Y} \in [-1, 1]
+\end{equation}
+
+\paragraph{5. Varianza di una combinazione lineare}
+Infine, se definiamo una nuova variabile $Z$ come combinazione lineare $Z = aX + bY$ (per cui $\mu_Z = a\mu_X + b\mu_Y$), la sua varianza non è semplicemente la somma delle varianze, ma include la covarianza:
+\begin{align*}
+    \sigma_Z^2 &= \mathbb{E}[Z^2] - \mu_Z^2 = \mathbb{E}[(aX + bY)^2] - (a\mu_X + b\mu_Y)^2 \\
+    &= a^2\sigma_X^2 + b^2\sigma_Y^2 + 2ab\text{COV}[X, Y]
+\end{align*}
+\textit{Nota:} Se $X$ e $Y$ sono incorrelate (e quindi a maggior ragione se sono indipendenti), il termine della covarianza si annulla e la varianza della somma diventa la somma delle varianze.

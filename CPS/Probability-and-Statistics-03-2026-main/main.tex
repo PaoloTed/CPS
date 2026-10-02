@@ -1,0 +1,115 @@
+\documentclass[a4paper, 12pt]{report}
+
+% --- Pacchetti Lingua e Font ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel} % Fondamentale per avere "Indice" e la sillabazione italiana
+
+% --- Pacchetti Matematici e Grafici ---
+\usepackage{amsmath}
+\usepackage{amssymb} 
+\usepackage{amsthm}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{positioning}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\graphicspath{{images/}} % Nota: ho aggiunto una parentesi graffa extra, più sicuro
+\usepackage{booktabs}
+% --- Impaginazione ---
+\usepackage{epigraph}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows.meta}
+\usepackage{caption} % Serve per mettere la didascalia sotto al disegno
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+% --- Configurazione Teoremi ---
+
+\theoremstyle{plain}
+\newtheorem{teorema}{Teorema}[section]
+\newtheorem{lemma}[teorema]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definizione}{Definizione}[section]
+\newtheorem{esempio}{Esempio}[section]
+
+\theoremstyle{remark}
+\newtheorem*{osservazione}{Osservazione}
+
+% --- Configurazione INDICE CLICCABILE (Hyperref) ---
+% Caricato quasi sempre per ultimo
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,       % true: link colorati; false: riquadri rossi
+    linkcolor=blue,        % colore dell'indice e dei riferimenti interni
+    citecolor=black,       % colore delle citazioni
+    urlcolor=cyan,         % colore dei link a siti web
+    pdftitle={Probability and Statistics},
+    pdfauthor={Angelo Marcone}
+}
+
+% --- Dati Documento ---
+\title{Probability and Statistics}
+\author{Angelo Marcone}
+\date{\today} % O inserisci una data specifica
+
+\begin{document}
+
+\begin{titlepage}
+    \begin{center}
+        \vspace*{3cm}
+        
+        \Huge
+        \textbf{Probability and Statistics}
+        
+        \vspace{0.8cm}
+        \LARGE
+        Appunti del Corso
+        
+        \vspace{2cm}
+        
+        \Large
+        \textbf{Università degli Studi di Napoli Federico II}
+        
+        \vfill
+        
+        \large
+        \today
+        
+        \vspace{1cm}
+    \end{center}
+    
+    \begin{flushright}
+        \small
+        \textit{Autore:}\\
+        Angelo Marcone
+    \end{flushright}
+\end{titlepage}
+
+\clearpage
+\vspace*{\fill}
+\begin{center}
+    \begin{minipage}{0.8\textwidth}
+        \small
+        \textbf{Nota dell'autore:} \\
+        Questi appunti sono stati redatti a scopo di studio personale e non mi assumo alcuna responsabilità riguardo all'assoluta correttezza o completezza dei contenuti. 
+        
+        Tutto il codice sorgente \LaTeX{} utilizzato per generare questo documento è aperto, scaricabile e modificabile su GitHub. Se trovi degli errori o vuoi semplicemente migliorare e arricchire questo PDF, sei liberissimo di farlo e ogni contributo è ben accetto!
+    \end{minipage}
+\end{center}
+\vspace*{2cm}
+\thispagestyle{empty}
+\clearpage
+
+\pagenumbering{roman} % Numerazione romana per l'indice (opzionale, elegante)
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic} % Torna alla numerazione araba (1, 2, 3...)
+\setcounter{page}{1}
+
+% --- Inclusione Capitoli ---
+\input{chapters/index.tex}
+
+\end{document}

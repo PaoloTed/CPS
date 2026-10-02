@@ -1,0 +1,302 @@
+% !TeX root = ../../main.tex
+\section{Teoria della Probabilità}
+
+La teoria della probabilità è, in linea di principio e se non si è troppo pignoli, semplice. Ridotta all’osso, consiste in questo: definiti un esperimento ed i suoi possibili risultati casuali, si assegna una misura (la probabilità) non negativa ad ogni evento (un risultato o l’unione di più risultati) in modo che la probabilità dell'unione di eventi disgiunti (cioè che non contengono risultati comuni) coincida con la somma delle relative probabilità. Inoltre si richiede che la probabilità dell’evento certo (unione di tutti i possibili risultati) sia unitaria.
+
+Analizziamo nel dettaglio questi punti:
+
+\begin{itemize}
+    \item \textbf{"La probabilità è un'unità di misura che associamo ad un evento":} Proprio come usiamo i metri per misurare la lunghezza, usiamo la probabilità per "misurare" il grado di incertezza o la verosimiglianza di un evento. Questa misura è un numero compreso tra 0 (per un evento impossibile) e 1 (per un evento certo).
+    \item \textbf{"La probabilità dell'unione di eventi disgiunti [...] coincida con la somma delle relative probabilità":} Questo è il terzo assioma della probabilità, noto anche come additività. Se due eventi $A$ e $B$ non possono verificarsi contemporaneamente (sono "disgiunti" o "incompatibili"), allora la probabilità che si verifichi o l'uno o l'altro ($A \cup B$) è semplicemente la somma delle loro probabilità individuali: $P(A \cup B) = P(A) + P(B)$. Questo principio è fondamentale per calcolare la probabilità di eventi complessi scomponendoli in parti più semplici.
+    \item \textbf{"Si richiede che la probabilità dell’evento certo [...] sia unitaria":} Questo è il secondo assioma della probabilità. L'evento certo, che comprende tutti i possibili risultati di un esperimento (chiamato spazio campionario), ha una probabilità di 1 (o 100\%). Questo serve come "norma" per la nostra misura: la probabilità massima possibile è 1.
+\end{itemize}
+
+\subsection{Esempio di Calcolo: Il Problema della Segretaria}
+
+\subsubsection{Traccia del Problema}
+Immaginiamo di dover selezionare la segretaria migliore tra 100 candidate, intervistandole una alla volta. Dopo ogni colloquio, dobbiamo decidere immediatamente se assumerla (e terminare la ricerca) o scartarla per sempre e passare alla successiva. Come massimizzare la probabilità di scegliere la migliore in assoluto?
+
+Trasliamo il problema in un contesto matematico: un estraneo prepara 100 biglietti, ognuno con un numero diverso positivo o negativo, a noi sconosciuto. Il giocatore estrae un biglietto alla volta, legge il numero e ha due possibilità:
+\begin{enumerate}
+    \item Dichiarare che il numero appena estratto è il più grande di tutti i 100. Il gioco finisce.
+    \item Scartare il biglietto e procedere con l'estrazione successiva.
+\end{enumerate}
+
+In mancanza di informazioni a priori, una strategia efficace consiste nel fissare un numero $N$ (con $1 \le N < 100$), osservare i primi $N$ biglietti senza sceglierli, memorizzando il valore massimo $M$ trovato in questo gruppo. A partire dal biglietto $N+1$, si sceglie il primo che ha un valore superiore a $M$.
+
+\subsubsection{Analisi della Strategia}
+Si può perdere in due modi:
+\begin{enumerate}
+    \item Il numero più grande in assoluto si trova tra i primi $N$ biglietti (che vengono scartati per definizione).
+    \item oppure è negli altri $100 - N$, ma è preceduto da almeno un altro maggiore dei primi N
+\end{enumerate}
+
+\subsubsection{Calcolo della Probabilità di Vittoria}
+Ipotizziamo di assegnare ad ogni biglietto un indice. Abbiamo così creato una permutazione dei 100 biglietti. Abbiamo $100!$ possibili permutazioni. La possibilità che capiti una permutazione piuttosto che un'altra è la stessa: sono ugualmente probabili (equiprobabili). Ora ci basta individuare i risultati elementari che portano alla vittoria e sommarne le probabilità. Poiché i risultati elementari sono equiprobabili, si tratta in pratica di contare quelli favorevoli.
+
+Il principio di base è:
+\[ \text{Probabilità di Vittoria} = \frac{\text{(Numero di permutazioni in cui vinciamo)}}{\text{(Numero totale di permutazioni)}} \]
+
+Il numero totale di permutazioni è $100!$. Ora dobbiamo solo contare quelle vincenti.
+
+L'autore usa una strategia intelligente: invece di contare tutte le permutazioni vincenti in un colpo solo, le divide in gruppi più piccoli, facili da gestire. I gruppi sono mutuamente esclusivi (se il numero più grande è in una posizione, non può essere in un'altra).
+
+I gruppi sono:
+\begin{quote}
+    Caso 1: Il numero migliore è in posizione 1. \\
+    Caso 2: Il numero migliore è in posizione 2. \\
+    ... \\
+    Caso i: Il numero migliore è in posizione i. \\
+    ... \\
+    Caso 100: Il numero migliore è in posizione 100.
+\end{quote}
+
+Per ogni posizione i del numero migliore, ci chiediamo: "In quante permutazioni vinciamo?"
+
+\paragraph{Analisi dei Casi}
+\begin{itemize}
+    \item \textbf{Se il numero migliore si trova in una posizione i tra 1 e N (cioè $i \le N$)} \\
+    In questo caso, la strategia ci impone di scartarlo. Non potremo mai sceglierlo. La probabilità di vittoria è 0.
+
+    \item \textbf{Se il numero migliore si trova in posizione $i = N+1$} \\
+    Analizziamo cosa succede.
+    \begin{itemize}
+        \item Osserviamo i primi N numeri e stabiliamo la nostra soglia M (il massimo tra loro).
+        \item Al passo N+1, ci viene presentato il numero migliore in assoluto.
+        \item Questo numero è, per definizione, più grande di tutti gli altri 99, quindi è certamente più grande di M.
+        \item La nostra strategia dice: "scegli il primo numero dopo N che supera M". Poiché questo numero al passo N+1 supera M, lo scegliamo sempre.
+        \item Dato che è effettivamente il migliore, vinciamo sempre.
+    \end{itemize}
+    Quante sono le permutazioni in cui il numero migliore si trova in posizione N+1? Fissiamo il numero migliore in quella posizione. Gli altri 99 numeri possono essere disposti nelle altre 99 posizioni in $99!$ modi diversi. \\
+    \textit{Casi favorevoli per $i = N+1$:} $99!$
+
+    \item \textbf{Se il numero migliore si trova in posizione $i = N+2$ (Questo è il caso chiave!)} \\
+    Per vincere in questa situazione, devono accadere due cose:
+    \begin{itemize}
+        \item Il numero migliore deve essere in posizione N+2.
+        \item La nostra strategia deve portarci a sceglierlo. Questo significa che NON dobbiamo esserci fermati prima, cioè alla posizione N+1.
+    \end{itemize}
+    Quando è che NON ci fermiamo alla posizione N+1? Non ci fermiamo se il numero in posizione N+1 è più piccolo della nostra soglia M (il massimo dei primi N numeri).
+    
+    \textit{Riformuliamo la condizione di vittoria:} Per vincere con il numero migliore in posizione N+2, è necessario che il numero più alto tra i primi N+1 numeri si trovi nel gruppo dei primi N. 
+    
+    Ma che significa questa frase? Se il numero più alto non si trova in posizione N+1, significa che il rango di M (il numero più alto tra gli N numeri) ha rango pari ad N+1 nel momento in cui scopriamo il numero N+1. Di conseguenza il numero N+1 avrà un rango minore o uguale ad N.
+ 
+    Perché? Se il "campione locale" dei primi N+1 numeri è nei primi N, allora la nostra soglia M sarà proprio quel campione. Di conseguenza, il numero in posizione N+1 (che non è il campione locale) sarà per forza più piccolo di M, e noi lo scarteremo correttamente, dandoci la possibilità di arrivare a N+2.
+    \begin{itemize}
+        \item Fissiamo il numero migliore in assoluto in posizione N+2. Ci rimangono 99 numeri da sistemare.
+        \item Ora consideriamo i primi N+1 posti. Quanti modi ci sono di disporre i numeri in questi posti affinché la nostra condizione di vittoria sia soddisfatta?
+        \item Dei N+1 numeri che capitano nei primi N+1 posti, uno è il più grande (il "campione locale"). Per vincere, questo campione locale può trovarsi in una qualsiasi delle prime N posizioni, ma non in posizione N+1.
+        \item Ci sono N posizioni "buone" e 1 posizione "cattiva". Poiché ogni ordinamento è equiprobabile, la probabilità che il campione locale capiti in una delle N posizioni buone è $\frac{N}{N+1}$.
+        \item Il numero totale di permutazioni in cui il migliore è a N+2 è $99!$. La frazione di queste che ci fa vincere è $\frac{N}{N+1}$.
+    \end{itemize}
+    \textit{Casi favorevoli per $i = N+2$:} $99! \times \frac{N}{N+1}$. 
+\end{itemize}
+
+\paragraph{Come generalizziamo la logica?}
+\begin{itemize}
+\item Per $i = N+3$, il massimo locale deve trovarsi tra i primi N numeri. La probabilità che ciò accada è $\frac{N}{N+2}$, quindi abbiamo $99! \times \frac{N}{N+2}$ casi favorevoli.
+
+\item Se il migliore è in $i = 100$: Per vincere, il massimo dei primi 99 numeri deve trovarsi nei primi N. La probabilità è $\frac{N}{99}$. Casi favorevoli = $99! \times \frac{N}{99}$.
+
+\item In generale il massimo deve trovarsi sempre tra i primi N numeri, ma cambia la probabilità con cui questa cosa può accadere ($\frac{N}{N+i}$) (si abbassa). I casi favorevoli sono: $99! \times \frac{N}{N+i}$.
+\end{itemize}
+Se ricordi all'inizio avevamo diviso i 100 numeri in gruppi. Ora per ogni gruppo stiamo calcolando la probabilità di vittoria in base a quante permutazioni vincenti abbiamo in quel gruppo. Dato che le classi sono disgiunte (non è possibile che una permutazione appartenga a due gruppi distinti) possiamo sommare le probabilità e calcolare il totale dei casi favorevoli.
+
+Il NUMERATORE della nostra frazione della probabilità è la somma di tutti questi termini:
+\[ \text{Totale Casi Favorevoli} = \left[99!\right] + \left[99! \cdot \frac{N}{N+1}\right] + \left[99! \cdot \frac{N}{N+2}\right] + \dots + \left[99! \cdot \frac{N}{99}\right] \]
+Mettiamo in evidenza $99!$:
+\[ P(\text{Vittoria}) = \frac{99! \cdot \left[1 + \frac{N}{N+1} + \frac{N}{N+2} + \dots + \frac{N}{99}\right]}{100!} \]
+Ricorda che $100! = 100 \cdot 99!$. Semplifica e ottieni:
+\[ P(\text{Vittoria}) = \frac{1 + \frac{N}{N+1} + \frac{N}{N+2} + \dots + \frac{N}{99}}{100} \]
+1 si può scrivere come $\frac{N}{N}$:
+\[ P(\text{Vittoria}) = \frac{\frac{N}{N} + \frac{N}{N+1} + \frac{N}{N+2} + \dots + \frac{N}{99}}{100} \]
+Mettiamo in evidenza N:
+\[ P(\text{Vittoria}) = \frac{N \cdot \left[\frac{1}{N} + \frac{1}{N+1} + \frac{1}{N+2} + \dots + \frac{1}{99}\right]}{100} \]
+Che è uguale a:
+\[ P(\text{Vittoria}) = \frac{N}{100} \cdot \left[\frac{1}{N} + \frac{1}{N+1} + \frac{1}{N+2} + \dots + \frac{1}{99}\right] \]
+Semplifichiamo scrivendo la sommatoria:
+\[ \sum_{k=N}^{99} \frac{1}{k} \]
+Ricapitolando otteniamo:
+\[ P(\text{Vittoria}) = \frac{N}{100} \cdot \sum_{k=N}^{99} \frac{1}{k} \]
+
+\paragraph{Valore migliore di N?}
+Per trovare il valore migliore di N, dovremmo calcolare questa espressione per N=1, N=2, N=3, ... fino a N=99 e vedere quale risultato è più alto.
+una somma di tanti termini piccoli che seguono un andamento regolare può essere "approssimata" da un integrale.
+
+\begin{equation}
+\frac{N}{100} \int_{N}^{100} \frac{dx}{x} = \frac{N}{100} \log \frac{100}{N} \tag{1.2}
+\end{equation}
+
+Trattando poi N come una variabile reale anziché intera si ottiene che il massimo si ha per $N = 100/e = 36.8$, e che la probabilità di vittoria è $1/e = 0.368$, sorprendentemente elevata. Dovendo N essere intero sarà $N = 37$, e per questo valore l'integrale fornisce come risultato 0.371.
+
+Che significato si potrà dare a questo numero? Se il giocatore ripete il gioco molte volte vincerà più o meno nel 37\% dei casi. Ma quante volte occorre ripetere il gioco perché la previsione del 37\% di successi sia affidabile, e che fluttuazioni potrá avere la frequenza delle
+vittorie? A queste domande si potrá dare risposta piú avanti.
+
+\begin{quote}
+Questo è un problema che fa parte della classe dei \textbf{problemi di arresto ottimale}. Questi problemi si occupano di determinare la regola ottimale per decidere quando fermarsi e compiere un'azione (in questo caso, "scegliere un candidato") per massimizzare una ricompensa o la probabilità di successo, in un processo che si svolge in sequenza e in condizioni di incertezza.
+\end{quote}
+
+\subsection{Definizioni essenziali}
+\begin{itemize}
+\item Esperimento: Operazione/azione - o insieme di operazioni/azioni - il
+cui esito dà uno tra tanti risultati possibili; 
+
+I risultati sono detti risultati elementari.
+
+\item L'insieme $\Omega$ di tutti i possibili risultati elementari é detto spazio degli eventi o spazio dei campioni. Un evento é un sottoinsieme dello spazio degli eventi, cioé una qualsiasi collezione di risultati elementari.
+In particolare un evento puo contenere un solo risultato elementare. 
+In tal caso lo si chiama evento semplice o evento elementare. Si dice che l'evento A si e' verificato se il risultato della prova é contenuto in A.
+
+Ad esempio nel lancio di un dado, in cui i risultati siano le facce numerate da 1 a 6, l’evento
+A = {1, 3, 5} si verifica se il risultato `e 1, 3 o 5, ovvero se il risultato `e un numero dispari.
+    
+$\Omega$ può essere continuo o discreto: per il momento assumeremo che
+sia discreto, cioè finito o numerabile
+
+\item Evento: un qualunque sotto-insieme di $\Omega$ definito matematicamente
+da un insieme di suoi elementi e lessicalmente da una proposizione;
+
+\item Evento elementare: uno dei possibili $|\omega|$ elementi di $\Omega$. Si indica
+anche con $\omega \in \Omega$.
+
+\item  l’evento impossibile $\emptyset$, cioe' l’insieme vuoto che non contiene alcun risultato
+e quindi non si verifica mai e l’evento certo o spazio degli eventi $\Omega$, che contiene tutti i
+risultati e quindi si verifica sempre.
+
+\begin{quote} 
+    Un evento è univocamente individuato dagli elementi che lo
+compongono;
+Al contrario, la proposizione che lo definisce non è unica.
+\end{quote}
+\end{itemize}
+
+Se A e B sono eventi anche l’unione di A e B e l’intersezione di A e B sono eventi. ’unione degli eventi A e B si verifica se il risultato appartiene ad A o a B o ad
+entrambi. L’intersezione si verifica se il risultato appartiene sia ad A sia a B.Anche il complemento di A, indicato solitamente con Not A e'  un evento, che si verifica se e
+solo se non si verifica A.
+
+Si dicono disgiunti, o mutuamente esclusivi, eventi che hanno intersezione nulla, cio`e che
+non possono verificarsi entrambi nella stessa prova. $A \cap B = \emptyset$
+
+Se A $\subseteq$ B si dice che A implica B, cioè il verificarsi di A implica che
+si verifichi B
+
+\begin{esempio}[Lancio di una moneta]
+    \begin{itemize}
+        \item \textbf{Spazio dei campioni ($\Omega$):} È l'insieme di tutti i possibili risultati, $\Omega = \{ \text{Testa}, \text{Croce} \}$.
+        \item \textbf{Eventi elementari:} I singoli risultati ``Testa'' e ``Croce'' sono i due eventi elementari che compongono lo spazio campionario.
+        \item \textbf{Eventi disgiunti:} Gli eventi $\{ \text{Testa} \}$ e $\{ \text{Croce} \}$ sono mutuamente esclusivi. In un singolo lancio, si può ottenere o testa o croce, ma non entrambi. L'intersezione dei due eventi è l'evento impossibile: $\{ \text{Testa} \} \cap \{ \text{Croce} \} = \emptyset$.
+    \end{itemize}
+\end{esempio}
+
+\begin{esempio}[Lancio di due monete]
+    \begin{itemize}
+        \item \textbf{Esperimento:} Il lancio di due monete.
+        \item \textbf{Spazio dei campioni ($\Omega$):} Lo spazio campionario completo è $\Omega = \{TT, TC, CT, CC\}$, dove T sta per Testa e C per Croce.
+        \item Ricorda che un evento è un qualsiasi sottoinsieme di $\Omega$.
+        \item \textbf{Esempio di evento:} L'evento ``non esce nessuna croce'' corrisponde esattamente al sottoinsieme $\{TT\}$.
+    \end{itemize}
+\end{esempio}
+
+\subsection{Frequenza Relativa e Probabilità Teorica}
+
+\paragraph{Frequenza Relativa}
+La frequenza relativa è una misura sperimentale, calcolata dopo aver eseguito l’esperimento. Indica la proporzione di volte in cui un evento si è effettivamente verificato durante un certo numero di prove.
+
+\begin{quote}
+\textbf{Definizione:} È il rapporto tra il numero di volte in cui un evento si è verificato (frequenza assoluta) e il numero totale di prove effettuate:
+\[ \text{Frequenza relativa} = \frac{\text{Numero di successi}}{\text{Numero totale di prove}} \]
+\end{quote}
+Può essere determinata solo dopo aver raccolto i dati.
+
+\begin{esempio}
+Se lanci un dado 20 volte e ottieni la sequenza: \{1, 6, 4, 4, 3, 2, 5, 4, 6, 1, 2, 2, 5, 4, 6, 3, 1, 4, 5, 2\}.
+\begin{enumerate}
+    \item \textbf{Numero di successi (per il 4):} Il 4 è uscito 5 volte (frequenza assoluta).
+    \item \textbf{Numero totale di prove:} Hai lanciato il dado 20 volte.
+    \item \textbf{Frequenza Relativa (del 4):} $\frac{5}{20} = 0.25$ (o 25\%).
+\end{enumerate}
+\end{esempio}
+
+\paragraph{Probabilità Teorica}
+
+La probabilità teorica è una misura \textbf{teorica} e \textbf{a priori} (calcolata prima di eseguire l'esperimento). Rappresenta il valore a cui la frequenza relativa tende al tendere all'infinito del numero di prove.
+
+\begin{quote}
+\textbf{Definizione:} È il rapporto tra il numero di risultati favorevoli a un evento e il numero totale di risultati possibili, a condizione che tutti i risultati siano ugualmente probabili (equiprobabili).
+\[ \text{Probabilità Teorica} = \frac{\text{Numero di casi favorevoli}}{\text{Numero di casi possibili}} \]
+\end{quote}
+
+\begin{esempio}[Uscita del numero 4 con un dado]
+    Vuoi calcolare la probabilità teorica dell'evento ``uscita del numero 4''.
+    \begin{enumerate}
+        \item \textbf{Numero di casi favorevoli:} C'è solo un modo per ottenere 4, cioè che esca la faccia con il numero 4.
+        \item \textbf{Numero di casi possibili:} Ci sono 6 facce in totale, quindi 6 risultati possibili: $\{1, 2, 3, 4, 5, 6\}$.
+        \item \textbf{Probabilità Teorica (del 4):} $\frac{1}{6} \approx 0.167$ (o 16.7\%).
+    \end{enumerate}
+\end{esempio}
+
+% Da inserire di seguito al codice precedente in chapters/1.tex
+
+\subsection{Dalla Frequenza alla Probabilità: Un Esempio Pratico}
+
+Ipotizziamo di lanciare un dado onesto $n$ volte. Lo spazio campionario è $\Omega = \{1, 2, 3, 4, 5, 6\}$. La sua dimensione è $|\Omega| = 6$.
+
+Definiamo con $n_i$ il numero di volte che esce la faccia $i$. Ad esempio, $n_1$ è il numero di volte che è uscita la faccia del dado con il numero 1.
+
+Se il dado è onesto e lo lanciamo tantissime volte, ci aspettiamo che ogni faccia esca all'incirca lo stesso numero di volte:
+\[ n_i \approx \frac{n}{|\Omega|} = \frac{n}{6} \]
+
+\subsubsection{Definizione di Eventi}
+Definiamo due eventi:
+\begin{itemize}
+    \item $A$: l'evento dell'uscita di un numero dispari, $A = \{1, 3, 5\}$.
+    \item $B$: l'evento dell'uscita di un numero pari, $B = \{2, 4, 6\}$.
+\end{itemize}
+
+\subsubsection{Calcolo delle Frequenze}
+Calcoliamo la frequenza degli eventi $A$ e $B$.
+
+Sia $n_A$ il numero totale di volte in cui si è verificato l'evento $A$. Questo numero è la somma delle volte in cui è uscito 1, 3 o 5:
+\[ n_A = n_1 + n_3 + n_5 \]
+Similmente, sia $n_B$ il numero di volte in cui è uscito un numero pari:
+\[ n_B = n_2 + n_4 + n_6 \]
+
+Di conseguenza, per un numero $n$ di lanci molto grande, possiamo concludere che:
+\begin{itemize}
+    \item La frequenza relativa di $A$ è: $\frac{n_A}{n} \approx \frac{|A|}{|\Omega|} = \frac{3}{6} = \frac{1}{2}$
+    \item La frequenza relativa di $B$ è: $\frac{n_B}{n} \approx \frac{|B|}{|\Omega|} = \frac{3}{6} = \frac{1}{2}$
+\end{itemize}
+
+È fondamentale distinguere i due concetti:
+\begin{itemize}
+    \item $\frac{n_A}{n}$: È la \textbf{frequenza relativa} dell'evento A. È un valore che otteniamo dall'esperimento reale (il rapporto tra quante volte A è successo e il numero totale di prove).
+    \item $\frac{|A|}{|\Omega|}$: È la \textbf{probabilità teorica} dell'evento A. È un valore calcolato a priori, basato sulla struttura dell'esperimento (il rapporto tra i casi favorevoli e i casi possibili).
+\end{itemize}
+
+% Da inserire di seguito al codice precedente in chapters/1.tex
+
+
+Dal punto di vista teorico: sia $\Omega$ uno spazio dei campioni finito. Si assuma che tutti gli eventi elementari (cioè, gli elementi di $\Omega$) siano \textbf{equiprobabili}, ovvero che ciascun evento elementare si verifichi, su un gran numero di prove, un numero di volte approssimativamente uguale a quello di qualsiasi altro evento elementare.
+
+Detto $A \subseteq \Omega$ un qualsiasi evento, la sua frequenza di occorrenza gode della seguente proprietà.
+
+\subsubsection{La Convergenza della Frequenza alla Probabilità (Legge dei Grandi Numeri)}
+La frequenza relativa dell'evento $A$ su $n$ prove, definita come $f_n(A) = \frac{n_A}{n}$, converge alla sua probabilità teorica per $n$ che tende a infinito:
+\[ f_n(A) = \frac{n_A}{n} \xrightarrow{n \to \infty} \frac{|A|}{|\Omega|} \]
+dove $\frac{|A|}{|\Omega|}$ è la \textbf{probabilità teorica} di $A$.
+
+\subsubsection{La Probabilità come Problema di Conteggio}
+Se la probabilità di un evento $A$ è semplicemente il rapporto tra la sua dimensione ($|A|$, cardinalità di $A$) e la dimensione dello spazio campionario ($|\Omega|$, cardinalità di $\Omega$), allora il calcolo della probabilità si riduce a un problema di conteggio.
+
+\begin{esempio}
+Qual è la probabilità che esca un numero maggiore di 4 lanciando un dado?
+    \begin{enumerate}
+        \item \textbf{Contiamo i casi possibili:} $\Omega = \{1, 2, 3, 4, 5, 6\} \implies |\Omega| = 6$.
+        \item \textbf{Contiamo i casi favorevoli:} L'evento è $A = \{\text{uscita di un numero > 4}\}$, quindi $A = \{5, 6\} \implies |A| = 2$.
+        \item \textbf{La probabilità è:} $P(A) = \frac{|A|}{|\Omega|} = \frac{2}{6} = \frac{1}{3}$.
+    \end{enumerate}
+\end{esempio}
+
+Quindi per eventi equivalenti è importante saper contare le cardinalità dei sotto-insiemi che definiscono gli eventi di interesse.
+La branca che si occupa di questo problema si chiama calcolo combinatorio

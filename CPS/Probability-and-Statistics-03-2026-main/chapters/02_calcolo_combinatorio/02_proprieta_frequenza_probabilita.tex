@@ -1,0 +1,51 @@
+% !TeX root = ../../main.tex
+\section{Proprietà della Frequenza e della Probabilità}
+
+Siano $A \subseteq \Omega$ e $B \subseteq \Omega$ due eventi.
+\\Siano $n_A = n_A(n)$ e $n_B = n_B(n)$ il numero di occorrenze su $n$ prove.
+\\Indichiamo con $f_n(A)$ e $f_n(B)$ le relative frequenze e con $\mathbb{P}(A)$ e $\mathbb{P}(B)$ i rispettivi limiti (ovvero le probabilità).
+
+Valgono le seguenti proprietà fondamentali:
+
+\subsection{Eventi complementari}
+La frequenza dell'evento complementare $\overline{A}$ si ricava osservando che le occorrenze in cui $A$ \emph{non} si verifica sono date dal totale delle prove meno le occorrenze in cui $A$ si verifica.
+
+\[
+f_n(\overline{A}) = \frac{n - n_A}{n} = 1 - f_n(A) \implies \mathbb{P}(\overline{A}) = 1 - \mathbb{P}(A)
+\]
+
+\subsection{Sub-additività (Unione di eventi)}
+Per calcolare la frequenza dell'unione di due eventi, dobbiamo considerare la somma delle singole occorrenze correggendo l'eventuale sovrapposizione.
+
+\[
+f_n(A \cup B) = \frac{n_{A \cup B}}{n} = \frac{n_A + n_B - n_{A \cap B}}{n} = f_n(A) + f_n(B) - f_n(A \cap B)
+\]
+Passando al limite per $n \to \infty$, otteniamo la relazione per le probabilità:
+\[
+\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B)
+\]
+
+\paragraph{Spiegazione}
+Infatti, se $A$ e $B$ non sono incompatibili (disgiunti), sommare semplicemente $n_A$ e $n_B$ equivarrebbe a contare \textbf{due volte} le occorrenze in cui si verificano entrambi gli eventi (cioè le occorrenze di $A \cap B$). Il termine sottrattivo $-\mathbb{P}(A \cap B)$ serve proprio a correggere questo doppio conteggio.
+
+\subsection{Sottrazione tra insiemi}
+Consideriamo la probabilità che si verifichi $A$ ma non $B$. Questo corrisponde all'insieme differenza $A \setminus B$ (o equivalentemente $A \cap \overline{B}$).
+
+\[
+f_n(A \setminus B) = f_n(A \cap \overline{B}) = \frac{n_A - n_{A \cap B}}{n} = f_n(A) - f_n(A \cap B)
+\]
+Da cui deriva la proprietà:
+\[
+\mathbb{P}(A \setminus B) = \mathbb{P}(A) - \mathbb{P}(A \cap B)
+\]
+
+\paragraph{Spiegazione}
+Dovendosi verificare $A$ ma non $B$, bisogna sottrarre dal numero totale di esperimenti favorevoli ad $A$ ($n_A$) il numero di esperimenti in cui si verificano contemporaneamente entrambi ($n_{A \cap B}$).
+
+\subsection{Evento certo ed evento impossibile}
+Banalmente, l'evento certo (l'intero spazio campionario $\Omega$) si verifica in tutte le $n$ prove, mentre l'evento impossibile ($\emptyset$) non si verifica mai.
+
+\[
+f_n(\Omega) = \frac{n}{n} = 1 \implies \mathbb{P}(\Omega) = 1 \implies \mathbb{P}(\emptyset) = \mathbb{P}(\overline{\Omega}) = 0
+\]
+

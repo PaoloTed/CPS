@@ -1,0 +1,130 @@
+\section{Legge di Bayes}
+
+Consideriamo due variabili aleatorie $X$ e $Y$ con PMF congiunta $p_{X,Y}(x,y)$.
+
+Consideriamo l'evento:
+\[
+\{X=x, Y=y\} = \{X=x\} \cap \{Y=y\}.
+\]
+
+Allora:
+\begin{align*}
+P(X=x, Y=y)
+&= P(\{X=x\} \cap \{Y=y\}) \\
+&= P(X=x \mid Y=y)\cdot P(Y=y) \\
+&= P(Y=y \mid X=x)\cdot P(X=x).
+\end{align*}
+
+Scrivendo in termini di PMF:
+\[
+p_{X|Y}(x|y)\cdot p_Y(y) = p_{Y|X}(y|x)\cdot p_X(x).
+\]
+
+Da cui otteniamo la \textbf{Legge di Bayes}:
+\begin{equation}
+\boxed{
+p_{X|Y}(x|y) = \frac{p_{Y|X}(y|x)\cdot p_X(x)}{p_Y(y)}
+}
+\end{equation}
+
+\subsection{Esempio: Test diagnostico}
+
+Immaginiamo la seguente situazione.
+
+Svegli e ti senti malato, vai dal dottore e non sai se sei malato oppure no. Il dottore ti fa fare un test.
+
+Supponiamo che il test rilevi correttamente la malattia nel $99\%$ dei casi, e sbagli solo nell'$1\%$ dei casi.
+
+La malattia colpisce solo lo $0.1\%$ della popolazione.
+
+Il dottore chiede:
+\textit{``Qual è la probabilità che tu abbia la malattia se il test è risultato positivo?''}
+
+\subsubsection{Formalizzazione}
+
+Definiamo:
+
+\begin{itemize}
+\item $H$: evento \textit{``la persona ha la malattia''}.
+\item $E$: evento \textit{``test positivo''}.
+\end{itemize}
+
+Applichiamo Bayes:
+\begin{equation}
+P(H|E) = \frac{P(E|H)\cdot P(H)}{P(E)}.
+\end{equation}
+
+Dove:
+\begin{itemize}
+\item $P(E|H)$: probabilità che il test sia positivo se la persona è malata.
+\item $P(H)$: probabilità che una persona sia malata.
+\item $P(E)$: probabilità che il test risulti positivo.
+\end{itemize}
+
+Ora calcoliamo $P(E)$ usando la legge della probabilità totale:
+\begin{equation}
+P(E) = P(H)\cdot P(E|H) + P(\overline{H})\cdot P(E|\overline{H}).
+\end{equation}
+
+Sostituendo:
+\[
+P(H) = 0.001, \quad
+P(E|H) = 0.99, \quad
+P(E|\overline{H}) = 0.01.
+\]
+
+Otteniamo:
+\[
+P(H|E) = \frac{0.99\cdot 0.001}{0.99\cdot 0.001 + 0.999\cdot 0.01}
+= \frac{0.00099}{0.00099 + 0.00999}
+\approx 0.09 = 9\%.
+\]
+
+\subsubsection{Interpretazione Intuitiva}
+
+Supponiamo di avere $1000$ persone.
+
+\begin{itemize}
+\item Una sola persona ha la malattia.
+\item Tra le $999$ persone sane, l'$1\%$ risulta comunque positivo: circa $10$ persone.
+\end{itemize}
+
+Quindi abbiamo:
+
+\begin{itemize}
+\item $1$ vero positivo,
+\item $10$ falsi positivi.
+\end{itemize}
+
+In totale, tra i positivi, ci sono $11$ persone, di cui solo una è davvero malata.
+
+\[
+P(\text{malato} \mid \text{positivo}) = \frac{1}{11} \approx 9\%.
+\]
+
+\subsubsection{Ripetizione del Test}
+
+Cosa succede se ripetiamo il test in un altro laboratorio?
+
+Supponiamo che i due test siano indipendenti.
+
+La probabilità aggiornata diventa nuovamente:
+\[
+P(H|E) = \frac{P(E|H)\cdot P(H)}{P(H)\cdot P(E|H) + P(\overline{H})\cdot P(E|\overline{H})}.
+\]
+
+Dopo il secondo test positivo, la probabilità di essere davvero malati sale fino a circa:
+
+\[
+\boxed{91\%}.
+\]
+
+\subsection{Osservazione Importante}
+
+Questo esempio mostra come la probabilità iniziale (\textit{prior}) influenzi fortemente il risultato finale.
+
+Un test anche molto accurato può produrre una probabilità finale sorprendentemente bassa se la malattia è molto rara.
+
+\begin{quote}
+\textit{``Un test molto preciso non implica automaticamente una diagnosi affidabile.''}
+\end{quote}

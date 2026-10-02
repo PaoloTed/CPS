@@ -1,0 +1,91 @@
+% !TeX root = ../../main.tex
+\section{Pmf e medie condizionali}
+
+Supponiamo che $X \sim \mathcal{B}(16, 1/3)$.
+
+\textbf{"La variabile aleatoria $X$ segue una distribuzione Binomiale con parametri $n= 16$ e $p=1/3$"}
+
+dove $16$ è il numero di volte che ripeti l'esperimento e $1/3$ è la probabilità di vincere nel singolo esperimento.
+
+$X$ è il risultato finale: \textbf{conta quante volte hai vinto} su quei $16$ tentativi. Il minimo che $X$ può assumere è $0$ (hai perso tutte e $16$ le volte) e il massimo che $X$ può assumere è $16$ (hai vinto sempre).
+
+Per definizione di distribuzione binomiale:
+
+\begin{equation}
+\boxed{p_{X_N}(k) = \mathbb{P}(X_N = k) = \binom{N}{k} p^k q^{N-k}}
+\end{equation}
+
+quindi:
+
+\[
+\binom{16}{k} \left(\frac{1}{3}\right)^k \left(\frac{2}{3}\right)^{16-k}
+\]
+
+Significa:
+\begin{enumerate}
+    \item $\left(\frac{1}{3}\right)^k$: Hai vinto $k$ volte.
+    \item $\left(\frac{2}{3}\right)^{16-k}$: Hai perso tutte le altre volte.
+    \item $\binom{16}{k}$: È il coefficiente binomiale. Ti dice in quanti modi diversi potevi ottenere quelle vittorie 
+\end{enumerate}
+
+Osserviamo che:
+\[ \mathbb{E}[X] = 16/3 \quad \text{perché } \mathbb{E}[X] = N \cdot p \]
+Se ripetiamo un esperimento $N$ volte con probabilità di successo $p$, ci aspettiamo in media $N \cdot p$ successi.
+
+\paragraph{Scenario Condizionale}
+Supponiamo ora di assumere che sia verificata la condizione $X > 4$: ci chiediamo come si distribuisca $X$ \textbf{sotto questa condizione}.
+
+Dal punto di vista fisico significa considerare un insieme di $n$ esperimenti, scartare i valori di $X$ (il numero di successi) che siano inferiori a $5$ e valutare le probabilità dei residui dodici valori sul campione così ridotto.
+
+Adesso devi ricalcolare le probabilità per il nuovo scenario "filtrato". Succedono due cose:
+
+\paragraph{A. I valori scartati vanno a zero}
+
+Per $k < 5$ (quindi $0, 1, 2, 3, 4$), la nuova probabilità è $0$.
+
+\[ \text{per } k < 5 \to 0 \]
+
+\paragraph{B. I valori rimasti devono "ingrassare" (Rinormalizzazione)}
+
+
+Nella situazione originale, la somma delle probabilità dal $5$ al $16$ \textbf{non faceva 1} (perché mancava la "fetta" dello $0-4$). Diciamo, per esempio, che la probabilità di fare più di $4$ fosse il $60\%$ ($0.6$).
+
+Se tu cancelli il resto, quel $60\%$ deve diventare il nuovo $100\%$ del tuo universo ridotto.
+Per farlo, devi \textbf{dividere} ogni singola probabilità superstite per il totale della probabilità rimasta ($P(X > 4)$).
+
+Quindi:
+\begin{equation}
+p_{X|X>4}(k) = \frac{p_X(k)}{P(X > 4)}
+\end{equation}
+
+\begin{itemize}
+    \item \textbf{Numeratore ($p_X(k)$):} La probabilità originale di fare, ad esempio, $7$.
+    \item \textbf{Denominatore ($P(X > 4)$):} La somma di tutte le probabilità "sopravvissute". Serve a scalare tutto in modo che la somma finale faccia di nuovo $1$.
+\end{itemize}
+
+La slide usa questa notazione formale:
+\[
+\frac{P(\{X = k\} \cap \{X > 4\})}{P(\{X > 4\})}
+\]
+
+Che é la stessa cosa che abbiamo appena visto 
+\begin{itemize}
+    \item \textbf{Caso $k = 3$:} L'intersezione tra "è uscito 3" e "il numero è maggiore di 4" è \textbf{impossibile} (insieme vuoto). Probabilità = $0$.
+    \item \textbf{Caso $k = 7$:} L'intersezione tra "è uscito 7" e "il numero è maggiore di 4" è semplicemente \textbf{"è uscito 7"}. Quindi al numeratore metti la probabilità originale del $7$.
+\end{itemize}
+
+\paragraph{Proprietà della PMF condizionale}
+Si noti che la pmf condizionale trovata è una vera pmf. Infatti:
+
+\[
+p_{X|X>4}(k) \ge 0 \quad \text{e} \quad \sum_{k \in \mathbb{Z}} p_{X|X>4}(k) = \sum_{k=5}^{16} \frac{p_X(k)}{\sum_{i=5}^{16} p_X(i)} = 1
+\]
+
+Siamo quindi ora in grado di definire la pmf di una variabile aleatoria qualsiasi $X$ condizionata a un qualsiasi evento $A \subseteq \Omega$ a probabilità non nulla nella forma:
+
+\begin{equation}
+\boxed{p_{X|A}(x) = \mathbb{P}(x|A) = \frac{\mathbb{P}(\{X = x\} \cap A)}{\mathbb{P}(A)} \quad x \in \mathcal{X}}
+\end{equation}
+
+Ovviamente, $p_{X|A}(x)$ al variare di $x$ in $\mathcal{X}$ con $A$ prefissato è una pmf.
+

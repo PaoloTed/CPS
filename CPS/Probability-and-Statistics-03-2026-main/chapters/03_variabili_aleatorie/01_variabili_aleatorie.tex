@@ -1,0 +1,225 @@
+% !TeX root = ../../main.tex
+\section{Variabili Aleatorie}
+
+Quando lo spazio campionario $\Omega$ non è un insieme numerico, è necessario mettere gli eventi in corrispondenza con un insieme numerico discreto. Come facciamo? Tramite una corrispondenza (funzione) definita come:
+
+\[
+X: \omega \in \Omega \to X(\omega) \in \mathcal{X} \subseteq \mathbb{R}
+\]
+
+Questa funzione $X$ prende il nome di \textbf{Variabile Aleatoria}.
+\\Il codominio di $X$ (che nel caso discreto deve essere un insieme numerabile) prende il nome di \textbf{alfabeto} di $X$.
+
+Osserviamo che:
+\begin{itemize}
+    \item Gli eventi elementari divengono del tipo $X(\omega) = x$, con $x \in \mathcal{X}$.
+    \item Di conseguenza, anche le frequenze e le probabilità saranno espresse in funzione di $x$: $f_n(x)$ e $\mathbb{P}(X=x)$. La scrittura $\mathbb{P}(X=x)$ é una scorciatoia per: $P({\omega \in \Omega \mid X(\omega) = x})$, stiamo dicendo: Consideriamo tutti i casi in cui il risultato dell'esperimento (X) coincide con il numero (x) e calcoliamone la probabilitá. 
+\end{itemize}
+
+\paragraph{Etimologia e Terminologia}
+La variabile aleatoria è anche detta variabile \textit{casuale} o \textit{stocastica}.
+\begin{itemize}
+    \item \textbf{Stocastico:} Deriva dal verbo greco \textit{stochazesthai} che significa "fare congetture" o "tirare al bersaglio". In origine il termine indicava qualcosa che si basava su ipotesi e congetture.
+    \item \textbf{Aleatorio:} Deriva dal latino \textit{alea} (gioco di dadi) ed esprime il concetto di rischio calcolato.
+\end{itemize}
+
+\textbf{Definizione:} Ricordiamo che viene definito \textit{aleatorio} (o \textit{stocastico}) un fenomeno non deterministico.
+\\Quindi una variabile casuale è una variabile che può assumere valori diversi in dipendenza da qualche fenomeno aleatorio.
+
+\subsection{Funzione di Massa di Probabilità (PMF)}
+
+In alcune situazioni potremmo essere interessati non alla probabilità che la variabile casuale $X$ assuma uno specifico valore, bensì alla probabilità che essa assuma un valore minore o uguale ad un dato valore $x$.
+
+Sia $X$ una variabile aleatoria discreta con supporto (alfabeto) $\mathcal{X}$.
+\\La funzione $p_X(x)$ definita come:
+
+\begin{equation}
+\boxed{p_X(x) = \mathbb{P}(X=x), \quad \forall x \in \mathcal{X}}
+\end{equation}
+
+è chiamata \textbf{Funzione di Massa di Probabilità} (pmf).
+\\\textit{(Nota: talvolta indicata impropriamente come densità o distribuzione).}
+
+Affinché questa funzione sia valida, deve soddisfare due proprietà assiomatiche che derivano dall'approccio frequentista (dove la probabilità è approssimata dal limite delle frequenze relative $\approx \lim_{n \to \infty} \frac{n_x}{n}$):
+
+\begin{enumerate}
+    \item \textbf{Non negatività:}
+    \[ p_X(x) \ge 0, \quad \forall x \in \mathcal{X} \]
+    
+    \item \textbf{Normalizzazione:}
+    \[ \sum_{x \in \mathcal{X}} p_X(x) = 1 \]
+\end{enumerate}
+
+\paragraph{Esempio di verifica}
+Sia $\mathcal{X} = \{1, 2, 3, 4\}$. La sequenza $\left(\frac{1}{2}, \frac{1}{4}, \frac{1}{8}, \frac{1}{8}\right)$ definisce una PMF valida?
+
+\begin{itemize}
+    \item \textbf{Verifica 1:} Tutti i valori sono $\ge 0$? \textbf{Sì}.
+    \item \textbf{Verifica 2:} La somma è unitaria?
+    \[
+    \sum_{i=1}^4 p_X(x_i) = \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \frac{1}{8} = \frac{4+2+1+1}{8} = \frac{8}{8} = 1
+    \]
+    \item \textbf{Conclusione:} Sì, è una PMF valida.
+\end{itemize}
+
+\subsection{Caratterizzazione e Media Campionaria}
+
+Il modo più preciso per conoscere una variabile aleatoria è avere la sua \textbf{pmf} (Probability Mass Function), ovvero la lista completa di tutti i possibili valori che può assumere e le relative probabilità. Se hai questo, sai tutto della variabile.
+
+Spesso non possiamo (o non vogliamo) elencare tutte le probabilità. Ci serve un "riassunto". Uno dei riassunti più utili è la \textbf{Media}.
+
+\paragraph{L'Esperimento (prove)}
+L'approccio empirico (statistico) si basa sui seguenti passi:
+\begin{itemize}
+    \item Immagina di avere la tua variabile $X$ (es. lanciare un dado o misurare un pezzo meccanico).
+    \item Ripeti l'esperimento $n$ \textbf{volte}.
+    \item Ottieni una collezione di $n$ risultati:
+    \[ [X(\omega_1), X(\omega_2), \dots, X(\omega_n)] \]
+\end{itemize}
+
+\paragraph{La Media Campionaria ($\overline{X}_n$)}
+Per capire come si comporta la variabile "in media", calcoli la media aritmetica dei risultati che hai ottenuto. La formula è:
+
+\begin{equation}
+\boxed{\overline{X}_n = \frac{1}{n} \sum_{i=1}^n X(\omega_i)}
+\end{equation}
+
+Ovvero: \textbf{Somma di tutti i risultati ottenuti diviso il numero di prove fatte.}\
+
+\subsection{Media Statistica (Valore Atteso)}
+
+Riconsideriamo la definizione di media campionaria vista in precedenza:
+\[
+\overline{X}_n = \frac{1}{n} \sum_{i=1}^n X(\omega_i)
+\]
+
+Supponiamo che la variabile aleatoria $X$ assuma valori in un insieme discreto finito (il supporto) $\mathcal{X} = \{x_1, \dots, x_M\}$.
+\\Al crescere del numero di esperimenti $n$, accadrà che il valore specifico $x_1$ verrà osservato $n_1$ volte, il valore $x_2$ verrà osservato $n_2$ volte, e così via (fino a $x_M$ che apparirà $n_M$ volte).
+
+Possiamo quindi riscrivere la somma non più come lista di tutti i risultati, ma raggruppando i valori uguali e moltiplicandoli per la loro frequenza di apparizione ($n_i$).
+\\Quando il numero di prove $n$ tende all'infinito ($n \to \infty$), le frequenze relative $f_n(x_i) = \frac{n_i}{n}$ convergono alle probabilità teoriche $p_X(x_i)$.
+
+Questo ragionamento ci porta alla definizione teorica:
+
+\begin{equation}
+\begin{aligned}
+\overline{X}_n &= \frac{1}{n} \sum_{i=1}^M n_i x_i \\
+&= \sum_{i=1}^M x_i \underbrace{\left( \frac{n_i}{n} \right)}_{f_n(x_i)} \\
+&\xrightarrow{n \to \infty} \sum_{i=1}^M x_i \mathbb{P}(X = x_i) \\
+&= \sum_{i=1}^M x_i p_X(x_i) \stackrel{\text{def}}{=} \mathbb{E}[X]
+\end{aligned}
+\end{equation}
+
+\paragraph{Definizione}
+La quantità limite ottenuta è definita come \textbf{Media Statistica} o \textbf{Valore Atteso} (Expected Value) della variabile aleatoria $X$ ed è indicata con la notazione $\mathbb{E}[X]$:
+
+\begin{equation}
+\boxed{\mathbb{E}[X] = \sum_{x \in \mathcal{X}} x \cdot p_X(x)}
+\end{equation}
+in pratica é come una media pesata dove (x) é il peso.
+
+\textit{Nota: Nel caso in cui il supporto $\mathcal{X}$ sia infinito numerabile ($M=\infty$), la somma diventa una serie e il concetto si estende come passaggio al limite.}
+
+\subsection{Varianza e Deviazione Standard}
+\label{sec-varianza}
+
+Il Valore Atteso (media) ci fornisce il "baricentro" della distribuzione, ma non ci dice nulla su quanto i dati siano sparsi attorno ad esso.
+\\Per descrivere la dispersione dei valori (ovvero quanto è "incerta" o "rischiosa" la variabile aleatoria), introduciamo il concetto di \textbf{Varianza}.
+
+\paragraph{}
+Misuriamo la "distanza" tra ogni possibile valore ($X$) e la media $\mu = \mathbb{E}[X]$. Dove per distanza intendiamo quanto é lontano $x$ da $\mu$ 
+\begin{itemize}
+    \item La differenza $X - \mu$ è detta \textbf{scarto}.
+    
+    \item Se facessimo la media degli scarti ($\mathbb{E}[X - \mu]$), otterremmo sempre 0 (gli scarti positivi cancellano quelli negativi). 
+    
+    \begin{center}
+    \fbox{
+    \begin{minipage}{0.9\linewidth}
+    \small \textbf{Perché fa sempre 0?} \\
+    Partendo dalla definizione di media:
+    $$ \mu = \frac{x_1 + x_2 + \dots + x_n}{n} $$
+    Moltiplicando entrambi i lati per $n$, la somma di tutti i valori originali equivale alla media presa $n$ volte:
+    $$ x_1 + x_2 + \dots + x_n = n \cdot \mu $$
+    Se ora sommiamo tutti gli scarti:
+    $$ (x_1 - \mu) + (x_2 - \mu) + \dots + (x_n - \mu) $$
+    Possiamo riordinare e raggruppare i termini:
+    $$ (x_1 + x_2 + \dots + x_n) - (\mu + \mu + \dots + \mu) $$
+    Sapendo che la prima parentesi vale $n \cdot \mu$, e la seconda contiene $\mu$ sommata $n$ volte:
+    $$ n \cdot \mu - n \cdot \mu = 0 $$
+    \end{minipage}
+    }
+    \end{center}
+    
+    \item Per evitare ciò, eleviamo gli scarti al quadrato.
+\end{itemize}
+\paragraph{Definizione}
+La Varianza di una variabile aleatoria $X$, indicata con $\text{Var}(X)$ o $\sigma_X^2$, è definita come la \textbf{media degli scarti al quadrato}:
+
+\begin{equation}
+\boxed{\text{Var}(X) = \mathbb{E}\left[ (X - \mathbb{E}[X])^2 \right]}
+\end{equation}
+
+Essendo una somma di quadrati pesata per delle probabilità (che sono positive), la varianza è sempre una quantità \textbf{non negativa} ($\text{Var}(X) \ge 0$).
+
+\subsubsection{Come si calcola?}
+
+Per calcolare la varianza negli esercizi, è spesso scomodo usare la definizione sopra (bisognerebbe calcolare ogni scarto, farne il quadrato e moltiplicare per la probabilità).
+\\Sviluppando il quadrato del binomio all'interno del valore atteso, si ottiene una formula molto più pratica, nota come \textit{formula di König-Huygens}:
+
+$$ \text{Var}(X) = \mathbb{E}[(X - \mu)^2] $$
+$$ = \mathbb{E}[X^2 - 2X\mu + \mu^2] $$
+
+Per la proprietà di linearità del valore atteso:
+$$ = \mathbb{E}[X^2] - \mathbb{E}[2X\mu] + \mathbb{E}[\mu^2] $$
+
+Poiché $2$ e $\mu$ sono costanti, possono essere portate fuori dall'operatore $\mathbb{E}$ (e il valore atteso della costante $\mu^2$ è $\mu^2$ stesso):
+$$ = \mathbb{E}[X^2] - 2\mu \mathbb{E}[X] + \mu^2 $$
+$$ = \mathbb{E}[X^2] - 2\mu \cdot \mu + \mu^2 $$
+$$ = \mathbb{E}[X^2] - 2\mu^2 + \mu^2 $$
+$$ = \mathbb{E}[X^2] - \mu^2 $$
+
+\begin{equation}
+\boxed{\text{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2}
+\end{equation}
+
+In parole povere: \textbf{"La media dei quadrati meno il quadrato della media"}.
+Dove il termine $\mathbb{E}[X^2]$ (detto \textit{momento secondo o valore quadratico medio (Mean Square)}) si calcola come:
+\[ \mathbb{E}[X^2] = \sum_{x \in \mathcal{X}} x^2 \cdot p_X(x) \]\\
+
+Proprietà da tenere a mente:
+
+Se $Y = aX + b$, allora $\sigma_Y^2 = a^2\sigma_X^2$. Infatti:
+
+\begin{align*}
+\mu_Y &= a\mu_X + b \\
+\mathbb{E}[Y^2] &= \mathbb{E}[a^2X^2 + 2abX + b^2] = a^2\mathbb{E}[X^2] + 2ab\mu_X + b^2 \\
+\sigma_Y^2 &= \mathbb{E}[Y^2] - \mu_Y^2 \\
+\sigma_Y^2 &= \left(a^2\mathbb{E}[X^2] + 2ab\mu_X + b^2\right) - (a\mu_X + b)^2 \\
+\sigma_Y^2 &= a^2\mathbb{E}[X^2] + 2ab\mu_X + b^2 - \left(a^2\mu_X^2 + 2ab\mu_X + b^2\right) \\
+\sigma_Y^2 &= a^2\mathbb{E}[X^2] + 2ab\mu_X + b^2 - a^2\mu_X^2 - 2ab\mu_X - b^2 \\
+\sigma_Y^2 &= a^2\mathbb{E}[X^2] - a^2\mu_X^2 \\
+\sigma_Y^2 &= a^2\left(\mathbb{E}[X^2] - \mu_X^2\right) \\
+\sigma_Y^2 &= a^2\sigma_X^2
+\end{align*}
+\paragraph{Esempio di Calcolo}
+Consideriamo la variabile aleatoria $X$ definita come il lancio di una moneta dove Testa=1 e Croce=0, con probabilità $1/2$.
+\begin{enumerate}
+    \item Calcoliamo la media $\mathbb{E}[X] = 0 \cdot 0.5 + 1 \cdot 0.5 = 0.5$.
+    \item Calcoliamo la media dei quadrati $\mathbb{E}[X^2] = 0^2 \cdot 0.5 + 1^2 \cdot 0.5 = 0.5$.
+    \item Calcoliamo la varianza:
+    \[ \text{Var}(X) = 0.5 - (0.5)^2 = 0.5 - 0.25 = 0.25 \]
+\end{enumerate}
+Ma che significa 0.25 Testa al quadrato? Facciamone la radice quadrata: $\sqrt{0.25}=0.5$ Testa. In questo caso specifico, non importa cosa esce (testa o croce), ti sbaglierai sempre esattamente di 0.5 rispetto alla media. 
+
+\subsubsection{Deviazione Standard (Scarto Quadratico Medio)}
+
+La varianza ha un difetto "fisico": la sua unità di misura è al quadrato rispetto alla variabile originale (es. se $X$ è in metri, la varianza è in $m^2$).
+\\Per tornare all'unità di misura originale e avere un indice di dispersione più intuitivo, si definisce la \textbf{Deviazione Standard} ($\sigma_X$):
+
+\begin{equation}
+\sigma_X = \sqrt{\text{Var}(X)}
+\end{equation}
+
+Mentre la varianza è utile per i calcoli algebrici (grazie alle proprietà additive), la deviazione standard è fondamentale per l'interpretazione dei dati.
+

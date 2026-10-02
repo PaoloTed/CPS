@@ -1,0 +1,58 @@
+% !TeX root = ../../main.tex
+\section{Legge della Probabilità Totale}
+Il teorema permette di calcolare la probabilità di un evento $A$ sfruttando una partizione dello spazio campionario $\Omega$.
+
+\subsection{Ipotesi: La Partizione}
+
+Sia $\{E_i\}_{i=1}^M$ una famiglia di insiemi che costituisce una \textbf{partizione} di $\Omega$. Affinché sia una partizione, devono valere due condizioni fondamentali:
+
+\begin{enumerate}
+    \item \textbf{Esaustività:} L'unione degli insiemi copre l'intero spazio campionario.
+    \[ \bigcup_{i=1}^M E_i = \Omega \]
+    
+    \item \textbf{Disgiunzione a coppie:} Gli insiemi non hanno elementi in comune tra loro.
+    \[ E_i \cap E_j = \emptyset, \quad \forall i \neq j \]
+\end{enumerate}
+
+\subsection{Scomposizione dell'evento A}
+
+Consideriamo un evento generico $A \subseteq \Omega$.
+\\Possiamo riscrivere $A$ come l'intersezione di se stesso con l'intero spazio campionario $\Omega$ (poiché intersecare con l'insieme universo non cambia l'insieme):
+\[ A = A \cap \Omega \]
+
+Sostituendo $\Omega$ con la definizione di partizione (punto 1), otteniamo:
+\[ A = A \cap \left( \bigcup_{i=1}^M E_i \right) \]
+
+Applicando la \textbf{proprietà distributiva} dell'intersezione rispetto all'unione, portiamo l'intersezione dentro la sommatoria insiemistica:
+\[ A = \bigcup_{i=1}^M (A \cap E_i) \]
+
+\paragraph{Nota fondamentale}
+Poiché gli insiemi $E_i$ sono disgiunti tra loro, anche le loro intersezioni con $A$ (ovvero i sottoinsiemi $A \cap E_i$) sono disgiunte a coppie.
+\[ (A \cap E_i) \cap (A \cap E_j) = \emptyset, \quad \forall i \neq j \]
+
+\subsection{Passaggio alla Probabilità (Assioma di Additività)}
+
+Calcoliamo ora la probabilità di $A$, ovvero $\mathbb{P}(A)$.
+\\Sfruttando la scomposizione appena trovata:
+\[ \mathbb{P}(A) = \mathbb{P}\left( \bigcup_{i=1}^M (A \cap E_i) \right) \]
+
+Per il \textbf{terzo assioma di Kolmogorov} (additività finita), poiché gli eventi $(A \cap E_i)$ sono disgiunti, la probabilità dell'unione è uguale alla somma delle probabilità:
+\[ \mathbb{P}(A) = \sum_{i=1}^M \mathbb{P}(A \cap E_i) \]
+
+\subsection{Applicazione della Probabilità Condizionata}
+
+Dalla definizione di probabilità condizionata sappiamo che:
+\[ \mathbb{P}(A \mid E_i) = \frac{\mathbb{P}(A \cap E_i)}{\mathbb{P}(E_i)} \quad (\text{con } \mathbb{P}(E_i) > 0) \]
+
+Invertendo la formula, possiamo esprimere la probabilità congiunta come prodotto:
+\[ \mathbb{P}(A \cap E_i) = \mathbb{P}(A \mid E_i) \cdot \mathbb{P}(E_i) \]
+
+Sostituendo quest'ultima espressione nella sommatoria del punto 3, otteniamo la formula della Legge della Probabilità Totale:
+
+\begin{equation}
+\boxed{\mathbb{P}(A) = \sum_{i=1}^M \mathbb{P}(A \mid E_i)\mathbb{P}(E_i)}
+\end{equation}
+
+\paragraph{Interpretazione analitica}
+Il teorema afferma che la probabilità marginale di $A$ è una \textbf{media ponderata} delle probabilità condizionate $\mathbb{P}(A \mid E_i)$, dove i pesi sono dati dalle probabilità degli eventi della partizione $\mathbb{P}(E_i)$.
+

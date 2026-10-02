@@ -1,0 +1,64 @@
+% !TeX root = ../../main.tex
+\section{Regola della probabilità totale per le pmf}
+
+\url{https://www.youtube.com/watch?v=U3_783xznQI}
+
+Ricordiamo che, per un qualunque evento $C \subseteq \Omega$ e per una qualunque partizione $\{E_i\}_{i=1}^M$, si ha:
+
+\[
+\mathbb{P}(C) = \sum_{i=1}^M \mathbb{P}(C \mid E_i)\mathbb{P}(E_i)
+\]
+
+Ovvero: la probabilitá che l'evento C accada é uguale alla probabilità dell'evento C condizionata da ogni Evento indipendente Ei per la probabilità di ogni evento Ei.
+\\\\
+Pertanto, specializzando la precedente all'evento $C = \{X = x\}$, otteniamo una formula fondamentale per le funzioni di massa di probabilità:
+
+\begin{equation}
+\boxed{p_X(x) = \mathbb{P}(X = x) = \sum_{m=1}^M \mathbb{P}(\{X = x\} \mid E_m) \mathbb{P}(E_m) = \sum_{m=1}^M p_{X|E_m}(x)\mathbb{P}(E_m)}
+\end{equation}
+
+Il concetto chiave qui è la \textbf{Partizione} $(E_1, E_2, \dots, E_M)$.
+\\Immagina una torta intera (l'universo $\Omega$). La tagli in tante fette ($E_m$). Le fette non si sovrappongono e coprono tutta la torta.
+\\\\
+Se vuoi sapere la probabilità totale che accada $X = x$ (es. che esca un 7), puoi procedere ricostruendo la probabilità "globale" usando i pezzi "locali":
+
+\begin{enumerate}
+    \item Calcola la probabilità che esca 7 nello \textbf{scenario 1} ($E_1$) e moltiplicala per quanto è probabile che accada lo scenario 1.
+    \item Calcola la probabilità che esca 7 nello \textbf{scenario 2} ($E_2$) e moltiplicala per la probabilità dello scenario 2.
+    \item ...fai così per tutti gli scenari...
+    \item \textbf{Somma tutto.}
+\end{enumerate}
+
+\paragraph{Esempio applicato}
+Tornando all'esempio precedente, vuoi calcolare $p_X(k)$ (probabilità di ottenere $k$ successi). Invece di calcolarla direttamente, spacca il mondo in due scenari:
+\begin{itemize}
+    \item \textbf{Scenario A:} $X > 4$ (hai vinto tante volte).
+    \item \textbf{Scenario B:} $X \le 4$ (hai vinto poche volte).
+\end{itemize}
+
+La formula ti dice:
+\[
+P(\text{esce } k) = P(\text{esce } k \mid \text{scenario A}) \cdot P(A) + P(\text{esce } k \mid \text{scenario B}) \cdot P(B)
+\]
+\\
+\paragraph{Formalmente:} Applicando la regola della probabilità totale, possiamo scrivere $p_X(k)$ in modi diversi a seconda di come decidiamo di partizionare lo spazio degli eventi.
+
+Ecco due esempi di scomposizione validi per la stessa variabile:
+
+\begin{align*}
+p_X(k) &= p_{X \mid X>4}(k)\mathbb{P}(X > 4) + p_{X \mid X \le 4}(k)\mathbb{P}(X \le 4) \\[1em]
+&= p_{X \mid 2 \le X \le 6}(k)\mathbb{P}(2 \le X \le 6) + p_{X \mid X \le 1}(k)\mathbb{P}(X \le 1) + p_{X \mid X \ge 7}(k)\mathbb{P}(X \ge 7)
+\end{align*}
+
+Queste uguaglianze sono valide \textbf{essendo} verificate le proprietà delle partizioni su $\Omega$:
+
+\begin{itemize}
+    \item \textbf{Caso a 2 scenari:}
+    \[ \Omega = E_1 \cup E_2 = \{X > 4\} \cup \{X \le 4\} \]
+    con $E_1 \cap E_2 = \emptyset$ (insiemi disgiunti).
+    
+    \item \textbf{Caso a 3 scenari:}
+    \[ \Omega = E'_1 \cup E'_2 \cup E'_3 = \{2 \le X \le 6\} \cup \{X \le 1\} \cup \{X \ge 7\} \]
+    con $E'_i \cap E'_j = \emptyset$ per ogni $i \neq j$ (tutti gli insiemi sono a due a due disgiunti).
+\end{itemize}
+

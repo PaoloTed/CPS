@@ -1,0 +1,473 @@
+% !TeX root = ../../main.tex
+\section{Calcolo Combinatorio}
+\subsection{Prodotto Cartesiano}
+
+Si considerino $k$ insiemi finiti, $A_1, \dots, A_k$, non necessariamente distinti.
+\\\\Si definisce \textbf{prodotto cartesiano} $A^{(k)} = A_1 \times \dots \times A_k$ un insieme costituito dalle $k$-ple ordinate in cui il primo elemento appartiene a $A_1$, il secondo a $A_2$ e così via.
+\\\\Siccome il primo elemento si può scegliere in $|A_1|$ modi, il secondo in $|A_2|$ e così via, avremo:
+    \[
+    |A^{(k)}| = \prod_{i=1}^{k} |A_i|
+    \]
+Questa è la relazione fondamentale del calcolo combinatorio, dalla quale molte altre formule di conteggio derivano.
+
+\subsection{Disposizioni Semplici (k-ple ordinate senza ripetizione)}
+
+Abbiamo un insieme $A$ con $n$ elementi. Vogliamo capire quante stringhe ordinate di lunghezza $k$ possiamo formare con la condizione che ogni elemento di $A$ può apparire una ed una sola volta.
+
+\begin{esempio}
+	C'è una gara con 8 atleti ($n=8$). Quanti possibili podi (oro, argento, bronzo) possiamo avere ($k=3$)?
+\end{esempio}
+
+Il ragionamento è il seguente:
+\begin{enumerate}
+	\item \textbf{Scegliamo il primo elemento:} abbiamo $n$ possibili scelte.
+	\item \textbf{Scegliamo il secondo elemento:} abbiamo $n-1$ possibili scelte (perché non possiamo riprendere l'elemento scelto in precedenza).
+	\item \textbf{Scegliamo il terzo elemento:} abbiamo $n-2$ scelte.
+	\item[\dots]
+	\item \textbf{Scegliamo il $k$-esimo elemento:} abbiamo $n - (k-1) = n - k + 1$ scelte.
+\end{enumerate}
+
+Applicando la regola del prodotto, il numero totale di stringhe possibili, per ogni $k \le n$, è:
+\[ n \cdot (n-1) \cdot (n-2) \cdot \dots \cdot (n - k + 1) \]
+che possiamo scrivere in modo compatto come:
+\[ \prod_{i=0}^{k-1} (n-i) \]
+Questa formula viene quasi sempre scritta in una forma ancora più compatta usando i fattoriali. Ricorda che $n! = n \cdot (n-1) \cdot \dots \cdot 2 \cdot 1$.
+\\\\La formula delle \textbf{Disposizioni Semplici} $D_{n,k}$ è:
+\[ D_{n,k} = \frac{n!}{(n-k)!} \]
+
+\paragraph{Perché funziona?}
+Espandendo i fattoriali si osserva che i termini si semplificano:
+\[ \frac{n!}{(n-k)!} = \frac{n \cdot (n-1) \cdot \dots \cdot (n-k+1) \cdot (n-k)!}{(n-k)!} \]
+Tutti i termini da $(n-k)$ in giù si annullano, lasciando esattamente la formula di partenza: $n \cdot (n-1) \cdot \dots \cdot (n-k+1)$.
+
+\begin{esempio}[Risoluzione Esempio del Podio]
+Con $n=8$ atleti e $k=3$ posizioni sul podio:
+\[ \text{Numero di podi possibili} = 8 \cdot 7 \cdot 6 = 336 \]
+Usando la formula con i fattoriali:
+\[ D_{8,3} = \frac{8!}{(8-3)!} = \frac{8!}{5!} = \frac{8 \cdot 7 \cdot 6 \cdot 5!}{5!} = 8 \cdot 7 \cdot 6 = 336 \]
+\end{esempio}
+
+\begin{osservazione}
+	Il caso speciale in cui $k=n$ prende il nome di \textbf{permutazione}. In questo caso, vogliamo contare le stringhe di lunghezza $n$ usando \emph{tutti} gli $n$ elementi, senza ripetizioni. In altre parole, stiamo contando in quanti modi diversi possiamo ordinare (o mettere in fila) tutti gli elementi dell'insieme.
+\end{osservazione}
+
+La formula per le permutazioni di $n$ elementi, indicata con $P_n$, è:
+\[ P_n = D_{n,n} = \frac{n!}{(n-n)!} = \frac{n!}{0!} = n! \]
+(ricordando che per definizione $0! = 1$).
+
+\begin{esempio}
+In quanti modi diversi posso disporre 3 libri ($n=3$) su uno scaffale?
+\[ P_3 = 3! = 3 \cdot 2 \cdot 1 = 6 \]
+\end{esempio}
+
+\subsection{Disposizioni con Ripetizione (k-ple ordinate con ripetizione)}
+
+Abbiamo un insieme $A$ con $n$ elementi distinti. Vogliamo sempre formare delle "stringhe" (sequenze ordinate) di lunghezza $k$.
+A differenza del caso precedente, ora ogni elemento può essere usato \textbf{più di una volta}.
+
+Il ragionamento è il seguente:
+\begin{itemize}
+    \item Per la scelta del primo elemento abbiamo $n$ possibilità.
+    \item Per la scelta del secondo elemento abbiamo ancora $n$ possibilità (poiché la ripetizione è permessa).
+    \item \dots
+    \item Per la scelta del $k$-esimo elemento, abbiamo sempre $n$ possibilità.
+\end{itemize}
+
+Applicando il principio fondamentale del calcolo combinatorio (la regola del prodotto), otteniamo:
+\[ \underbrace{n \cdot n \cdot n \cdot \dots \cdot n}_{k \text{ volte}} \]
+Questo è, per definizione, la potenza $k$-esima di $n$.
+\[ n^k \]
+
+\begin{osservazione}
+Questo risultato non è altro che la cardinalità del prodotto cartesiano dell'insieme $A$ con se stesso per $k$ volte. Se $A^{(k)} = A \times A \times \dots \times A$ ($k$ volte), allora $|A^{(k)}| = |A|^k = n^k$.
+\end{osservazione}
+
+% Da inserire di seguito al codice precedente in chapters/1.tex
+
+\subsection{Combinazioni Semplici (Sottoinsiemi non ordinati)}
+
+Prima abbiamo visto il concetto di disposizione. Qual è la differenza con la parola ``combinazione''?
+
+Le \textbf{combinazioni} $C_{n,k}$ di $n$ "elementi presi a gruppi di $k$" contano in quanti modi si possono scegliere $k$ elementi da un insieme di $n$ elementi, \textbf{senza tenere conto dell'ordine}. 
+
+Questo significa che le combinazioni sono sempre minori o uguali alle disposizioni, perché gruppi ordinati come $(1,2,3)$, $(3,2,1)$ e $(2,1,3)$ ``collassano'' in un unico sottoinsieme non ordinato $\{1,2,3\}$.
+\\\\Deriviamo la formula:
+\\Iniziamo calcolando tutti i possibili gruppi ordinati di $k$ elementi presi da $n$. Questa è esattamente la formula delle disposizioni semplici che abbiamo già visto:
+\[ D_{n,k} = \frac{n!}{(n-k)!} \]
+
+\paragraph{Rimuoviamo la ridondanza}
+Prendiamo uno specifico gruppo di $k$ elementi, ad esempio il sottoinsieme $\{1, 2, 3\}$ (con $k=3$). Quante volte appare questo gruppo nella nostra lista di \textit{disposizioni}? Appare in tutte le sue possibili permutazioni:
+\begin{itemize}
+    \item $(1, 2, 3)$
+    \item $(1, 3, 2)$
+    \item $(2, 1, 3)$
+    \item $(2, 3, 1)$
+    \item $(3, 1, 2)$
+    \item $(3, 2, 1)$
+\end{itemize}
+Tutte queste $3! = 6$ sequenze ordinate, dal punto di vista delle combinazioni (dove l'ordine non conta), sono la \textbf{stessa e unica cosa}.
+
+In generale, per un qualsiasi gruppo di $k$ elementi, esistono $k!$ modi di ordinarli. Questo significa che, nella nostra lista iniziale di disposizioni, ogni combinazione unica è stata contata $k!$ volte di troppo. Per ottenere il numero corretto di combinazioni, dobbiamo quindi dividere il numero totale di disposizioni per questo fattore di ridondanza.
+\\\\La formula per le \textbf{Combinazioni Semplici}, indicata anche con il \textbf{coefficiente binomiale} $\binom{n}{k}$, è:
+\[ C_{n,k} = \binom{n}{k} = \frac{D_{n,k}}{k!} = \frac{n!}{k!(n-k)!} \]
+
+\subsubsection{Esempi Pratici}
+\begin{itemize}
+    \item \textbf{SuperEnalotto:} Bisogna scegliere 6 numeri da un insieme di 90 ($n=90, k=6$). L'ordine con cui vengono estratti non influenza la vincita. Quante sono le possibili sestine?
+    \[ \binom{90}{6} = \frac{90!}{6!(90-6)!} = \frac{90!}{6! \cdot 84!} = 622.614.630 \]
+    
+    \item \textbf{Mano di Poker:} Quante diverse mani di 5 carte ($k=5$) si possono ricevere da un mazzo di 52 ($n=52$)? L'ordine in cui si ricevono le carte non cambia la mano.
+    \[ \binom{52}{5} = \frac{52!}{5!(52-5)!} = \frac{52!}{5! \cdot 47!} = 2.598.960 \]
+\end{itemize}
+
+\subsection{Insieme delle parti di un insieme finito}
+
+Si consideri un insieme $A$ con $n$ elementi.
+\\L'insieme delle parti $\mathcal{P}(A)$ di $A$ è l'insieme di tutti i possibili sottoinsiemi di $A$.
+Negli insiemi ovviamente l'ordinamento non conta, per cui il numero di sottoinsiemi $k$-dimensionali di $A$ è:
+    \[ \binom{n}{k} \]
+Siccome tanto l'insieme vuoto ($0$-dimensionale) quanto $A$ ($n$-dimensionale) sono sottoinsiemi di $A$, avremo:
+    \[ |\mathcal{P}(A)| = \sum_{k=0}^{n} \binom{n}{k} = 2^n \]
+
+\begin{esempio}
+Un giocatore estrae (senza reinserimento) 5 carte da un mazzo di carte da poker (contenente le carte dal 7 all’asso, per un totale di $8 \times 4 = 32$ carte).
+Calcolare le seguenti probabilità:
+\begin{enumerate}
+    \item Coppia di assi e coppia qualsiasi;
+    \item Almeno tre assi;
+    \item Un tris qualsiasi (ma non un full nè un poker);
+    \item Colore di picche o colore qualsiasi.
+\end{enumerate}
+
+\paragraph{Soluzione 1) Coppia di assi e coppia qualsiasi}
+
+Per calcolare la probabilità di un evento si utilizza la formula:
+\[
+\text{Probabilità} = \frac{\text{Numero di Mani Favorevoli}}{\text{Numero Totale di Mani Possibili}}
+\]
+
+Per prima cosa, calcoliamo il denominatore, ovvero quante combinazioni di 5 carte si possono estrarre da un mazzo di 32, senza reinserimento e senza considerare l'ordine. Il numero totale di mani possibili è dato da:
+\[
+\binom{32}{5} = \frac{32!}{5!(32-5)!} = \frac{32 \cdot 31 \cdot 30 \cdot 29 \cdot 28}{5 \cdot 4 \cdot 3 \cdot 2 \cdot 1} = \mathbf{201.376} \text{ mani possibili}
+\]
+
+Ora calcoliamo il numeratore, ovvero in quanti modi possiamo ottenere una mano con una coppia di assi e un'altra coppia qualsiasi. Suddividiamo il problema in passaggi:
+
+\begin{enumerate}
+    \item \textbf{Scegliamo la coppia di assi:} ci sono 4 assi nel mazzo e dobbiamo sceglierne 2:
+    \[ \binom{4}{2} = \frac{4!}{2!2!} = 6 \text{ modi} \]
+    
+    \item \textbf{Scegliamo il valore della seconda coppia:} il mazzo ha 8 valori di carte (7, 8, 9, 10, J, Q, K, A). Avendo già scelto gli assi come valore per la prima coppia, rimangono 7 valori possibili per la seconda coppia:
+    \[ \binom{7}{1} = 7 \text{ modi} \]
+    
+    \item \textbf{Scegliamo le due carte per la seconda coppia:} per il valore scelto (ad esempio, i Re), ci sono 4 carte di quel valore nel mazzo. Dobbiamo sceglierne 2:
+    \[ \binom{4}{2} = 6 \text{ modi} \]
+    
+    \item \textbf{Scegliamo la quinta carta:} questa carta non può essere né un asso né del valore della seconda coppia, altrimenti avremmo un full. Le carte totali sono 32.
+    \begin{itemize}
+        \item Togliamo i 4 assi: $32 - 4 = 28$.
+        \item Togliamo le 4 carte del valore della seconda coppia: $28 - 4 = 24$.
+    \end{itemize}
+    Dobbiamo quindi scegliere una carta tra le restanti 24:
+    \[ \binom{24}{1} = 24 \text{ modi} \]
+\end{enumerate}
+
+Il numero totale di mani favorevoli si ottiene moltiplicando i risultati di ogni passaggio:
+\[
+\text{Casi Favorevoli} = \binom{4}{2} \cdot \binom{7}{1} \cdot \binom{4}{2} \cdot \binom{24}{1} = 6 \cdot 7 \cdot 6 \cdot 24 = \mathbf{6.048} \text{ mani}
+\]
+
+Ora possiamo unire i due risultati per calcolare la probabilità:
+\[
+\text{Probabilità} = \frac{\text{Casi Favorevoli}}{\text{Casi Possibili}} = \frac{6.048}{201.376} \approx 0,030033
+\]
+La probabilità di estrarre una coppia di Assi e un'altra coppia qualsiasi è quindi di circa il \textbf{3,00\%}.
+
+
+\paragraph{Soluzione 2) Almeno tre assi}
+L'evento "almeno tre assi" si realizza se si verifica uno dei due eventi mutuamente esclusivi: "esattamente 3 assi" oppure "esattamente 4 assi". Calcoliamo separatamente le probabilità.
+
+\subparagraph{Probabilità di estrarre esattamente 3 assi}
+Questa mano è composta da 3 assi e 2 carte che non sono assi.
+\begin{itemize}
+    \item Scegliamo 3 assi dai 4 disponibili nel mazzo:
+    \[ \binom{4}{3} = 4 \text{ modi} \]
+    \item Scegliamo le altre 2 carte dalle 28 carte rimanenti che non sono assi:
+    \[ \binom{28}{2} = \frac{28!}{2! \cdot 26!} = \frac{28 \cdot 27}{2} = 378 \text{ modi} \]
+\end{itemize}
+Moltiplichiamo i risultati per trovare il numero di mani favorevoli (che include anche il full house):
+\[ \text{Casi Favorevoli (3 assi)} = 4 \cdot 378 = \mathbf{1.512} \text{ mani} \]
+
+\subparagraph{Probabilità di estrarre esattamente 4 assi (Poker d'assi)}
+Questa mano è composta da 4 assi e 1 carta qualsiasi che non sia un asso.
+\begin{itemize}
+    \item Scegliamo 4 assi dai 4 disponibili:
+    \[ \binom{4}{4} = 1 \text{ modo} \]
+    \item Scegliamo 1 carta dalle 28 rimanenti:
+    \[ \binom{28}{1} = 28 \text{ modi} \]
+\end{itemize}
+Moltiplichiamo i risultati:
+\[ \text{Casi Favorevoli (4 assi)} = 1 \cdot 28 = \mathbf{28} \text{ mani} \]
+
+\subparagraph{Probabilità totale}
+Per ottenere la probabilità di estrarre "almeno tre assi", sommiamo le mani favorevoli dei due casi e le dividiamo per il totale delle mani possibili.
+\begin{itemize}
+    \item \textbf{Totale mani favorevoli}: $1.512 \text{ (3 assi)} + 28 \text{ (4 assi)} = \mathbf{1.540}$
+    \item \textbf{Probabilità}: 
+    \[ P(\text{almeno 3 assi}) = \frac{1.540}{201.376} \approx 0,007647 \]
+\end{itemize}
+La probabilità è quindi di circa lo \textbf{0,76\%}.
+
+\vspace{1cm} % Aggiunge uno spazio verticale per separare i ragionamenti
+
+\hrule % Aggiunge una linea di separazione
+
+\vspace{1cm}
+
+\subparagraph{Approfondimento: Probabilità di 3 assi escludendo il Full House}
+Ora calcoliamo la probabilità di estrarre una mano con esattamente 3 assi e due carte di valore diverso tra loro (del tipo AAAXY).
+
+\begin{enumerate}
+    \item \textbf{Scegliamo i 3 assi:} Dal mazzo che contiene 4 assi, dobbiamo sceglierne 3. Il numero di modi per farlo è:
+    \[ \binom{4}{3} = \mathbf{4} \]
+    
+    \item \textbf{Scegliamo le restanti due carte (X e Y):} Queste devono soddisfare due condizioni:
+    \begin{itemize}
+        \item Non devono essere assi.
+        \item Non devono avere lo stesso valore (per evitare una coppia, che formerebbe un full house AAAXX).
+    \end{itemize}
+    
+    Il procedimento è il seguente:
+    \begin{itemize}
+        \item \textbf{Scegliamo i due valori diversi per X e Y:} tolti gli assi, rimangono 7 valori possibili (7, 8, 9, 10, J, Q, K). Di questi ne dobbiamo scegliere 2:
+        \[ \binom{7}{2} = \frac{7!}{2!5!} = 21 \text{ coppie di valori possibili} \]
+        (es. \{Re, Donna\}, \{7, 9\}, ecc.).
+        
+        \item \textbf{Scegliamo il seme per la prima carta (X):} per il primo valore scelto (es. Re), ci sono 4 semi disponibili:
+        \[ \binom{4}{1} = \mathbf{4} \]
+        
+        \item \textbf{Scegliamo il seme per la seconda carta (Y):} anche per il secondo valore (es. Donna), ci sono 4 semi disponibili:
+        \[ \binom{4}{1} = \mathbf{4} \]
+    \end{itemize}
+    Per ottenere il numero totale di modi per scegliere le carte X e Y, moltiplichiamo i risultati di questi tre sottogruppi:
+    \[ \text{Modi per scegliere X e Y} = \binom{7}{2} \cdot \binom{4}{1} \cdot \binom{4}{1} = 21 \cdot 4 \cdot 4 = \mathbf{336} \]
+    
+    \item \textbf{Calcolo finale delle mani favorevoli:} adesso moltiplichiamo questo risultato per il numero di modi per scegliere gli assi:
+    \[ \text{Mani favorevoli (AAAXY)} = 4 \text{ (modi per assi)} \cdot 336 \text{ (modi per X e Y)} = \mathbf{1.344} \]
+    
+    \item \textbf{Calcolo della probabilità:}
+    \[ P(\text{Tris d'assi, non full}) = \frac{1.344}{201.376} \approx 0,006674 \]
+\end{enumerate}
+La probabilità di estrarre esattamente 3 assi senza avere un full house è quindi di circa lo \textbf{0,67\%}.
+
+\paragraph{Soluzione 3) Un tris qualsiasi (ma non un full nè un poker)}
+L'obiettivo è calcolare la probabilità di ottenere una mano di tipo ZZZXY, dove Z, X e Y sono tre valori distinti. Questo esclude il full (ZZZXX) e il poker (ZZZZX).
+
+\begin{enumerate}
+    \item \textbf{Scegliamo il valore del tris (Z):}
+    Ci sono 8 valori possibili nel mazzo (dal 7 all'Asso). Dobbiamo sceglierne uno per il nostro tris.
+    \[ \text{Scelta del valore:} \binom{8}{1} = 8 \text{ modi} \]
+
+    \item \textbf{Scegliamo i 3 semi per quel valore:}
+    Per il valore scelto (ad esempio, il Re), ci sono 4 semi. Dobbiamo sceglierne 3.
+    \[ \text{Scelta dei semi:} \binom{4}{3} = 4 \text{ modi} \]
+
+    \item \textbf{Scegliamo le ultime due carte (X e Y):}
+    Le due carte rimanenti devono avere valori diversi sia dal tris sia tra di loro.
+    \begin{itemize}
+        \item \textbf{Scegliere i 2 valori diversi:} Restano 7 valori disponibili nel mazzo (8 totali meno quello usato per il tris). Ne dobbiamo scegliere 2.
+        \[ \text{Scelta dei valori:} \binom{7}{2} = \frac{7 \cdot 6}{2} = 21 \text{ modi} \]
+        
+        \item \textbf{Scegliere il seme per la prima carta (X):} Per il primo dei due valori scelti, ci sono 4 semi disponibili.
+        \[ \text{Scelta del seme di X:} \binom{4}{1} = 4 \text{ modi} \]
+        
+        \item \textbf{Scegliere il seme per la seconda carta (Y):} Anche per il secondo valore scelto, ci sono 4 semi disponibili.
+        \[ \text{Scelta del seme di Y:} \binom{4}{1} = 4 \text{ modi} \]
+    \end{itemize}
+\end{enumerate}
+
+Per calcolare il numero totale di mani favorevoli, moltiplichiamo il numero di opzioni per ogni passaggio:
+\begin{align*}
+\text{Mani favorevoli} &= (\text{Scelta valore tris}) \times (\text{Scelta semi tris}) \times (\text{Scelta valori X, Y}) \\
+                      &\quad \times (\text{Scelta seme X}) \times (\text{Scelta seme Y}) \\
+\text{Mani favorevoli} &= \binom{8}{1} \cdot \binom{4}{3} \cdot \binom{7}{2} \cdot \binom{4}{1} \cdot \binom{4}{1} \\
+                      &= 8 \times 4 \times 21 \times 4 \times 4 = \mathbf{10.752}
+\end{align*}
+
+\subsubsection*{2. Calcolo della Probabilità}
+Dividiamo il numero di mani favorevoli per il numero totale di mani possibili (201.376).
+\[
+\text{Probabilità} = \frac{10.752}{201.376} \approx 0,05339...
+\]
+Convertendo in percentuale, la probabilità è di circa il \textbf{5,34\%}.
+
+
+\paragraph{Soluzione 4) Colore di Picche o Colore Qualsiasi}
+
+L'evento "Colore di Picche" è un caso specifico dell'evento più generale "Colore Qualsiasi". Pertanto, la probabilità dell'unione "Colore di Picche o Colore Qualsiasi" è semplicemente la probabilità dell'evento "Colore Qualsiasi".
+
+Per chiarezza, calcoliamo prima il caso specifico e poi lo generalizziamo.
+
+\subsubsection*{Colore di Picche}
+Un "colore di picche" significa che tutte e 5 le carte estratte devono essere di picche.
+
+\begin{itemize}
+    \item \textbf{Carte disponibili:} Nel mazzo di 32 carte, ci sono 8 carte di picche (7, 8, 9, 10, J, Q, K, A).
+    \item \textbf{Mani favorevoli:} Dobbiamo scegliere 5 di queste 8 carte. Utilizziamo le combinazioni:
+    \[
+    \binom{8}{5} = \frac{8!}{5!(8-5)!} = \frac{8!}{5!3!} = \frac{8 \times 7 \times 6}{3 \times 2 \times 1} = \mathbf{56}
+    \]
+    Ci sono esattamente \textbf{56} mani possibili che costituiscono un colore di picche.
+\end{itemize}
+
+La probabilità di questo evento specifico è:
+\[
+P(\text{Colore di Picche}) = \frac{56}{201.376} \approx 0,000278 \approx \mathbf{0,028\%}
+\]
+
+\subsubsection*{Colore Qualsiasi}
+Un "colore qualsiasi" (o \textit{flush}) significa ottenere 5 carte dello stesso seme, non importa quale. 
+\\\\\textbf{Mani favorevoli:} il calcolo che abbiamo fatto per il seme di picche è identico per qualsiasi altro seme (cuori, quadri, fiori), poiché ogni seme ha 8 carte. Il numero totale di mani favorevoli per un colore qualsiasi è la somma dei casi per ciascun seme:
+    \[
+    \text{Mani favorevoli (Colore Qualsiasi)} = 56 (\text{picche}) + 56 (\text{cuori}) + 56 (\text{quadri}) + 56 (\text{fiori})
+    \]
+    \[
+    = 56 \times 4 = \mathbf{224}
+    \]
+
+La probabilità di ottenere un colore qualsiasi è quindi:
+\[
+P(\text{Colore Qualsiasi}) = \frac{224}{201.376} \approx 0,001112 \approx \mathbf{0,11\%}
+\]
+\end{esempio}
+
+\newpage
+
+
+\section*{Dagli Eventi Equiprobabili a Quelli Non Equiprobabili: Il mondo reale}
+
+\subsection*{1. Spazi Campione Discreti}
+
+Iniziamo definendo il nostro campo di gioco: uno spazio campione \(\Omega\) discreto, ovvero un insieme di risultati possibili che possiamo contare o elencare (finito o numerabile).
+\\\\
+Il passo fondamentale che compiamo ora è rimuovere l'ipotesi che tutti gli eventi elementari siano equiprobabili. Questo ci permette di modellare scenari più realistici, come il lancio di un dado truccato o una moneta sbilanciata.
+\\\\
+Anche in assenza di equiprobabilità, la definizione fondamentale di probabilità rimane valida attraverso l'approccio frequentista. Questo metodo si basa sull'osservazione sperimentale:
+\begin{itemize}
+    \item Si considera un evento A (un sottoinsieme di \(\Omega\)) e si ripete l'esperimento \(n\) volte.
+    \item Si conta il numero di volte \(n_A\) in cui l'evento A si verifica.
+    \item La frequenza relativa di A è il rapporto: \( f_n(A) = \frac{n_A}{n} \).
+    \item La \textbf{Probabilità P(A)} è il valore a cui questa frequenza tende a stabilizzarsi all'aumentare infinito del numero di prove (\(n \to \infty\)).
+\end{itemize}
+
+Nel modello equiprobabile, ogni risultato ha la stessa identica chance di verificarsi. Qui, il calcolo della probabilità si basa su un principio semplice: il conteggio.
+\\\\
+La probabilità di un evento A è data dal rapporto tra il numero di casi favorevoli e il numero di casi possibili:
+\[ P(A) = \frac{|A|}{|\Omega|} \]
+\\
+Di conseguenza, se ripetiamo l'esperimento \(n\) volte, ci aspettiamo che A si verifichi un numero di volte approssimativamente pari a \( n \cdot P(A) = n \cdot \frac{|A|}{|\Omega|} \).
+
+\begin{esempio}[Lancio di un dado non truccato]
+    \begin{itemize}
+        \item \(\Omega = \{1, 2, 3, 4, 5, 6\}\), quindi \(|\Omega| = 6\).
+        \item Evento A = "Esce un numero pari" = \(\{2, 4, 6\}\), quindi \(|A| = 3\).
+        \item \(P(A) = \frac{3}{6} = 0.5\).
+        \item Su 1000 lanci, ci aspettiamo circa \(1000 \cdot 0.5 = 500\) risultati pari.
+    \end{itemize}
+\end{esempio}
+In questo mondo, la "misura" o il "peso" di un evento coincide con la sua cardinalità, ovvero il numero di elementi che contiene.
+
+\subsection*{2. Pesi}
+
+Quando gli eventi elementari non sono equiprobabili, ogni risultato possiede un suo "peso" intrinseco: la sua probabilità individuale. La cardinalità di un evento non è più sufficiente per determinarne la probabilità.
+
+La differenza fondamentale è che il numero di occorrenze \(n_A\) non dipende più solo da quanti elementi ci sono in A, ma da quanto sono probabili quegli elementi.
+
+\begin{esempio}[ Lancio di un dado non truccato]
+    Supponiamo che le probabilità siano: \(P(6) = 50\%\), mentre \(P(1) = P(2) = P(3) = P(4) = P(5) = 10\%\).
+    \begin{itemize}
+        \item Evento A = "Esce un numero pari" = \(\{2, 4, 6\}\).
+        \item La vecchia formula basata sul conteggio darebbe un errato \(P(A) = 3/6 = 0.5\).
+    \end{itemize}
+    Il metodo corretto è sommare i pesi (le probabilità) dei singoli risultati che compongono l'evento:
+    \[ P(A) = P(2) + P(4) + P(6) = 0.1 + 0.1 + 0.5 = 0.7 \]
+    La probabilità reale è del 70\%. Su 1000 lanci, ci aspetteremmo circa \(1000 \cdot 0.7 = 700\) risultati pari, un valore molto diverso dai 500 del dado non truccato.
+\end{esempio}
+
+Il passaggio a eventi non equiprobabili segna un cambiamento cruciale nel metodo:
+\begin{itemize}
+    \item Le tecniche di calcolo combinatorio non sono più sufficienti da sole per calcolare la probabilità.
+    \item Non possiamo più limitarci a calcolare \(\frac{\text{casi favorevoli}}{\text{casi totali}}\). Dobbiamo prima conoscere la probabilità (il "peso") di ogni singolo risultato elementare e poi sommare i pesi di tutti i risultati che formano il nostro evento.
+\end{itemize}
+In sintesi, si passa da un modello dove \textbf{"probabilità è contare"} a un modello più generale e potente dove \textbf{"probabilità è pesare e sommare"}.
+
+
+\begin{esempio}[Il Dado Truccato]
+
+Supponiamo di avere un dado, ma questa volta truccato in modo che 5 volte su 6 esca il risultato 1.
+
+Si lanci il dado un’unica volta, per cui lo spazio campione è \(\Omega = \{1, 2, 3, 4, 5, 6\}\).
+Definiamo due eventi:
+\begin{itemize}
+    \item \(A = \{\text{Il risultato è pari}\} = \{2, 4, 6\}\)
+    \item \(B = \{\text{Il risultato è dispari}\} = \{1, 3, 5\}\)
+\end{itemize}
+
+Chiamiamo \(n_i\) il numero delle volte che esce il risultato \(i\) su \(n\) prove.
+\\\\La somma delle occorrenze di tutte le facce (da 1 a 6) è uguale al numero totale di lanci \(n\):
+\[ \sum_{i=1}^{6} n_i = n \]
+
+L'informazione "5 volte su 6 esca il risultato 1" si traduce nella seguente relazione tra le occorrenze: il numero di volte che esce '1' (\(n_1\)) è 5 volte la somma del numero di volte che escono tutti gli altri numeri messi insieme (\(n_2 + n_3 + n_4 + n_5 + n_6\)).
+\[ n_1 \approx 5 \sum_{i=2}^{6} n_i \]
+
+Dividendo entrambi i membri per \(n\), otteniamo la stessa relazione per le frequenze relative \(f_n(i) = n_i/n\):
+\[ \frac{n_1}{n} = f_n(1) \approx 5 \sum_{i=2}^{6} f_n(i) \]
+
+Passando al limite per \(n \to \infty\), le frequenze convergono alle probabilità. Otteniamo quindi la relazione fondamentale per le probabilità dei singoli eventi elementari:
+\[ P(\{1\}) = 5 \sum_{i=2}^{6} P(\{i\}) \]
+Questa equazione ci dice che la probabilità che esca 1 è 5 volte la \textbf{somma delle probabilità} di tutti gli altri risultati (dal 2 al 6).
+
+\paragraph{Risoluzione del Sistema}
+Ora abbiamo un'equazione, ma con 6 incognite (le probabilità di ogni faccia). Ci serve un'altra equazione, che è fornita da uno degli assiomi della probabilità: la somma delle probabilità di tutti i risultati possibili deve essere 1 (o 100\%).
+\[ \sum_{i=1}^{6} P(\{i\}) = 1 \]
+
+Per risolvere il sistema, facciamo un'assunzione ragionevole: le facce da 2 a 6, non essendo favorite, sono equiprobabili tra loro.
+
+Chiamiamo \(S\) la somma delle probabilità delle facce da 2 a 6: \( S = P(\{2\}) + P(\{3\}) + P(\{4\}) + P(\{5\}) + P(\{6\}) \).
+
+Le nostre due equazioni diventano:
+\begin{enumerate}
+    \item \( P(\{1\}) = 5 \cdot S \)
+    \item \( P(\{1\}) + S = 1 \)
+\end{enumerate}
+
+Questo è un semplice sistema che possiamo risolvere per sostituzione. Sostituiamo \(P(\{1\})\) dalla prima equazione nella seconda:
+\begin{align*}
+(5 \cdot S) + S &= 1 \\
+6S &= 1 \\
+S &= \frac{1}{6}
+\end{align*}
+
+Ora che conosciamo \(S\), troviamo \(P(\{1\})\) usando la prima equazione:
+\[ P(\{1\}) = 5 \cdot S = 5 \cdot \frac{1}{6} = \frac{5}{6} \]
+
+Infine, poiché \(S\) è la probabilità totale (\(1/6\)) da dividere equamente per le 5 facce \{2, 3, 4, 5, 6\}, la probabilità di ciascuna di esse è:
+\[ P(\{i\}) = \frac{S}{5} = \frac{1/6}{5} = \frac{1}{30} \quad \text{per } i = 2, \dots, 6. \]
+
+\paragraph{Calcolo delle Probabilità degli Eventi A e B}
+Ora che conosciamo i "pesi" di ogni faccia, possiamo calcolare la probabilità degli eventi A e B sommando le probabilità degli eventi elementari che li compongono.
+
+\begin{itemize}
+    \item \textbf{Per l'evento A (Pari):}
+    \[
+    P(A) = P(\{2\}) + P(\{4\}) + P(\{6\}) = \frac{1}{30} + \frac{1}{30} + \frac{1}{30} = \frac{3}{30} = \mathbf{\frac{1}{10}}
+    \]
+    
+    \item \textbf{Per l'evento B (Dispari):}
+    \[
+    P(B) = P(\{1\}) + P(\{3\}) + P(\{5\}) = \frac{5}{6} + \frac{1}{30} + \frac{1}{30} = \frac{25}{30} + \frac{1}{30} + \frac{1}{30} = \frac{27}{30} = \mathbf{\frac{9}{10}}
+    \]
+\end{itemize}
+\end{esempio}
+
+\clearpage

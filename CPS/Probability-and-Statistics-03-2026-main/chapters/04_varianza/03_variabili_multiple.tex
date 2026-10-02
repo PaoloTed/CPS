@@ -1,0 +1,140 @@
+% !TeX root = ../../main.tex
+
+\section{Variabili Multiple}
+
+Cosa succede se in un singolo esperimento ci interessano più caratteristiche contemporaneamente?
+
+\begin{equation}
+X, Y : \omega \in \Omega \longrightarrow (X(\omega), Y(\omega)) \in \mathcal{X} \times \mathcal{Y} \subseteq \mathbb{R}^2
+\end{equation}
+
+In pratica l'evento base è lo stesso, il risultato è formato da una coppia ordinata. Raggruppiamo più misurazioni dello stesso evento in un'unica entità (una coppia, una terna, ecc...).
+
+Per esempio ipotizziamo di avere un elenco dei residenti italiani ($\Omega$) corredato di dati quali altezza ($X$), peso ($Y$) e età ($Z$).
+\\Estraiamo una persona a caso ($\omega \in \Omega$), i possibili risultati sono:
+
+\begin{align*}
+(X(\omega), Y(\omega)) &\in \mathcal{X} \times \mathcal{Y} & (Y(\omega), Z(\omega)) &\in \mathcal{Y} \times \mathcal{Z} \\
+(X(\omega), Z(\omega)) &\in \mathcal{X} \times \mathcal{Z} & (X(\omega), Y(\omega), Z(\omega)) &\in \mathcal{X} \times \mathcal{Y} \times \mathcal{Z}
+\end{align*}
+
+Consideriamo la coppia $(X, Y)$.
+\\Come calcoliamo la probabilità che si verifichi una specifica combinazione?
+
+\begin{itemize}
+    \item Peschiamo $n$ persone a caso ($n$ esperimenti).
+    \item Teniamo traccia di tutti i singoli risultati $\{X(\omega_i), Y(\omega_i)\}_{i=1}^n$.
+    \item Indichiamo con $n_{X=x, Y=y} = n_{x,y}(n)$ il numero di volte in cui $X=x$ e $Y=y$ (il numero di volte in cui la persona scelta ha altezza $x$ e peso $y$).
+    \\In pratica stiamo dicendo che l'evento $\{X=x\} \cap \{Y=y\}$ occorre $n_{X=x, Y=y}$ volte su $n$ esperimenti.
+    \item La frequenza relativa è $\frac{n_{X=x, Y=y}}{n}$.
+    \item Per ottenere la probabilità dell'evento $\{X=x\} \cap \{Y=y\}$, ci basta passare al limite per $n \to \infty$:
+\end{itemize}
+
+\begin{equation}
+P_{X,Y}(x,y) = P(\{X=x\} \cap \{Y=y\}) = \lim_{n \to \infty} \frac{n_{X=x, Y=y}}{n} \quad \forall (x,y) \in \mathcal{X} \times \mathcal{Y}
+\end{equation}
+
+$P_{X,Y}(x,y)$ è una tabella dove le righe sono elementi di $X$ e le colonne sono elementi di $Y$. La cella della tabella contiene la probabilità che la coppia $(x,y)$ accada. La somma di tutti i numeri della tabella è 1. I numeri nella tabella sono $|\mathcal{X}| \cdot |\mathcal{Y}|$.
+
+Come ogni PMF:
+\begin{itemize}
+    \item $P_{X,Y}(x,y) \ge 0$
+    \item $\sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} P_{X,Y}(x,y) = 1$
+\end{itemize}
+
+\paragraph{Dimostrazione}
+\[
+1 = P(\Omega) = P\left(\bigcup_{x \in \mathcal{X}} \bigcup_{y \in \mathcal{Y}} \{X=x, Y=y\}\right) = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} \underbrace{P(\{X=x, Y=y\})}_{P_{X,Y}(x,y)}
+\]
+Questo è vero perché $\{X=x, Y=y\} \cap \{X=x', Y=y'\} = \emptyset$.
+
+\subsection{Proprietà di Marginalizzazione}
+
+Immagina di avere la tabella altezza-peso. Ipotizziamo di voler calcolare la probabilità di estrarre una persona alta 180 cm.
+\\Con la tabella sommo l'intera riga dei 180 cm ovvero: $P(180\text{cm}, 50\text{kg}) + P(180\text{cm}, 60\text{kg}) \dots$
+
+Ovvero:
+\begin{equation}
+\sum_{y \in \mathcal{Y}} P_{X,Y}(x,y) = P_X(x) \quad \text{e} \quad \sum_{x \in \mathcal{X}} P_{X,Y}(x,y) = P_Y(y)
+\end{equation}
+
+\paragraph{Dimostrazione}
+\[
+\{X=x\} = \{X=x\} \cap \Omega = \{X=x\} \cap \bigcup_{y \in \mathcal{Y}} \{Y=y\} = \bigcup_{y \in \mathcal{Y}} (\{X=x\} \cap \{Y=y\})
+\]
+Quindi:
+\[
+P(\{X=x\}) = P\left(\bigcup_{y \in \mathcal{Y}} (\{X=x\} \cap \{Y=y\})\right) = \sum_{y \in \mathcal{Y}} P(\{X=x\} \cap \{Y=y\}) = \sum_{y \in \mathcal{Y}} P_{X,Y}(x,y)
+\]
+Da cui:
+\[
+P_X(x) = \sum_{y \in \mathcal{Y}} P_{X,Y}(x,y)
+\]
+
+\subsection{Variabili Aleatorie Indipendenti}
+
+Due variabili aleatorie $X$ e $Y$ si dicono indipendenti se e solo se gli eventi $\{X=x\}$ e $\{Y=y\}$ sono indipendenti.
+
+In questo caso specifico (indipendenti) la PMF congiunta si fattorizza nel prodotto delle marginali:
+\begin{equation}
+P_{X,Y}(x,y) = P(\{X=x\} \cap \{Y=y\}) = P(\{X=x\}) \cdot P(\{Y=y\}) = P_X(x) P_Y(y)
+\end{equation}
+
+\textbf{N.B.} Questo è l'unico caso. Se le variabili sono collegate non vale più $P_{X,Y}(x,y) = P_X(x) P_Y(y)$.
+
+\subsubsection{Generalizziamo}
+
+Fino ad ora abbiamo parlato di coppie (2 variabili).
+\\Sia $(X_1, \dots, X_m) \in \mathcal{X}_1 \times \dots \times \mathcal{X}_m \subseteq \mathbb{R}^m$ una $m$-upla di variabili aleatorie:
+
+Se hai $m$ eventi, tutti indipendenti fra loro, allora la probabilità congiunta si calcola come:
+\begin{equation}
+P_{X_1 \dots X_m}(x_1, \dots, x_m) = P(\{X_1=x_1\}, \dots, \{X_m=x_m\}) = P(\{X_1=x_1\}) \cdot  \dots  \cdot P(\{X_m=x_m\})
+\end{equation}
+
+Ovvero, raggruppando come produttoria:
+\[
+\prod_{i=1}^m P(\{X_i=x_i\}) = \prod_{i=1}^m P_{X_i}(x_i)
+\]
+
+Quindi:
+\begin{equation}
+\boxed{P_{X_1 \dots X_m}(x_1, \dots, x_m) = \prod_{i=1}^m P_{X_i}(x_i)}
+\end{equation}
+
+\subsubsection{Definizione e Intuizione}
+
+Due variabili aleatorie $X \in \mathcal{X}$ e $Y \in \mathcal{Y}$ sono \textbf{indipendenti} $\iff$ gli eventi $\{X=x\}$ e $\{Y=y\}$ sono indipendenti.
+
+Ovvero se la PMF congiunta si fattorizza nel prodotto delle marginali:
+\begin{equation}
+p_{X,Y}(x,y) = p_X(x) \cdot p_Y(y) \quad \forall (x,y) \in \mathcal{X} \times \mathcal{Y}
+\end{equation}
+
+In termini semplici:
+\begin{quote}
+    \textit{``La probabilità che due cose accadano insieme è esattamente uguale alla probabilità della prima per la probabilità della seconda.''}
+\end{quote}
+
+\paragraph{Esempio: Moneta e Dado}
+Immagina di lanciare una moneta (Variabile $X$) e un dado a 6 facce (Variabile $Y$).
+\\Voglio calcolare la probabilità che escano contemporaneamente testa ($T$) \textbf{E} il numero 6.
+
+Sappiamo dalle probabilità marginali che:
+\begin{itemize}
+    \item $p_X(\text{testa}) = \frac{1}{2}$ (50\%)
+    \item $p_Y(6) = \frac{1}{6}$ (16,6\%)
+\end{itemize}
+
+L'alfabeto congiunto della coppia $(X, Y)$ è l'insieme di tutte le possibili combinazioni:
+\[ \mathcal{X} \times \mathcal{Y} = \{(T,1), (T,2), \dots, (T,6), (C,1), (C,2), \dots, (C,6)\} \]
+
+Il numero totale di risultati possibili è $|\mathcal{X}| \cdot |\mathcal{Y}| = 12$. 
+Quindi, la probabilità congiunta che si verifichi lo specifico evento è:
+\[ p_{X,Y}(\text{testa}, 6) = \frac{1}{12} \]
+
+Le variabili sono indipendenti? Verifichiamolo calcolando il prodotto delle marginali:
+\[ p_X(T) \cdot p_Y(6) = \frac{1}{2} \cdot \frac{1}{6} = \frac{1}{12} \]
+
+Il risultato coincide ($\frac{1}{12} = \frac{1}{12}$), quindi la risposta è \textbf{SI}!
+

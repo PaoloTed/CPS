@@ -1,0 +1,197 @@
+% !TeX root = ../../main.tex
+\section{Indipendenza Stocastica (Eventi Indipendenti)}
+
+Due eventi $A$ e $B$ si dicono indipendenti quando l'accadere di uno non modifica in alcun modo la probabilità che accada l'altro. In termini semplici: l'informazione su un evento non aggiunge nulla alla conoscenza dell'altro.
+
+\subsection{1. Definizione Formale tramite Probabilità Condizionata}
+
+Matematicamente, l'indipendenza si traduce nel fatto che la probabilità condizionata è uguale alla probabilità non condizionata (marginale).
+\\Due eventi $A$ e $B$ sono indipendenti se e solo se:
+
+\[
+\mathbb{P}(A \mid B) = \mathbb{P}(A)
+\]
+(La probabilità di $A$ dato $B$ è uguale alla probabilità di $A$: sapere $B$ non serve a nulla).
+
+E analogamente:
+\[
+\mathbb{P}(B \mid A) = \mathbb{P}(B)
+\]
+
+\subsection{2. La Regola del Prodotto (Fattorizzazione)}
+
+Questa è la proprietà più usata negli esercizi per verificare l'indipendenza.
+\\Partendo dalla definizione di probabilità condizionata $\mathbb{P}(A \mid B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}$ e ponendo $\mathbb{P}(A \mid B) = \mathbb{P}(A)$, otteniamo la Legge della Probabilità Composta per eventi indipendenti:
+
+\begin{equation}
+\boxed{\mathbb{P}(A \cap B) = \mathbb{P}(A) \cdot \mathbb{P}(B)}
+\end{equation}
+
+\paragraph{Importante}
+Questa formula vale \textbf{solo} se gli eventi sono indipendenti.
+\begin{itemize}
+    \item Se $\mathbb{P}(A \cap B) = \mathbb{P}(A)\mathbb{P}(B) \implies$ Sono \textbf{Indipendenti}.
+    \item Se $\mathbb{P}(A \cap B) \neq \mathbb{P}(A)\mathbb{P}(B) \implies$ Sono \textbf{Dipendenti} (cioè uno influenza l'altro).
+\end{itemize}
+
+\subsection{3. Esempio: Lancio di un dado due volte}
+
+Consideriamo l'esperimento di lanciare un dado ``onesto'' due volte consecutive.
+\begin{itemize}
+    \item \textbf{Evento 1:} Esce il numero $i$ al primo lancio. $\mathbb{P}(\{i\}) = \frac{1}{6}$.
+    \item \textbf{Evento 2:} Esce il numero $j$ al secondo lancio. $\mathbb{P}(\{j\}) = \frac{1}{6}$.
+\end{itemize}
+
+Il dado non ha ``memoria'': il risultato del secondo lancio non dipende dal primo.
+\\La probabilità di ottenere la coppia specifica $\{i, j\}$ (intersezione dei due eventi) è il prodotto delle singole probabilità:
+
+\[
+\mathbb{P}(\{i, j\}) = \mathbb{P}(\{i\}) \cdot \mathbb{P}(\{j\}) = \frac{1}{6} \cdot \frac{1}{6} = \frac{1}{36}
+\]
+
+\paragraph{Nota Bene: Indipendenti vs Disgiunti (Attenzione all'errore comune)}
+
+Non confondere eventi \textbf{Indipendenti} con eventi \textbf{Disgiunti} (o incompatibili).
+
+\begin{itemize}
+    \item \textbf{Disgiunti ($A \cap B = \emptyset$):} Se accade $A$, $B$ \emph{non può} accadere. Quindi si influenzano tantissimo! Se so che è successo $A$, la probabilità di $B$ diventa immediatamente 0. Sono fortemente \textbf{dipendenti}.
+    
+    \item \textbf{Indipendenti:} Se accade $A$, la probabilità di $B$ rimane invariata. Possono accadere insieme (l'intersezione non è vuota, ma ha probabilità pari al prodotto delle singole probabilità).
+\end{itemize}
+
+\subsection{Algebra di eventi}
+Un'algebra di eventi (o Algebra di sottoinsiemi di $\Omega$) è la collezione di tutti gli "eventi osservabili" o "misurabili" su cui ha senso calcolare una probabilità, garantendo che le operazioni logiche (NOT, OR, AND) non ci portino fuori da questa collezione.
+
+Questa struttura algebrica può essere formalizzata dalla sestupla:
+\[ (\mathcal{E}, \cup, \cap, ^c, \Omega, \emptyset) \]
+dove $\mathcal{E}$ è una famiglia di sottoinsiemi dello spazio campionario $\Omega$.
+
+Affinché $\mathcal{E}$ sia un'algebra, richiediamo che soddisffi le seguenti proprietà:
+\begin{enumerate}
+    \item $\mathcal{E}$ sia chiusa rispetto all'operazione di unione finita (se $A, B \in \mathcal{E} \implies A \cup B \in \mathcal{E}$).
+    \item $\mathcal{E}$ sia chiusa rispetto all'operazione di complementazione (se $A \in \mathcal{E} \implies A^c \in \mathcal{E}$).
+\end{enumerate}
+
+Da queste due proprietà deriva automaticamente che l'insieme universo $\Omega$ e l'insieme vuoto $\emptyset$ appartengono all'algebra. Infatti, poiché $A \in \mathcal{E} \implies A^c \in \mathcal{E}$, osserviamo che:
+\[ A \cup A^c = \Omega \quad \text{(L'evento certo appartiene a } \mathcal{E}) \]
+E per complementazione:
+\[ \Omega^c = \emptyset \quad \text{(L'evento impossibile appartiene a } \mathcal{E}) \]
+
+\paragraph{Estensione alla $\sigma$-algebra}
+Se richiediamo che la famiglia $\mathcal{E}$ sia chiusa non solo rispetto all'unione finita, ma anche rispetto all'\textbf{unione numerabile} (infinita), allora $\mathcal{E}$ si definisce una \textbf{$\sigma$-algebra}:
+\[
+\text{Se } A_1, A_2, \dots \in \mathcal{E} \implies \bigcup_{i=1}^{\infty} A_i \in \mathcal{E}
+\]
+
+Nota: Se lo spazio campionario $\Omega$ è finito, ogni unione numerabile si riduce a un'unione finita. Di conseguenza, nel caso finito, le definizioni di Algebra e $\sigma$-algebra coincidono.
+\clearpage
+Dalle definizioni di chiusura rispetto all'unione e alla complementazione, derivano automaticamente altre proprietà fondamentali per l'algebra di eventi $\mathcal{E}$:
+
+\begin{itemize}
+    \item \textbf{Chiusura rispetto all'intersezione:} \\
+    Se $A, B \in \mathcal{E}$, allora $A \cap B \in \mathcal{E}$. \\
+    \textit{Dimostrazione:} Utilizzando le leggi di De Morgan, possiamo scrivere l'intersezione come:
+    \[ A \cap B = (A^c \cup B^c)^c \]
+    Poiché $A, B \in \mathcal{E}$, i loro complementari $A^c, B^c \in \mathcal{E}$. Di conseguenza, la loro unione $(A^c \cup B^c) \in \mathcal{E}$ e, infine, il complemento di quest'ultima appartiene ancora a $\mathcal{E}$.
+
+    \item \textbf{Chiusura rispetto alla differenza insiemistica:} \\
+    Se $A, B \in \mathcal{E}$, allora $A \setminus B \in \mathcal{E}$. \\
+    \textit{Dimostrazione:} Possiamo riscrivere la differenza come:
+    \[ A \setminus B = A \cap B^c \]
+    Poiché abbiamo appena dimostrato che l'algebra è chiusa rispetto all'intersezione e sappiamo che $B^c \in \mathcal{E}$, la proprietà è verificata.
+
+    \item \textbf{Algebra minima (o generata da un evento):} \\
+    Se $A$ è un evento qualsiasi, la minima algebra che contiene $A$ è l'insieme:
+    \[ \mathcal{E}_A = \{A, A^c, \Omega, \emptyset\} \]
+    Infatti:
+    \begin{itemize}
+        \item[$\dagger$] $A^c$ deve appartenere a $\mathcal{E}_A$ per la proprietà di chiusura rispetto alla complementazione;
+        \item[$\dagger$] $\Omega = A \cup A^c$ deve appartenere a $\mathcal{E}_A$ per la proprietà di chiusura rispetto all'unione;
+        \item[$\dagger$] $\emptyset = \Omega^c$ deve appartenere a $\mathcal{E}_A$ per la proprietà di chiusura rispetto alla complementazione.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Spazi di Probabilità}
+Uno spazio di probabilità è il modello matematico completo che descrive un esperimento casuale.
+Mettiamo insieme quanto detto fino ad ora:
+Alla nostra struttura algebrica dobbiamo aggiungere un pezzo: La misura (quanto è probabile che accada qualcosa?).
+
+Formalmente uno spazio di probabilità è una terna formata da: $(\Omega, \mathcal{E}, \mathbb{P})$
+dove:
+
+\paragraph{$\Omega$ (Spazio Campionario)}
+È l'insieme di tutti i possibili esiti elementari (l'insieme ``sostegno'').
+\begin{itemize}
+    \item \textit{Esempio:} Nel lancio di un dado, $\Omega=\{1, 2, 3, 4, 5, 6\}$.
+\end{itemize}
+
+\paragraph{$\mathcal{E}$ ($\sigma$-algebra degli eventi)}
+(Come definito nella sezione precedente).
+
+\paragraph{$\mathbb{P}$ (Misura di Probabilità)}
+$\mathbb{P}$ è una funzione: $\mathbb{P}: \mathcal{E} \to [0,1]$ (appartenente a $\mathbb{R}$).
+Questa funzione deve soddisfare i 3 \textbf{assiomi di Kolmogorov}:
+
+La funzione $\mathbb{P}$ definisce uno spazio di probabilità $\iff$
+
+\begin{enumerate}
+    \item \textbf{Non negativa:} per ogni evento $A \in \mathcal{E}$ la probabilità è un numero non negativo: 
+    \[ \mathbb{P}(A) \ge 0 \quad \forall A \in \mathcal{E}; \]
+    
+    \item \textbf{Normalizzazione (o dell'Evento Certo):} La probabilità dell'intero spazio campionario è 1 (il 100\%):
+    \[ \mathbb{P}(\Omega) = 1 \]
+    \item \textbf{Sub-additività, cioè:} \\
+    $A$ e $B$ incompatibili $(A \cap B = \emptyset) \implies \mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)$
+    \\\\e 3.1 \textbf{$\sigma$-additività (Additività numerabile):}
+    Se abbiamo una sequenza infinita (numerabile) di eventi $A_1, A_2, \dots \in \mathcal{E}$ che sono \textbf{a due a due disgiunti} (cioè $A_i \cap A_j = \emptyset$ per ogni $i \neq j$), allora la probabilità della loro unione è la somma delle loro probabilità:
+    \[ \mathbb{P}\left( \bigcup_{i=1}^{\infty} A_i \right) = \sum_{i=1}^{\infty} \mathbb{P}(A_i) \]
+    \textit{(Se lo spazio è finito, basta l'additività finita).}
+\end{enumerate}
+
+La terna $(\Omega, \mathcal{E}, \mathbb{P})$ si definisce \textbf{Spazio di Probabilità}.
+
+Questa definizione collega l'astrazione algebrica alla misura.
+In matematica, uno \textbf{Spazio di Probabilità} è un caso specifico di uno \textbf{Spazio di Misura}.
+
+\begin{itemize}
+    \item Uno spazio di misura è una terna $(\Omega, \mathcal{E}, \mu)$ dove $\mu(\Omega)$ può essere qualsiasi numero (anche infinito, come la lunghezza di una retta).
+    \item Uno spazio di probabilità è uno spazio di misura ``finito'' e ``normalizzato'' dove la misura totale deve fare esattamente 1.
+\end{itemize}
+
+\paragraph{Conseguenze degli Assiomi}
+
+\begin{itemize}
+    \item[$\dagger$] \textbf{Eventi complementari:} \\
+    Poiché $A$ e $\overline{A}$ sono disgiunti e la loro unione è l'evento certo $\Omega$:
+    \[
+    \mathbb{P}(\Omega) = \mathbb{P}(A \cup \overline{A}) = \mathbb{P}(A) + \mathbb{P}(\overline{A}) = 1 \implies \mathbb{P}(\overline{A}) = 1 - \mathbb{P}(A)
+    \]
+
+    \item[$\dagger$] \textbf{Sottrazione tra insiemi:} \\
+    Possiamo scomporre l'evento $A$ intersecandolo con l'universo partizionato da $B$:
+    \[
+    A = A \cap \Omega = A \cap (B \cup \overline{B}) = (A \cap B) \cup (A \cap \overline{B})
+    \]
+    Siccome $(A \cap B)$ e $(A \cap \overline{B})$ sono incompatibili (disgiunti), allora per l'additività:
+    \[
+    \mathbb{P}(A) = \mathbb{P}(A \cap B) + \mathbb{P}(A \cap \overline{B})
+    \]
+    Isolando il termine della differenza, ritroviamo la proprietà:
+    \[
+    \mathbb{P}(A \cap \overline{B}) = \mathbb{P}(A \setminus B) = \mathbb{P}(A) - \mathbb{P}(A \cap B)
+    \]
+
+    \item[$\dagger$] \textbf{Unione di eventi non incompatibili:} \\
+    Se $A \cap B \neq \emptyset$, non possiamo sommare semplicemente le probabilità. Osserviamo preliminarmente che possiamo scrivere l'unione come somma di insiemi disgiunti:
+    \[ A \cup B = A \cup (B \cap \overline{A}) \]
+    Per cui, calcolando la probabilità:
+    \[
+    \mathbb{P}(A \cup B) = \mathbb{P}(A) + \underbrace{\mathbb{P}(B \cap \overline{A})}_{=\mathbb{P}(B)-\mathbb{P}(A \cap B)} = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B)
+    \]
+
+    \item[$\dagger$] \textbf{Se due eventi sono indipendenti allora anche i loro complementi sono indipendenti:} \\
+    Due eventi $A$ e $B$ sono indipendenti, quindi vale la relazione:
+\[ \mathbb{P}(A \cap B) = \mathbb{P}(A) \cdot \mathbb{P}(B) \]
+    \[ \mathbb{P}(\overline{A} \cap \overline{B}) = \mathbb{P}(\overline{A}) \cdot \mathbb{P}(\overline{B}) \]
+\end{itemize}
+

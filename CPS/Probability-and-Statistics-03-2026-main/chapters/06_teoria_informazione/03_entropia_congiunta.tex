@@ -1,0 +1,176 @@
+% ==========================================
+% NUOVO ARGOMENTO: COPPIE DI VARIABILI
+% ==========================================
+
+\section{Estensione a Coppie di Variabili Aleatorie}
+
+Finora abbiamo analizzato sorgenti che emettono un singolo simbolo alla volta. Nella realtà, i sistemi elaborano spesso flussi di dati correlati (es. pixel adiacenti in un'immagine, o canali stereo audio).
+Siano $X$ e $Y$ due variabili aleatorie discrete associate agli alfabeti $\mathcal{X}$ e $\mathcal{Y}$. Definiamo la loro interazione tramite la \textbf{Probability Mass Function (PMF) Congiunta}: $p_{X,Y}(x,y) = \text{Pr}\{X=x \text{ e } Y=y\}$.
+
+Vogliamo misurare l'incertezza media globale quando osserviamo simultaneamente \textit{entrambe} le variabili.
+
+\subsection{Entropia Congiunta}
+Generalizzando il concetto di entropia a due dimensioni, definiamo l'\textbf{Entropia Congiunta} $H(X,Y)$ estendendo la doppia sommatoria su tutti i possibili incroci degli eventi:
+\begin{equation}
+\label{eq:joint_entropy}
+H(X, Y) = \mathbb{E}_{X,Y} \left[ \log \frac{1}{p_{X,Y}(X,Y)} \right] = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p_{X,Y}(x,y) \log \frac{1}{p_{X,Y}(x,y)}
+\end{equation}
+
+\subsubsection{Il caso di Indipendenza Statistica}
+Cosa succede all'entropia se le due variabili non hanno assolutamente nulla a che fare l'una con l'altra (es. estrarre un dado e lanciare una moneta)? 
+Dalla teoria della probabilità, sappiamo che due eventi sono \textbf{indipendenti} se e solo se la loro probabilità congiunta è il prodotto delle probabilità marginali: $p_{X,Y}(x,y) = p_X(x) \cdot p_Y(y)$.
+
+Sostituiamo questa definizione all'interno dell'argomento del logaritmo nella \ref{eq:joint_entropy} ed esplodiamo i calcoli sfruttando le proprietà dei logaritmi ($\log(a \cdot b) = \log a + \log b$):
+\begin{align}
+H(X, Y) &= \mathbb{E} \left[ \log \frac{1}{p_X(X) \cdot p_Y(Y)} \right] \nonumber \\
+        &= \mathbb{E} \left[ \log \left( \frac{1}{p_X(X)} \right) + \log \left( \frac{1}{p_Y(Y)} \right) \right]
+\end{align}
+Essendo l'operatore di Valore Atteso ($\mathbb{E}$) un operatore lineare, il valore atteso di una somma è la somma dei valori attesi:
+\begin{align}
+H(X,Y)  &= \mathbb{E} \left[ \log \frac{1}{p_X(X)} \right] + \mathbb{E} \left[ \log \frac{1}{p_Y(Y)} \right] \nonumber \\
+        &= H(X) + H(Y)
+\end{align}
+Abbiamo dimostrato che, in caso di totale indipendenza, l'incertezza globale del sistema è semplicemente la somma delle incertezze dei singoli componenti.
+
+\subsection{Entropia Condizionale e Regola della Catena}
+
+Se invece le variabili \textit{sono} dipendenti (es. il cielo è nuvoloso $\implies$ probabilità che piova), conoscere il valore di una variabile riduce l'incertezza sull'altra.
+Ricorriamo alla \textbf{legge della probabilità composta} (o Teorema di Bayes ristretto):
+\begin{equation}
+p_{X,Y}(x,y) = p_{Y|X}(y|x) \cdot p_X(x) = p_{X|Y}(x|y) \cdot p_Y(y)
+\end{equation}
+
+Sostituiamo la scomposizione $p_{Y|X}(y|x) p_X(x)$ nella definizione di Entropia Congiunta per derivare la \textbf{Regola della Catena}. Di nuovo, espandiamo passo dopo passo i logaritmi e l'aspettazione:
+\begin{align}
+H(X, Y) &= \mathbb{E} \left[ \log \frac{1}{p_X(X) \cdot p_{Y|X}(Y|X)} \right] \nonumber \\
+        &= \mathbb{E} \left[ \log \frac{1}{p_X(X)} + \log \frac{1}{p_{Y|X}(Y|X)} \right] \nonumber \\
+        &= \mathbb{E} \left[ \log \frac{1}{p_X(X)} \right] + \mathbb{E} \left[ \log \frac{1}{p_{Y|X}(Y|X)} \right]
+\end{align}
+
+Il primo termine è palesemente l'entropia marginale $H(X)$. 
+Il secondo termine definisce una nuova grandezza, l'\textbf{Entropia Condizionale} $H(Y|X)$, ovvero l'incertezza residua su $Y$ sapendo di aver già osservato $X$. 
+Scritta in forma estesa (esplicitando il Valore Atteso), la formula appare così:
+\begin{equation}
+\label{eq:cond_entropy}
+H(Y|X) = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} p_{X,Y}(x,y) \log \frac{1}{p_{Y|X}(y|x)}
+\end{equation}
+
+\subsubsection*{Approfondimento: Perché usiamo la probabilità congiunta come "peso"?}
+
+A questo punto, osservando l'equazione \ref{eq:cond_entropy}, sorge spontaneo uno dei dubbi più comuni e legittimi nello studio dell'entropia: \textit{perché come peso della doppia sommatoria utilizziamo la probabilità congiunta $p_{X,Y}$ e non la probabilità condizionata $p_{Y|X}$?}
+
+La risposta breve è che l'entropia condizionale $H(Y|X)$ \textbf{non} misura l'incertezza di $Y$ dato un \textit{singolo e specifico} valore di $X$, ma rappresenta l'incertezza \textit{media} di $Y$ calcolata su \textit{tutti i possibili} valori che $X$ può assumere.
+
+Per capire esattamente da dove spunta la probabilità congiunta, dobbiamo scomporre il calcolo logico in due passaggi.
+
+\paragraph{1. L'entropia dato un evento specifico $X=x$}
+Se noi sapessimo con assoluta certezza che la variabile $X$ ha appena assunto un valore specifico (chiamiamolo $x$), calcoleremmo l'entropia di $Y$ usando giustamente la probabilità condizionata come peso. Questa quantità puntuale si indica con $H(Y|X=x)$:
+\begin{equation}
+H(Y|X=x) = \sum_{y \in \mathcal{Y}} p_{Y|X}(y|x) \log \frac{1}{p_{Y|X}(y|x)}
+\end{equation}
+
+\paragraph{2. La media globale su tutti i possibili valori di $X$}
+Il problema è che·noi non sappiamo quale valore assumerà $X$. Quindi, per definire l'entropia condizionale globale $H(Y|X)$, dobbiamo effettuare una media pesata di tutte le possibili entropie $H(Y|X=x)$, usando come peso la probabilità che si verifichi quel determinato contesto $x$ (ovvero la probabilità marginale $p_X(x)$):
+\begin{equation}
+H(Y|X) = \sum_{x \in \mathcal{X}} p_X(x) H(Y|X=x)
+\end{equation}
+
+\paragraph{3. La sostituzione finale}
+Ora sostituiamo la prima formula all'interno della seconda:
+\begin{equation}
+H(Y|X) = \sum_{x \in \mathcal{X}} p_X(x) \left[ \sum_{y \in \mathcal{Y}} p_{Y|X}(y|x) \log \frac{1}{p_{Y|X}(y|x)} \right]
+\end{equation}
+Poiché il termine $p_X(x)$ non dipende dall'indice della sommatoria interna $y$, possiamo portarlo dentro le parentesi quadre:
+\begin{equation}
+H(Y|X) = \sum_{x \in \mathcal{X}} \sum_{y \in \mathcal{Y}} \left[ p_X(x) \cdot p_{Y|X}(y|x) \right] \log \frac{1}{p_{Y|X}(y|x)}
+\end{equation}
+Per la legge della probabilità composta, il termine tra parentesi quadre $p_X(x) \cdot p_{Y|X}(y|x)$ è l'esatta definizione della probabilità congiunta $p_{X,Y}(x,y)$.
+
+\begin{quote}
+\textbf{In sintesi:} Si usa la probabilità congiunta $p_{X,Y}(x,y)$ perché essa racchiude elegantemente in un unico termine due concetti: quanto è probabile l'evento condizionante $X=x$, moltiplicato per quanto è probabile l'evento $Y=y$ dato quel preciso contesto.
+\end{quote}
+
+In conclusione, la Regola della Catena stabilisce che l'incertezza totale di una coppia di variabili si può sempre scomporre nell'incertezza della prima, più l'incertezza residua della seconda sapendo la prima:
+\begin{equation}
+\boxed{ H(X,Y) = H(X) + H(Y|X) = H(Y) + H(X|Y) }
+\end{equation}
+
+\section{Mutua Informazione tra Variabili Aleatorie}
+
+Riprendiamo la Regola della Catena appena dimostrata per l'entropia congiunta di due variabili aleatorie $(X, Y) \sim p_{X,Y}(x,y)$:
+\begin{equation*}
+    H(X, Y) = H(X) + H(Y|X) = H(Y) + H(X|Y)
+\end{equation*}
+
+Prendendo le ultime due parti di questa uguaglianza e riordinando i termini (portando le entropie marginali da una parte e quelle condizionate dall'altra), otteniamo una simmetria molto interessante:
+\begin{equation}
+    H(X) - H(X|Y) = H(Y) - H(Y|X)
+\end{equation}
+
+Questa quantità prende il nome di \textbf{Mutua Informazione} tra $X$ e $Y$ e si indica con $I(X;Y)$:
+\begin{equation}
+\label{eq:mutual_info_def}
+    I(X;Y) = H(X) - H(X|Y)
+\end{equation}
+
+\subsubsection*{Significato Intuitivo}
+Cosa rappresenta la formula $H(X) - H(X|Y)$? 
+$H(X)$ è la mia incertezza iniziale su $X$ prima di fare qualsiasi esperimento. $H(X|Y)$ è l'incertezza che mi "rimane" su $X$ dopo aver osservato il valore di $Y$. 
+La loro differenza rappresenta quindi \textbf{l'incertezza che è stata rimossa} (o l'informazione che è stata acquisita) su $X$ grazie al fatto di aver osservato $Y$. In altre parole, $I(X;Y)$ misura il grado di dipendenza statistica (e quindi di predicibilità reciproca) tra le due variabili.
+
+\subsection{Espansione Matematica: Il legame con la KL Divergence}
+
+Vogliamo ora manipolare l'equazione \ref{eq:mutual_info_def} per esprimerla in termini di probabilità congiunta e marginale. 
+
+Scriviamo l'espressione in forma di Valore Atteso. Per poter sommare i due valori attesi, dobbiamo calcolarli entrambi sullo stesso dominio congiunto $(X,Y)$. Ricordiamo che la media marginale $\mathbb{E}_X[\cdot]$ equivale a calcolare la media congiunta $\mathbb{E}_{X,Y}[\cdot]$ poiché la somma su $Y$ restituisce 1.
+\begin{equation}
+    I(X;Y) = \mathbb{E}_{X,Y} \left[ \log \frac{1}{p_X(X)} \right] - \mathbb{E}_{X,Y} \left[ \log \frac{1}{p_{X|Y}(X|Y)} \right]
+\end{equation}
+
+Sfruttiamo la linearità del valore atteso per raggruppare i due termini sotto un unico operatore $\mathbb{E}$:
+\begin{equation}
+    I(X;Y) = \mathbb{E}_{X,Y} \left[ \log \frac{1}{p_X(X)} - \log \frac{1}{p_{X|Y}(X|Y)} \right]
+\end{equation}
+
+Applichiamo la proprietà dei logaritmi ($\log A - \log B = \log \frac{A}{B}$):
+\begin{equation}
+    I(X;Y) = \mathbb{E}_{X,Y} \left[ \log \left( \frac{\frac{1}{p_X(X)}}{\frac{1}{p_{X|Y}(X|Y)}} \right) \right] = \mathbb{E}_{X,Y} \left[ \log \frac{p_{X|Y}(X|Y)}{p_X(X)} \right]
+\end{equation}
+
+A questo punto usiamo il Teorema di Bayes (definizione di probabilità condizionata), secondo cui $p_{X|Y}(x|y) = \frac{p_{X,Y}(x,y)}{p_Y(y)}$. Sostituiamo il numeratore:
+\begin{equation}
+    I(X;Y) = \mathbb{E}_{X,Y} \left[ \log \frac{\frac{p_{X,Y}(X,Y)}{p_Y(Y)}}{p_X(X)} \right] = \mathbb{E}_{X,Y} \left[ \log \frac{p_{X,Y}(X,Y)}{p_X(X)p_Y(Y)} \right]
+\end{equation}
+
+\textbf{Osservazione fondamentale:} Se guardiamo attentamente la formula appena ottenuta e la confrontiamo con la definizione di Entropia Relativa (Divergenza di Kullback-Leibler) studiata in precedenza, notiamo che sono \textit{identiche}. 
+La Mutua Informazione non è altro che la Distanza di Kullback-Leibler tra la vera probabilità congiunta $p_{X,Y}(x,y)$ e la probabilità fittizia $p_X(x)p_Y(y)$ che avremmo se le due variabili fossero completamente indipendenti:
+\begin{equation}
+    \boxed{ I(X;Y) = D( p_{X,Y}(x,y) \parallel p_X(x)p_Y(y) ) }
+\end{equation}
+
+\subsection{Conseguenze e Teoremi (Il Condizionamento non aumenta l'Entropia)}
+
+Aver dimostrato che la Mutua Informazione è di fatto una Divergenza KL ci permette di ereditare istantaneamente tutti i potenti teoremi associati alla divergenza $D(p \parallel q)$:
+
+\begin{enumerate}
+    \item \textbf{Non negatività:} Sappiamo che $D(p \parallel q) \ge 0$ in ogni caso. Di conseguenza:
+    \begin{equation}
+        I(X;Y) \ge 0
+    \end{equation}
+    
+    \item \textbf{Il Condizionamento non aumenta l'Entropia:} Sostituendo la disuguaglianza appena trovata nella definizione originale ($I(X;Y) = H(X) - H(X|Y) \ge 0$), otteniamo un risultato filosoficamente e matematicamente imponente:
+    \begin{equation}
+        H(X) \ge H(X|Y) \quad \text{e per simmetria} \quad H(Y) \ge H(Y|X)
+    \end{equation}
+    \textit{Significato pratico:} Aggiungere informazione (condizionare rispetto a una nuova variabile $Y$) può solo ridurre, o al limite lasciare inalterata, l'incertezza che abbiamo sul sistema. \textbf{L'informazione non può mai fare danni} aumentando la nostra incertezza.
+    
+    \item \textbf{Condizione per l'Indipendenza:} Sappiamo che la Divergenza KL è zero se e solo se le due distribuzioni sono identiche ($D(p \parallel q)=0 \iff p=q$). Pertanto:
+    \begin{equation}
+        I(X;Y) = 0 \iff p_{X,Y}(x,y) = p_X(x)p_Y(y)
+    \end{equation}
+    Questo significa che la mutua informazione tra due variabili è nulla \textbf{se e solo se} esse sono statisticamente indipendenti.
+    Se due variabili sono indipendenti, sapere $Y$ non mi dice assolutamente nulla di nuovo su $X$. Matematicamente, l'entropia condizionale collassa nell'entropia marginale:
+    \begin{equation}
+        H(X|Y) = H(X) \quad \text{e} \quad H(Y|X) = H(Y)
+    \end{equation}
+\end{enumerate}

@@ -1,0 +1,162 @@
+% !TeX root = ../../main.tex
+\section{Funzioni di Variabili Aleatorie Discrete}
+
+Sia $X$ una variabile aleatoria discreta definita su uno spazio campionario, caratterizzata da:
+\begin{itemize}
+    \item \textbf{Alfabeto $\mathcal{X}$:} l'insieme dei valori che $X$ può assumere.
+    \item \textbf{PMF $p_X(x)$:} la funzione di massa di probabilità, dove $p_X(x) = \mathbb{P}(X = x)$.
+\end{itemize}
+
+Sia $g(\cdot)$ una funzione deterministica che opera sui punti di $\mathcal{X}$. Definiamo una nuova variabile aleatoria $Y$ come:
+\[ Y = g(X) \]
+
+L'alfabeto della nuova variabile $Y$ sarà l'insieme immagine $\mathcal{Y} = \{g(x) : x \in \mathcal{X}\}$.
+\\Il problema fondamentale è ricavare la caratterizzazione statistica di $Y$ (la sua PMF e la sua media) partendo da quella di $X$. Si distinguono due casi in base alle proprietà della funzione $g$.
+
+\subsection{Caso [a]: Funzione Biunivoca (Invertibile)}
+
+Si verifica quando ad ogni valore $x \in \mathcal{X}$ corrisponde un unico valore $y \in \mathcal{Y}$ e viceversa ($|\mathcal{X}| = |\mathcal{Y}|$). In questo caso, esiste la funzione inversa $x = g^{-1}(y)$.
+
+\paragraph{PMF di $Y$}
+Si tratta di una semplice "ridenominazione" delle etichette dell'alfabeto. La probabilità si trasferisce direttamente dal punto $x$ al punto $y$ corrispondente:
+
+\begin{equation}
+\boxed{p_Y(y_i) = \mathbb{P}(Y = g(x_i)) = \mathbb{P}(X = g^{-1}(y_i)) = p_X(x_i)}
+\end{equation}
+
+\textit{"La probabilità di un valore nell'alfabeto di arrivo ($y_i$) è la probabilità dell'insieme di tutti i valori dell'alfabeto di partenza ($x$) che la funzione $g$ 'manda' in quel valore $y_i$."}
+
+In questo caso però \textbf{l'insieme di tutti i valori dell'alfabeto di partenza è composto da un solo elemento}.
+
+\subsection{Caso [b]: Funzione Non-Iniettiva}
+
+Si verifica quando la funzione $g$ associa più valori distinti di $\mathcal{X}$ allo stesso valore di $\mathcal{Y}$ ($|\mathcal{X}| > |\mathcal{Y}|$). In questo caso, la funzione non è invertibile globalmente.
+
+Immagina che $y_k$ sia un valore specifico nell'alfabeto di arrivo. Se la funzione non è invertibile, potrebbero esserci tanti valori di $x$ (che chiameremo $x_1^{(k)}, x_2^{(k)}, \dots, x_{L_k}^{(k)}$) che, se passati attraverso la funzione $g$, danno tutti lo stesso risultato $y_k$.
+
+\paragraph{Esempio pratico}
+Immagina $X$ (voto di un esame da 18 a 30) e la funzione $g(x)$ che trasforma il voto in "Promosso" (1) o "Bocciato" (0).
+\begin{itemize}
+    \item Se $Y = 1$ ("Promosso"), questo risultato deriva da molti $x$ diversi: $\{18, 19, 20, \dots, 30\}$.
+    \item In questo caso, $y_k$ è "1", e i vari $x_i^{(k)}$ sono i voti dal 18 al 30.
+\end{itemize}
+Per un punto $y_k$ che é invertibile si applica il ragionamento di prima. 
+\newpage
+Per un punto $y_k$ che ha piu preimmagini avremo che:
+
+\begin{equation}
+\boxed{p_Y(y_k) = \mathbb{P}\left( \bigcup_{i=1}^{L_k} \{X = x_i^{(k)}\} \right) = \sum_{i=1}^{L_k} \mathbb{P}(X = x_i^{(k)}) = \sum_{i=1}^{L_k} p_X(x_i^{(k)})}
+\end{equation}
+
+\paragraph{notazione $x_i^{(k)}$?}
+\begin{itemize}
+    \item Il pedice $i$ serve a contare quanti valori di $X$ finiscono in quel punto (il primo, il secondo, ecc.).
+    \item L'apice $(k)$ serve a ricordare che quei valori sono associati proprio al punto $y_k$ e non a un altro.
+    \item $L_k$ è il numero totale di "punti di partenza" che finiscono in $y_k$.
+\end{itemize}
+
+Spiegazione della formula:
+\begin{enumerate}
+    \item $p_Y(y_k)$: È la probabilità che la nuova variabile valga $y_k$.
+    \item $\mathbb{P}(\bigcup \dots)$: Dice che l'evento "$Y$ è uguale a $y_k$" accade se accade \textbf{almeno uno} degli eventi $X = x_1^{(k)}$ OPPURE $X = x_2^{(k)}$ ecc. (l'unione $\cup$ rappresenta l' "OPPURE").
+    \item $\sum \mathbb{P}(\dots)$: Poiché una variabile aleatoria non può assumere due valori contemporaneamente (gli eventi sono disgiunti: o esce 18, o esce 19, non entrambi), la probabilità dell'unione diventa semplicemente la \textbf{somma} delle singole probabilità.
+\end{enumerate}
+Ricaptiolando:
+"Nel caso [b], per calcolare la probabilità di un valore $y_k$, devo individuare tutti i valori $x$ che la funzione trasforma in quel $y_k$ e \textbf{sommare le loro probabilità originali}. Se un valore $y$ è invece 'invertibile' (proviene da un solo $x$), la sua probabilità rimane identica a quella del valore di partenza."
+
+\subsection{Teorema Fondamentale per il Calcolo della Media}
+
+Abbiamo visto come calcolare la PMF di una nuova variabile $Y = g(X)$. Ma se il nostro obiettivo fosse solo conoscere la sua media ($\mathbb{E}[Y]$)? Dobbiamo per forza fare tutta la fatica di calcolare prima la distribuzione $p_Y$ e poi farne la media? La risposta è no. 
+\\Possiamo calcolare la media di $Y$ usando direttamente la distribuzione di $X$, senza passare per quella di $Y$. Questo risultato è noto come \textbf{Teorema Fondamentale della Media} (anche chiamato LOTUS: \textit{Law of the Unconscious Statistician}).
+
+Seguiamo la stessa suddivisione logica vista per le PMF:
+
+\begin{itemize}
+    \item \textbf{Funzioni Biunivoche:}
+    In questo caso, come abbiamo visto, c'è solo una "ridenominazione" dell'alfabeto. Ogni $y$ corrisponde a un solo $x$. Quindi sommare i valori $y$ pesati dalle loro probabilità è matematicamente identico a sommare i valori trasformati $g(x)$ pesati dalle probabilità originali:
+    
+    \[ \mathbb{E}[Y] = \sum_{y \in \mathcal{Y}} y p_Y(y) = \mathbb{E}[g(X)] = \sum_{x \in \mathcal{X}} g(x) p_X(x) \quad (1) \]
+
+    \item \textbf{Funzioni Univoche (caso generale):}
+    Qui più $x$ possono finire nello stesso $y$. Se usassimo la definizione classica di media su $Y$, dovremmo raggruppare questi termini.
+    
+    \[ \mathbb{E}[Y] = \sum_{y \in \mathcal{Y}} y p_Y(y) = \sum_{y \in \mathcal{Y}} \sum_{x: y=g(x)} g(x) p_X(x) \quad (2) \]
+\end{itemize}
+
+N.B. L'equazione (1) \textbf{include} l'equazione (2) come caso speciale.
+\\Non importa se la funzione è invertibile o "molti-a-uno": la somma su tutti gli $x$ funziona sempre, perché se più $x$ vanno nello stesso $y$, la somma li includerà tutti automaticamente con i loro pesi corretti.
+
+Adottiamo quindi la \textbf{forma generale} che prende il nome di Teorema fondamentale per il calcolo della media:
+
+\begin{equation}
+\boxed{\mathbb{E}[Y] = \mathbb{E}[g(X)] = \sum_{x \in \mathcal{X}} g(x) p_X(x)}
+\end{equation}
+
+\paragraph{Esempi}
+
+Consideriamo una variabile aleatoria $X$ distribuita uniformemente sull'insieme (alfabeto) $\mathcal{X} = \{-2, -1, 0, 2\}$.
+\\Notiamo che l'alfabeto ha cardinalità $|\mathcal{X}| = 4$.
+\\Essendo uniforme, la probabilità di ogni singolo elemento è:
+\[ p_X(x) = \frac{1}{4}, \quad \forall x \in \{-2, -1, 0, 2\} \]
+
+Consideriamo la trasformazione $Y_1 = X^2$.
+\\La funzione è $g(x) = x^2$.
+\\\\
+\textbf{Definizione del nuovo alfabeto}
+L'insieme dei valori assunti da $Y_1$ è $\mathcal{Y}_1 = \{0, 1, 4\}$.
+\\Osserviamo che $|\mathcal{Y}_1| = 3 < |\mathcal{X}| = 4$.
+\\Siamo quindi nel \textbf{Caso [b] (Funzione non iniettiva)}: c'è stata una "collisione" di valori. I due valori originali $\{-2, 2\}$ sono collassati entrambi sul valore $4$.
+\\\\
+\textbf{Calcolo delle probabilità (PMF)}
+Applichiamo la regola della somma per i valori collassati e la ridenominazione per gli altri.
+
+\begin{itemize}
+    \item \textbf{Per $y=0$:} Proviene solo da $x=0$.
+    \[ p_{Y_1}(0) = \mathbb{P}(X=0) = \frac{1}{4} \]
+    
+    \item \textbf{Per $y=1$:} Proviene solo da $x=-1$.
+    \[ p_{Y_1}(1) = \mathbb{P}(X=-1) = \frac{1}{4} \]
+    
+    \item \textbf{Per $y=4$:} Proviene sia da $x=-2$ che da $x=2$. Dobbiamo sommare le probabilità (unione di eventi disgiunti).
+    \[ p_{Y_1}(4) = \mathbb{P}(\{X=-2\} \cup \{X=2\}) = \mathbb{P}(X=-2) + \mathbb{P}(X=2) = \frac{1}{4} + \frac{1}{4} = \frac{1}{2} \]
+\end{itemize}
+
+\textbf{Risultato Finale:}
+\begin{equation}
+\boxed{
+p_{Y_1}(y) = 
+\begin{cases} 
+1/4 & \text{se } y = 0 \\
+1/4 & \text{se } y = 1 \\
+1/2 & \text{se } y = 4 \\
+0 & \text{altrimenti}
+\end{cases}
+}
+\end{equation}
+\\\\
+\textbf{Esempio 2:}
+Consideriamo ora la trasformazione $Y_2 = 3 \sin\left(\frac{2\pi}{5}X\right)$.
+\\La funzione è $g(x) = 3 \sin\left(\frac{2\pi}{5}x\right)$.
+
+Valutiamo la funzione per ogni $x \in \mathcal{X}$:
+
+\begin{itemize}
+    \item $x = 0 \implies 3 \sin(0) = 0$
+    \item $x = -1 \implies 3 \sin\left(-\frac{2\pi}{5}\right) \approx 3(-0.951) = -2.85$
+    \item $x = 2 \implies 3 \sin\left(\frac{4\pi}{5}\right) \approx 3(0.588) = 1.76$
+    \item $x = -2 \implies 3 \sin\left(-\frac{4\pi}{5}\right) \approx 3(-0.588) = -1.76$
+\end{itemize}
+\textit{(Nota: I valori numerici sono approssimati per comodità, ma il concetto importante è che sono tutti distinti).}
+\\\\
+\textbf{Definizione del nuovo alfabeto}
+Il nuovo alfabeto è $\mathcal{Y}_2 \approx \{-2.85, -1.76, 0, 1.76\}$.
+\\Osserviamo che $|\mathcal{Y}_2| = 4 = |\mathcal{X}|$.
+\\Ogni valore di partenza ha generato un valore di arrivo unico e distinto. Siamo nel \textbf{Caso [a] (Funzione Biunivoca)}.
+Poiché la corrispondenza è uno-a-uno, le probabilità si "trasferiscono" immutate. Se ogni $x$ aveva probabilità $1/4$, allora ogni $y$ corrispondente avrà probabilità $1/4$.
+
+\[ p_{Y_2}(y) = \frac{1}{4} \quad \forall y \in \mathcal{Y}_2 \]
+
+quindi: 
+\begin{equation}
+Y_2 \sim \mathcal{U}(\mathcal{Y}_2)
+\end{equation}

@@ -1,0 +1,109 @@
+X val aleatoria con alfabeto 0,1 e P(x=0) = 1/3, sia Z val aleatoria con stesso alfabeto e pmf di X
+Y val aleatoria con alfabeto 0,2 e P(Y=0) = 1/3, sia W val aleatoria con stesso alfabeto e pmf di Y
+Trovare pmf di T=X+Y
+Trovare pmf di V=X+Y+X+W
+Trovare media, varianza e deviazione standard di V
+Trovare pmf di V condizionata a valore assoluto di V-9/2 <1
+
+
+
+2)Sia X val aleatoria con alfabeto N0 e P(X=k)=A(7^k(ln2)^k)/k!
+e Y val aleatoria con stesso alfabeto e P(X=k) = 1/8 •((ln8)^k)/k!
+
+Sia z un test di decisione con ipotesi H1 Z=X e H2 Z=Y.
+
+Calcola A;
+Determina la regola di decisione che minimizza la probabilità di errore del test di protesi
+Calcola la probabilità di errore della regola decisa al punto b 
+Qual è il decisore che rende minima la probabilità di errore condizionato all'ipotesi H1 col vincolo che la probabilità di errore condizionato ad H2 sia <10^-3
+
+
+
+
+
+Esame di Calcolo delle Probabilità e Statistica
+
+Esercizio 1
+Si considerino le seguenti variabili aleatorie discrete: X con alfabeto X = {0, 1} e Y con alfabeto Y = {0, 2}. 
+Le loro probabilità congiunte note sono le seguenti:
+P(X=0, Y=0) = 2/9
+P(X=0, Y=2) = 4/9
+P(X=1, Y=0) = 2/9
+
+a. Si determinino le PMF marginali della variabile aleatoria X e della variabile aleatoria Y.
+b. Si determini la PMF della variabile aleatoria somma T = X + Y.
+c. Si determini la PMF condizionata P(T | X · Y = 0).
+d. Si calcoli l'entropia di X e l'entropia di Y, e si stabilisca quale delle due è maggiore.
+
+---
+
+Esercizio 2
+Si consideri la variabile aleatoria continua X caratterizzata dalla seguente funzione di densità di probabilità (PDF):
+f_X(x) = A * x * e^(-x^2) * u(x)
+dove A è un numero reale e u(x) è la funzione gradino unitario, definita come:
+u(x) = { 1 se x >= 0
+       { 0 se x < 0
+
+Si consideri inoltre la variabile aleatoria trasformata Y = sqrt(X).
+Sia dato un problema di decisione binaria con ipotesi a priori equiprobabili (P(H1) = P(H2) = 1/2), in cui l'osservazione Z è così definita:
+Z = { X sotto l'ipotesi H1
+    { Y sotto l'ipotesi H2
+
+a. Si valuti il parametro di normalizzazione A.
+b. Si determini la PDF della variabile aleatoria Y.
+c. Si determinino la moda e la mediana di Y e si stabilisca quale delle due grandezze è maggiore.
+d. Si determini la decisione del decisore ottimo (MAP) qualora l'osservazione fornita sia z = k mod 4, per ogni k appartenente a {1, 2, 3, 4, 5, 6, 7, 8}.
+
+---
+N.B. Ai fini del superamento dell'esame con voto sufficiente, è strettamente necessario lo svolgimento (anche non del tutto privo di imperfezioni) dell'Esercizio 1 e del punto "a" dell'Esercizio 2.
+
+
+Esame (Mattera) di Calcolo Probabilità e Statistica (04/09/2026)
+
+Esercizio 1
+
+Si considerino le seguenti variabili aleatorie discrete: X con alfabeto X = {0, 2} e Y con alfabeto Y = {1, 3}. 
+Le loro probabilità congiunte note sono le seguenti:
+P(X=0, Y=1) = 1/8
+P(X=0, Y=3) = 5/16
+P(X=2, Y=1) = 1/8
+
+A) Si determinino le PMF di X e Y
+B) Si determini la PMF di T=X+Y
+C) Si determini la PMF di T | X*Y < 3
+D) X e Y sono indipendenti?
+
+Esercizio 2
+
+Si consideri la variabile aleatoria continua X
+
+f_X (x) = 2x * exp(-x^2) * u(x)
+
+dove u(x) è la funzione gradino unitario, definita come:
+u(x) = { 1 se x >= 0
+       { 0 se x < 0
+
+Si consideri inoltre la variabile aleatoria  Y = ln(X).
+
+Sia dato un problema di decisione binaria con ipotesi a priori equiprobabili (P(H1) = P(H2) = 1/2), in cui l'osservazione Z è così definita:
+Z = { X sotto l'ipotesi H1
+    { Y sotto l'ipotesi H2
+
+A) Si determini la PDF di Y
+B) Si determini la probabilità che Y ∈ {0, ln(3)}
+C) Si determini la moda e mediana di Y, si stabilisca poi quale sia maggiore dell'altra
+D) Si determini la regola di decisione del decisore ottima e si stabilisca per Z=1/5 e Z=1/2
+
+
+Nota: Per la sufficienza il (anche se non perfetto al 100%) corretto svolgimento dell'esercizio 1 è necessario.
+
+
+
+
+
+
+
+
+
+
+

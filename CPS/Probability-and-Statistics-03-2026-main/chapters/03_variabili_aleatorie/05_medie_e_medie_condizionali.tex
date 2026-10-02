@@ -1,0 +1,59 @@
+% !TeX root = ../../main.tex
+\section{Medie e Medie Condizionali}
+
+Qui si applica lo stesso identico ragionamento visto per le probabilità, ma al \textbf{Valore Atteso} (la Media). Questa è una delle formule più usate al mondo, spesso chiamata \textbf{Teorema della Media Totale}.
+
+\paragraph{(Esempio della Scuola)}
+Immagina di voler calcolare l'altezza media di \textbf{tutti} gli studenti di una scuola ($\mathbb{E}[X]$).
+\\È difficile misurarli tutti insieme. È più facile fare così:
+
+\begin{enumerate}
+    \item Vai nella \textbf{Classe 1} ($E_1$), calcoli l'altezza media lì dentro ($\mathbb{E}[X \mid E_1]$) e la pesi per quanti alunni ha la classe.
+    \item Vai nella \textbf{Classe 2} ($E_2$), calcoli la media lì ($\mathbb{E}[X \mid E_2]$) e pesi.
+    \item Alla fine sommi i risultati pesati.
+\end{enumerate}
+
+\paragraph{La Formula}
+Matematicamente, il teorema si esprime come:
+
+\begin{equation}
+\boxed{\mathbb{E}[X] = \sum_{m=1}^M \mathbb{P}(E_m) \cdot \mathbb{E}[X \mid E_m]}
+\end{equation}
+
+Dove:
+\begin{itemize}
+    \item $\mathbb{P}(E_m)$: Il "peso" dello scenario (es. quanto è grande la classe).
+    \item $\mathbb{E}[X \mid E_m]$: La media calcolata \textit{solo} dentro quello scenario.
+\end{itemize}
+
+\subsection{Derivazione Matematica}
+
+Partendo dalla definizione di valore atteso:
+
+\[
+\mathbb{E}[X] = \sum_{x \in \mathcal{X}} x p_X(x)
+\]
+
+Sostituiamo $p_X(x)$ con la regola della probabilità totale vista prima e scambiamo l'ordine delle sommatorie:
+
+\begin{equation}
+\begin{aligned}
+\mathbb{E}[X] &= \sum_{x \in \mathcal{X}} x \sum_{m=1}^M p_{X|E_m}(x)\mathbb{P}(E_m) \\
+&= \sum_{m=1}^M \mathbb{P}(E_m) \underbrace{\sum_{x \in \mathcal{X}} x p_{X|E_m}(x)}_{\mathbb{E}[X \mid E_m]}
+\end{aligned}
+\end{equation}
+
+\paragraph{Esempio finale (Binomiale)}
+Se applichi questa formula agli esempi precedenti ($X \sim \mathcal{B}(16, p)$), puoi ritrovare la media generale scomponendola nei due casi:
+
+\[
+\mathbb{E}[X] = \mathbb{P}(X \le 4)\mathbb{E}[X \mid X \le 4] + \mathbb{P}(X > 4)\mathbb{E}[X \mid X > 4]
+\]
+
+Oppure in egual modo:
+\[
+\mathbb{P}(X \in \{2,3,4,5,6\}) \mathbb{E}[X \mid X \in \{2,3,4,5,6\}] + \mathbb{P}(X \notin \{2,3,4,5,6\}) \mathbb{E}[X \mid X \notin \{2,3,4,5,6\}]
+\]
+
+Significa: La media generale dei successi (che sappiamo essere $n \cdot p = 16/3 \approx 5.33$) è uguale alla media dei successi "quando va male" (pesata per la probabilità che vada male) PIÙ la media dei successi "quando va bene" (pesata per la probabilità che vada bene).
+

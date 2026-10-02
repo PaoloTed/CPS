@@ -1,0 +1,407 @@
+% !TeX root = ../../main.tex
+\section{Varianza pt.2}
+Riprendiamo l'argomento della varianza che abbiamo gia visto nel capitolo 8.4 \ref{sec-varianza}
+\\\\Data una variabile aleatoria $X \sim p_X(x)$, con $x \in \mathcal{X}$ e media $\mu_X = \mathbb{E}[X]$, definiamo i seguenti parametri fondamentali per descriverne la dispersione e la potenza.
+
+\begin{itemize}
+    \item \textbf{Il Valore Quadratico Medio} (Mean Square) di $X$:
+    Rappresenta la media dei quadrati dei valori. Serve per caloclare la varianza con la formula di König-Huygens. Inoltre ti da una misura dell'intesitá o del peso di quello che stai studiando.
+    \begin{equation}
+    \boxed{X^2_{\text{rms}} = \mathbb{E}[X^2] = \sum_{x \in \mathcal{X}} x^2 p_X(x)}
+    \end{equation}
+
+    \item \textbf{Il Valore Efficace} (Root Mean Square, rms) di $X$:
+    È semplicemente la radice quadrata del valore quadratico medio. è leggermente più alto della media, Se avessi avuto numeri negativi (es. -10 e +10), la media sarebbe stata 0, ma l'RMS sarebbe stato 10. L'RMS ignora il segno e misura la magnitudine complessiva.
+    
+    \begin{equation}
+    X_{\text{rms}} = \sqrt{\mathbb{E}[X^2]} = \sqrt{\sum_{x \in \mathcal{X}} x^2 p_X(x)}
+    \end{equation}
+
+    \item \textbf{La Varianza} di $X$ ($\sigma_X^2$):
+    Misura la dispersione attorno alla media. Partiamo dicendo che la Varianza é la media degli scarti al quadrato. Sviluppando il quadrato del binomio, ritroviamo la relazione fondamentale tra varianza, valore quadratico medio e media:
+
+    \begin{equation}
+    \begin{aligned}
+    \sigma_X^2 &= \mathbb{E}\left[ (X - \mu_X)^2 \right] \\
+    &= \sum_{x \in \mathcal{X}} (x^2 + \mu_X^2 - 2x\mu_X) p_X(x) \\
+    &= \mathbb{E}[X^2] + \mu_X^2 - 2\mu_X\mathbb{E}[X] \\
+    &= X^2_{\text{rms}} - \mu_X^2
+    \end{aligned}
+    \end{equation}
+    
+    Quindi: \textbf{Varianza = (Valore Quadratico Medio) - (Media al quadrato)}.
+
+    \item \textbf{La Deviazione Standard} di $X$:
+    È la radice quadrata della varianza e ha la stessa unità di misura della variabile $X$.
+    
+    \begin{equation}
+    \sigma_X = \sqrt{\sigma_X^2} = \sqrt{\mathbb{E}[X^2] - \mu_X^2} = \sqrt{X^2_{\text{rms}} - \mu_X^2}
+    \end{equation}
+    Immagina che i tuoi dati siano vettori nello spazio. Come si calcola la lunghezza (distanza) in geometria? Con il Teorema di Pitagora: $c=\sqrt{a^2 + b^2}$.
+    La Deviazione Standard (radice della varianza) è letteralmente la distanza euclidea dei tuoi dati dalla media, normalizzata.
+\end{itemize}
+
+\subsection{Esempio \#1: Variabile Binomiale $X \sim \mathcal{B}(N, p)$}
+Analizziamo il calcolo della varianza per una distribuzione Binomiale, distinguendo il caso semplice ($N=1$) da quello generale.
+
+\textbf{Caso $N=1$ (Bernoulli)}
+
+In questo caso la variabile è una semplice Bernoulli: assume valore $1$ con probabilità $p$ e valore $0$ con probabilità $(1-p)$.
+
+\begin{itemize}
+    \item \textbf{Media:} $\mathbb{E}[X] = 1 \cdot p + 0 \cdot (1-p) = p$
+    
+    \item \textbf{Mean Square:}
+    \[ \mathbb{E}[X^2] = 1^2 \cdot p + 0^2 \cdot (1-p) = p \]
+    \textit{Nota: Poiché $1^2=1$ e $0^2=0$, per una Bernoulli $\mathbb{E}[X^2] = \mathbb{E}[X]$.}
+    
+    \item \textbf{Varianza:} Applicando la formula di König-Huygens:
+    \[ \sigma_X^2 = \mathbb{E}[X^2] - (\mathbb{E}[X])^2 = p - p^2 = p(1-p) \]
+    
+    \item \textbf{Deviazione Standard:}
+    \[ \sigma_X = \sqrt{p(1-p)} \]
+\end{itemize}
+
+\subsection{Caso Generale (Qualsiasi $N$)}
+
+Vogliamo calcolare $\mathbb{E}[X^2]$ per ricavare la varianza. La definizione è:
+
+\[ \mathbb{E}[X^2] = \sum_{k=0}^{N} k^2 p_X(k) = \sum_{k=0}^{N} k^2 \binom{N}{k} p^k (1-p)^{N-k} \]
+
+\textit{(Nota: usiamo $q$ al posto di $1-p$ per brevità, ma è la stessa cosa).}
+
+\paragraph{1. La prima riga: Semplificazione del $k^2$}
+Poiché per $k=0$ il termine è nullo, la somma parte da $k=1$. Semplifichiamo algebricamente:
+
+\[
+k \binom{N}{k} = k \frac{N!}{k!(N-k)!} = k \frac{N!}{k(k-1)!(N-k)!} = \frac{N!}{(k-1)!(N-k)!}  \tag{a}
+\] 
+
+Quindi la somma diventa:
+
+\[
+\sum_{k=1}^{N} k \frac{N!}{(k-1)!(N-k)!} p^k q^{N-k}
+\]
+\paragraph{2. Il "Trucco" della Derivata}
+
+
+Estraiamo una $N$ dal fattoriale al numeratore ($N! = N(N-1)!$):
+
+\begin{equation}
+    \sum_{k=1}^{N} k \frac{N(N-1)!}{(k-1)!(N-k)!} \cdot p^k q^{N-k} \tag{b}
+\end{equation}
+
+Osserviamo che la formula del coefficiente binomiale è $\binom{A}{B} = \frac{A!}{B!(A-B)!}$. Per arrivare a questa forma, portiamo $N$ fuori dalla sommatoria. Inoltre, sottraiamo e aggiungiamo $1$ nel termine al denominatore: $N-k = N-1-k+1$, da cui, raccogliendo il segno "-", otteniamo $(N-1)-(k-1)$.
+
+\begin{equation}
+    N \sum_{k=1}^{N} k \frac{(N-1)!}{(k-1)!((N-1)-(k-1))!} \cdot p^k q^{N-k} \tag{c}
+\end{equation}
+
+Osserviamo che ponendo $A = N-1$ e $B = k-1$, la frazione corrisponde esattamente a un coefficiente binomiale:
+
+\begin{equation}
+    N \sum_{k=1}^{N} k \binom{N-1}{k-1} p^k q^{N-k} \tag{d}
+\end{equation}
+
+Ora usiamo il "trucco" della derivata: in analisi sappiamo che $p \frac{d(p^k)}{dp} = k \cdot p^k$. Sostituiamo questo termine all'interno della sommatoria:
+
+\begin{equation}
+    N \sum_{k=1}^{N} \binom{N-1}{k-1} p \frac{d(p^k)}{dp} q^{N-k} \tag{e}
+\end{equation}
+
+Ora prestiamo massima attenzione. Dobbiamo ricordare 2 cose:
+\begin{enumerate}
+    \item In questo momento trattiamo $q$ come una costante, ovvero non dipende da $p$ (per ipotesi).
+    \item La derivata è un operatore lineare, quindi $\frac{d(A)}{dp} + \frac{d(B)}{dp} = \frac{d}{dp}(A+B)$. Questo vale anche nel nostro caso, poiché abbiamo una somma discreta: $\sum_{k=1}^{N} \frac{d(p^k)}{dp} = \frac{d}{dp}\left(\sum_{k=1}^{N} p^k\right)$.
+\end{enumerate}
+
+\textbf{N.B.} La derivata è un operatore che si applica solo ai termini che contengono la variabile che stiamo derivando. \textbf{NON} si applica né a $\binom{N-1}{k-1}$ né a $q^{N-k}$ (per il punto 1).
+
+Quindi è lecito affermare che il termine di prima (e) è uguale a:
+
+\[
+    Np \frac{d}{dp} \left( \sum_{k=1}^{N} \binom{N-1}{k-1} p^k \cdot q^{N-k} \right) = \mathbb{E}[X^2]
+\]
+
+Per capire quanto vale questa somma, facciamo un cambio di variabile: poniamo $j = k-1$.
+
+\[
+    Np \frac{d}{dp} \left( \sum_{j=0}^{N-1} \binom{N-1}{j} p^{j+1} \cdot q^{N-(j+1)} \right)
+\]
+
+Raccogliamo una $p$ (poiché $p^{j+1} = p \cdot p^j$) e la mettiamo in evidenza, riconoscendo poi lo sviluppo del binomio di Newton:
+
+\[
+    Np \frac{d}{dp} \left( p \underbrace{\sum_{j=0}^{N-1} \binom{N-1}{j} p^j \cdot q^{(N-1)-j}}_{(p+q)^{N-1}} \right)
+\]
+
+Otteniamo infine la nostra forma chiusa:
+
+\[
+    Np \frac{d}{dp} \left[ p (p+q)^{N-1} \right] = \mathbb{E}[X^2]
+\]
+
+\paragraph{3. Calcolo della Derivata}
+Ora calcoliamo esplicitamente la derivata rispetto a $p$ della quantità appena isolata: $\frac{d}{dp} \left[ p(p+q)^{N-1} \right]$.
+\\\textit{(Nota bene: in questa fase $q$ viene trattato rigorosamente come una costante fissa; la condizione $q=1-p$ verrà applicata solo alla fine del calcolo differenziale).}
+
+Applichiamo la regola di derivazione del prodotto ($D[f \cdot g] = f'g + fg'$), considerando $f(p) = p$ e $g(p) = (p+q)^{N-1}$:
+\begin{itemize}
+    \item La derivata del primo fattore ($p$) moltiplicata per il secondo non derivato: $1 \cdot (p+q)^{N-1}$
+    \item Il primo fattore ($p$) moltiplicato per la derivata del secondo: $p \cdot (N-1)(p+q)^{N-2}$
+\end{itemize}
+
+Sommando i due termini, il risultato della derivata è:
+\[
+(p+q)^{N-1} + p(N-1)(p+q)^{N-2}
+\]
+
+
+Ora possiamo reintrodurre la condizione iniziale $q = 1-p$, il che implica che la base delle potenze diventi $p+q = 1$.
+L'espressione si semplifica drasticamente, poiché qualsiasi potenza di $1$ è sempre uguale a $1$:
+
+\[
+1^{N-1} + p(N-1)1^{N-2} = 1 + p(N-1)
+\]
+Sostituiamo questo risultato all'interno della nostra equazione principale per il Valore Quadratico Medio, ricordandoci di moltiplicare per il fattore $Np$ che avevamo "lasciato" fuori dall'operatore derivata:
+
+\begin{equation}
+\begin{aligned}
+\mathbb{E}[X^2] &= Np \left[ 1 + p(N-1) \right] \\
+&= Np \left[ 1 + Np - p \right] \\
+&= Np + N^2 p^2 - Np^2
+\end{aligned}
+\end{equation}
+
+Riorganizziamo i termini raggruppando quelli con grado $N$ singolo e quelli con grado $N^2$:
+
+\[
+\mathbb{E}[X^2] = (Np - Np^2) + N^2 p^2 = Np(1-p) + N^2 p^2
+\]
+
+Ed ecco ottenuto esattamente il risultato teorico cercato:
+
+\begin{equation}
+\mathbb{E}[X^2] = Np(1-p) + (Np)^2
+\end{equation}
+
+Possiamo notare che $(Np)^2$ è esattamente il quadrato della media $(\mathbb{E}[X])^2$, mentre la quantità $Np(1-p)$ corrisponde alla varianza.
+
+\paragraph{Riepilogo e Conclusione}
+
+Sostituendo il Valore Quadratico Medio appena calcolato nella definizione generale di varianza (formula di König-Huygens $\sigma_X^2 = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$), osserviamo che il termine $(Np)^2$ si elide perfettamente:
+
+\[
+\sigma_X^2 = \left[ Np(1-p) + (Np)^2 \right] - (Np)^2 = Np(1-p)
+\]
+
+Riassumendo, per una variabile aleatoria Binomiale $X \sim \mathcal{B}(N, p)$:
+
+\begin{equation}
+\boxed{\mathbb{E}[X^2] = Np(1-p) + N^2 p^2} \quad \text{(Valore Quadratico Medio)}
+\end{equation}
+
+\begin{equation}
+\boxed{\sigma_X^2 = Np(1-p)} \quad \text{(Varianza)}
+\end{equation}
+
+\begin{equation}
+\boxed{\sigma_X = \sqrt{Np(1-p)}} \quad \text{(Deviazione Standard)}
+\end{equation}
+
+\textit{Nota: Spesso nei testi la varianza è indicata sinteticamente come $Npq$, ponendo $q = 1-p$.}
+\subsection{Esempio \#2: Variabile Uniforme $X \sim \mathcal{U}(\{0, \dots, M-1\})$}
+
+Consideriamo una variabile uniforme definita sull'insieme $\{0, \dots, M-1\}$, per la quale sappiamo che la media è $\mu_X = \mathbb{E}[X] = \frac{M-1}{2}$.
+
+\paragraph{Calcolo del Mean Square (MS)}
+Il valore quadratico medio si scrive come la media dei quadrati:
+
+\[
+X^2_{\text{rms}} = \frac{1}{M} \sum_{k=0}^{M-1} k^2 = \frac{1}{M} \sum_{k=1}^{M-1} k^2
+\]
+
+Per risolvere la sommatoria, sfruttiamo la nota identità per la somma dei primi $n$ quadrati:
+
+\[
+\sum_{i=1}^n i^2 = \frac{n(n+1)(2n+1)}{6}
+\]
+
+Applicando questa formula con $n = M-1$, il termine $(n+1)$ diventa $M$, che si semplifica con il fattore $\frac{1}{M}$ presente nella definizione del Mean Square. Otteniamo quindi:
+
+\begin{equation}
+X^2_{\text{rms}} = \frac{(M-1)(2M-1)}{6}
+\end{equation}
+
+\paragraph{Calcolo della Varianza}
+Applicando la formula di König-Huygens ($\sigma^2 = \mathbb{E}[X^2] - \mu^2$):
+
+\[
+\sigma_X^2 = \frac{(M-1)(2M-1)}{6} - \left( \frac{M-1}{2} \right)^2
+\]
+
+\[
+\sigma_X^2 = \frac{(M-1)(2M-1)}{6} - \frac{(M-1)^2}{4}
+\]
+
+Svolgendo i passaggi algebrici (minimo comune multiplo 12 e semplificazione dei termini), si giunge a un risultato fondamentale molto compatto:
+
+\begin{equation}
+\boxed{\sigma_X^2 = \frac{M^2 - 1}{12}}
+\end{equation}
+
+\paragraph{Riepilogo parametri}
+Dai risultati precedenti ricaviamo immediatamente il valore efficace ($X_{\text{rms}}$) e la deviazione standard ($\sigma_X$):
+
+\[
+X_{\text{rms}} = \sqrt{\frac{(M-1)(2M-1)}{6}}
+\]
+
+\begin{equation}
+\boxed{\sigma_X = \sqrt{\frac{M^2 - 1}{12}}}
+\end{equation}
+
+\subsection{Esempio \#3: Variabile di Poisson $X \sim \mathcal{P}(\lambda)$}
+
+Consideriamo una variabile di Poisson con parametro $\lambda$. Ricordiamo che per questa distribuzione la media è $\mu_X = \mathbb{E}[X] = \lambda$.
+
+\paragraph{Calcolo del Mean Square (MS)}
+Partiamo dalla definizione di valore atteso del quadrato:
+\[
+X^2_{\text{rms}} = \sum_{k=0}^{\infty} k^2 \frac{\lambda^k e^{-\lambda}}{k!} = e^{-\lambda} \sum_{k=1}^{\infty} k^2 \frac{\lambda^k}{k!}
+\]
+\textit{(La somma parte da 1 perché il termine con $k=0$ è nullo).}
+
+Semplifichiamo il fattoriale ($k/k! = 1/(k-1)!$):
+\[
+X^2_{\text{rms}} = e^{-\lambda} \sum_{k=1}^{\infty} k \frac{\lambda^k}{(k-1)!}
+\]
+
+Ora applichiamo il metodo della derivata. Notiamo che $k \lambda^k = \lambda \frac{d}{d\lambda}(\lambda^k)$. Possiamo quindi riscrivere l'espressione portando l'operatore di derivata fuori dalla sommatoria:
+
+\[
+X^2_{\text{rms}} = \lambda e^{-\lambda} \frac{d}{d\lambda} \left[ \sum_{k=1}^{\infty} \frac{\lambda^k}{(k-1)!} \right]
+\]
+
+\paragraph{Riconoscimento della Serie di Taylor}
+Analizziamo il termine dentro la parentesi quadra. Dobbiamo ricondurci alla definizione di esponenziale ($e^\lambda = \sum \lambda^j/j!$).
+\\Per farlo, portiamo fuori un $\lambda$ dalla somma in modo da allineare l'esponente con il fattoriale:
+
+\[
+\sum_{k=1}^{\infty} \frac{\lambda^k}{(k-1)!} = \lambda \sum_{k=1}^{\infty} \frac{\lambda^{k-1}}{(k-1)!}
+\]
+
+Ponendo il cambio di variabile $j = k-1$, la somma diventa esattamente lo sviluppo di Taylor di $e^\lambda$:
+
+\[
+\lambda \underbrace{\sum_{j=0}^{\infty} \frac{\lambda^j}{j!}}_{e^\lambda} = \lambda e^\lambda
+\]
+
+Sostituiamo questo risultato nella nostra espressione principale:
+
+\[
+X^2_{\text{rms}} = \lambda e^{-\lambda} \frac{d}{d\lambda} \left[ \lambda e^\lambda \right]
+\]
+
+\paragraph{Calcolo Finale}
+Calcoliamo la derivata del prodotto $\lambda e^\lambda$ rispetto a $\lambda$:
+\[
+\frac{d}{d\lambda} (\lambda e^\lambda) = 1 \cdot e^\lambda + \lambda \cdot e^\lambda = e^\lambda(1 + \lambda)
+\]
+
+Sostituendo e semplificando ($e^{-\lambda} \cdot e^\lambda = 1$):
+\[
+X^2_{\text{rms}} = \lambda e^{-\lambda} [ e^\lambda(1 + \lambda) ] = \lambda (1 + \lambda) = \lambda + \lambda^2
+\]
+
+\paragraph{Riepilogo Risultati}
+Ora possiamo calcolare la varianza sottraendo il quadrato della media ($\mu_X^2 = \lambda^2$).
+
+\begin{equation}
+\boxed{X^2_{\text{rms}} = \lambda + \lambda^2}
+\end{equation}
+
+\begin{equation}
+\sigma_X^2 = (\lambda + \lambda^2) - \lambda^2 \implies \boxed{\sigma_X^2 = \lambda}
+\end{equation}
+
+\begin{equation}
+\boxed{\sigma_X = \sqrt{\lambda}}
+\end{equation}
+
+\textbf{Nota Importante:} La distribuzione di Poisson gode di una proprietà unica e fondamentale: \textbf{la media e la varianza coincidono}.
+\[ \mathbb{E}[X] = \text{Var}(X) = \lambda \] 
+
+\subsection{La Variabile Aleatoria Geometrica}
+
+La distribuzione geometrica è un modello discreto che modella le situazioni in cui ci poniamo la seguente domanda:
+\begin{quote}
+    \textit{``Quanti tentativi devo effettuare prima di ottenere il mio primo successo?''}
+\end{quote}
+
+Esempi classici includono: quante volte devo lanciare un dado prima che esca un 6? Quanti pacchetti di figurine devo aprire prima di trovarne una rara? Quanti colloqui devo sostenere prima di ottenere un lavoro?
+
+Per poter modellizzare un esperimento tramite una variabile geometrica, esso deve consistere in una sequenza di prove (dette di Bernoulli) che rispettano tre rigide assunzioni:
+\begin{enumerate}
+    \item \textbf{Esiti dicotomici (Solo due risultati):} Ogni singolo tentativo ammette solo due risultati mutuamente esclusivi, convenzionalmente chiamati "Successo" e "Fallimento". Non ci sono vie di mezzo.
+    \item \textbf{Probabilità costante:} La probabilità di successo, indicata con $p$, deve rimanere identica in ogni singolo tentativo. Di conseguenza, la probabilità di fallimento è costantemente pari a $1-p$.
+    \item \textbf{Indipendenza assoluta:} L'esito di un tentativo non deve influenzare minimamente i successivi. Il sistema è "senza memoria" (es. lanciando un dado, esso non si "ricorda" cosa è uscito al lancio precedente).
+\end{enumerate}
+
+\subsubsection{1. Funzione di Massa di Probabilità (PMF) e la sua logica}
+
+La PMF definisce la probabilità di ottenere il primissimo successo esattamente al tentativo numero $k$ (con $k \in \{1, 2, 3, \dots\}$). La formula analitica è:
+
+\begin{equation}
+\boxed{p_X(k) = \mathbb{P}(X = k) = (1 - p)^{k-1} \cdot p}
+\end{equation}
+
+\paragraph{Perché ha senso?}
+Pensiamoci in modo logico: se il primo successo si verifica esattamente al $k$-esimo tentativo, significa inevitabilmente che i precedenti $k - 1$ tentativi si sono conclusi tutti con un fallimento.
+Dato che i tentativi sono indipendenti (Assunzione 3), la probabilità congiunta di questa specifica sequenza si ottiene semplicemente moltiplicando le singole probabilità:
+\begin{itemize}
+    \item La probabilità di fallire $k - 1$ volte di fila è data da: $(1 - p)^{k-1}$
+    \item Questo termine va moltiplicato per la probabilità di farcela all'ultimo colpo: $p$
+\end{itemize}
+
+\subsubsection{2. Valore Atteso (Media Statistica) e Varianza}
+
+Se giocassimo a questo gioco all'infinito, quanti tentativi ci metteremmo \textit{in media} a vincere? La formula del valore atteso è:
+
+\begin{equation}
+\mathbb{E}[X] = \frac{1}{p}
+\end{equation}
+
+\textbf{Esempi pratici:}
+\begin{itemize}
+    \item \textbf{L'esempio del dado:} Qual è la probabilità di fare un 6? È $p = 1/6$. Applicando la formula, $\mathbb{E}[X] = 1 / (1/6) = 6$. Significa che, in media, ci vogliono 6 lanci per ottenere un 6.
+    \item \textbf{L'esempio della moneta:} Qual è la probabilità di ottenere Testa? È $p = 1/2$. In media ci vogliono $\mathbb{E}[X] = 1 / (1/2) = 2$ lanci per vedere la prima Testa.
+\end{itemize}
+
+La \textbf{varianza}, che misura quanto i tentativi reali oscilleranno e si disperderanno attorno a questa media teorica, è data dalla formula:
+
+\begin{equation}
+\text{Var}(X) = \frac{1 - p}{p^2}
+\end{equation}
+
+\subsubsection{3. Differenza concettuale: Geometrica vs Binomiale}
+
+È fondamentale non confondere la distribuzione Geometrica con quella Binomiale. Entrambe si basano sulle stesse identiche prove di Bernoulli, ma rispondono a domande speculari scambiando ciò che è noto con ciò che è ignoto:
+
+\begin{itemize}
+    \item \textbf{Variabile Geometrica (Il tempo di attesa):}
+    \begin{itemize}
+        \item \textit{La domanda:} "Quanti tentativi devo fare prima di farcela per la prima volta?"
+        \item \textit{Cosa è fisso:} Il numero di successi (ne vuoi esattamente \textbf{1} per fermarti).
+        \item \textit{Cosa è aleatorio:} Il numero di tentativi (potresti farcela al $1^\circ$ colpo così come al $100^\circ$).
+    \end{itemize}
+    
+    \vspace{0.2cm}
+    
+    \item \textbf{Variabile Binomiale (Il conteggio bernoulliano):}
+    \begin{itemize}
+        \item \textit{La domanda:} "Se faccio esattamente $n$ tentativi, quanti successi otterrò in totale?"
+        \item \textit{Cosa è fisso:} Il numero totale di tentativi (hai un "budget" di \textbf{$n$} prove stabilito in partenza).
+        \item \textit{Cosa è aleatorio:} Il numero di successi (potresti vincere 0 volte, 2 volte, o tutte le $n$ volte).
+    \end{itemize}
+\end{itemize}
