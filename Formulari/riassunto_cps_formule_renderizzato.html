@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Compendio CPS - Formulario e Prontuario d'Esame</title>
+  
+  <!-- MathJax 3 Configuration -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        enableMenu: true,
+        renderActions: {
+          addMenu: []
+        }
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  <!-- Marked.js for fast markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Google Fonts: Inter & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(21, 29, 46, 0.95);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --success: #34d399;
+      --purple: #c084fc;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --code-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding-bottom: 5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Sticky Header for Mobile */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(9, 13, 22, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .top-bar .title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 65vw;
+    }
+
+    .btn {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #090d16;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1.5rem 1.2rem;
+    }
+
+    /* Typography & Content Styles */
+    h1, h2, h3, h4, h5, h6 {
+      color: #fff;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 0.85rem;
+      line-height: 1.3;
+      scroll-margin-top: 5rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      color: var(--accent);
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 0.6rem;
+      margin-top: 2.5rem;
+    }
+
+    h2 {
+      font-size: 1.45rem;
+      color: #38bdf8;
+      margin-top: 2.2rem;
+    }
+
+    h3 {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+      border-left: 3px solid var(--accent);
+      padding-left: 0.6rem;
+      margin-top: 1.8rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      color: #cbd5e1;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #e2e8f0;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      margin-left: 1.4rem;
+      margin-bottom: 1.2rem;
+      color: #e2e8f0;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: var(--card-border);
+      margin: 2.5rem 0;
+    }
+
+    /* MathJax Display Overflow for Small Screens */
+    mjx-container[jax="CHTML"][display="true"] {
+      overflow-x: auto !important;
+      overflow-y: hidden !important;
+      max-width: 100% !important;
+      padding: 0.6rem 0.2rem !important;
+      margin: 0.8rem 0 !important;
+    }
+
+    mjx-container {
+      color: #f8fafc !important;
+    }
+
+    /* Code & Tables */
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+    }
+
+    code {
+      font-family: 'Fira Code', monospace;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: #38bdf8;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+      display: block;
+    }
+
+    th, td {
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--card-border);
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.05);
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: rgba(56, 189, 248, 0.06);
+      padding: 0.85rem 1.25rem;
+      border-radius: 0 10px 10px 0;
+      margin-bottom: 1.5rem;
+      color: #cbd5e1;
+    }
+
+    /* Floating Navigation Controls */
+    .floating-nav {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      z-index: 99;
+    }
+
+    .fab {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    /* Off-canvas TOC Drawer */
+    #toc-drawer {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 82vw;
+      max-width: 340px;
+      background: #0f172a;
+      border-left: 1px solid var(--card-border);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+      z-index: 200;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+
+    #toc-drawer.open {
+      display: block;
+    }
+
+    #toc-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 199;
+    }
+
+    #toc-overlay.open {
+      display: block;
+    }
+
+    .toc-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .toc-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .toc-list li {
+      margin-bottom: 0.75rem;
+    }
+
+    .toc-list a {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      display: block;
+      line-height: 1.4;
+    }
+
+    .toc-list a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Bar -->
+  <div class="top-bar">
+    <div class="title">📐 Compendio Formule CPS</div>
+    <div style="display: flex; gap: 0.5rem;">
+      <button class="btn" onclick="toggleTOC()">📑 Indice</button>
+      <a href="#parte-v-prontuario-operativo-desame-stile-mattera" class="btn" style="border-color: var(--amber); color: var(--amber);">🎯 Mattera</a>
+    </div>
+  </div>
+
+  <!-- TOC Drawer -->
+  <div id="toc-overlay" onclick="toggleTOC()"></div>
+  <div id="toc-drawer">
+    <div class="toc-title">
+      <span>Indice Rapido</span>
+      <button class="btn" style="padding: 0.2rem 0.5rem;" onclick="toggleTOC()">✕</button>
+    </div>
+    <ul class="toc-list">
+      <li><a href="#parte-i-fondamenti-di-probabilita-e-calcolo-combinatorio" onclick="toggleTOC()">I: Fondamenti & Calcolo Combinatorio</a></li>
+      <li><a href="#parte-ii-variabili-aleatorie-discrete" onclick="toggleTOC()">II: Variabili Aleatorie Discrete</a></li>
+      <li><a href="#parte-iii-momenti-disuguaglianze-e-variabili-multiple-discrete" onclick="toggleTOC()">III: Momenti e Variabili Multiple</a></li>
+      <li><a href="#parte-iv-dal-discreto-al-continuo" onclick="toggleTOC()">IV: Dal Discreto al Continuo (PDF, CDF, Gaussiana)</a></li>
+      <li><a href="#parte-v-prontuario-operativo-desame-stile-mattera" onclick="toggleTOC()" style="color: var(--amber); font-weight: 600;">V: Prontuario d'Esame Stile Mattera</a></li>
+      <li><a href="#checklist-rapida-salva-esame" onclick="toggleTOC()" style="color: var(--success); font-weight: 600;">✓ Checklist Salva-Esame</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Rendered Markdown Container -->
+  <main class="container" id="main-content">
+    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+      Caricamento e compilazione formule matematiche in corso...
+    </div>
+  </main>
+
+  <!-- Floating Scroll-to-Top Button -->
+  <div class="floating-nav">
+    <a href="#" class="fab" title="Torna in cima">↑</a>
+  </div>
+
+  <script>
+    const rawMarkdown = "# Compendio di Calcolo delle Probabilit\u00e0 e Statistica\n### Dalle basi fino a Sezione 5.1.9 (Pagina 93 / 99 di `main.pdf`)\n*Formulario ragionato, condizioni di applicabilit\u00e0 e prontuario operativo per le prove d'esame*\n\n---\n\n## Indice Generale\n\n1. [Parte I: Fondamenti di Probabilit\u00e0 e Calcolo Combinatorio (Capitoli 1 e 2)](#parte-i-fondamenti-di-probabilit\u00e0-e-calcolo-combinatorio)\n2. [Parte II: Variabili Aleatorie Discrete e Distribuzioni Notevoli (Capitolo 3)](#parte-ii-variabili-aleatorie-discrete)\n3. [Parte III: Momenti, Disuguaglianze e Variabili Multiple Discrete (Capitolo 4)](#parte-iii-momenti-disuguaglianze-e-variabili-multiple-discrete)\n4. [Parte IV: Dal Discreto al Continuo (Capitolo 5, fino a 5.1.9)](#parte-iv-dal-discreto-al-continuo)\n5. [Parte V: Prontuario Operativo d'Esame \"Stile Mattera\"](#parte-v-prontuario-operativo-desame-stile-mattera)\n\n---\n\n# Parte I: Fondamenti di Probabilit\u00e0 e Calcolo Combinatorio\n\n### 1.1 Assiomi di Kolmogorov e Propriet\u00e0 Fondamentali\nDato uno spazio campionario $\\Omega$ e una $\\sigma$-algebra degli eventi $\\mathcal{F}$, una misura di probabilit\u00e0 $\\mathbb{P}: \\mathcal{F} \\to [0, 1]$ soddisfa:\n\n1. **Non-negativit\u00e0:** $\\mathbb{P}(A) \\ge 0 \\quad \\forall A \\in \\mathcal{F}$\n2. **Normalizzazione:** $\\mathbb{P}(\\Omega) = 1$\n3. **Additivit\u00e0 numerabile:** se $A_1, A_2, \\dots$ sono disgiunti a due a due ($A_i \\cap A_j = \\emptyset$ per $i \\neq j$), allora:\n   $$\\mathbb{P}\\left(\\bigcup_{i=1}^{\\infty} A_i\\right) = \\sum_{i=1}^{\\infty} \\mathbb{P}(A_i)$$\n\n#### Formule derivate essenziali\n* **Evento complementare:** $\\mathbb{P}(A^c) = 1 - \\mathbb{P}(A)$\n* **Evento impossibile:** $\\mathbb{P}(\\emptyset) = 0$\n* **Monotonia:** se $A \\subseteq B \\implies \\mathbb{P}(A) \\le \\mathbb{P}(B)$\n* **Differenza di eventi:** $\\mathbb{P}(A \\setminus B) = \\mathbb{P}(A) - \\mathbb{P}(A \\cap B)$\n* **Unione di due eventi (Inclusione-Esclusione):**\n  $$\\mathbb{P}(A \\cup B) = \\mathbb{P}(A) + \\mathbb{P}(B) - \\mathbb{P}(A \\cap B)$$\n\n> **Quando si usa all'esame:**\n> * Quando viene richiesta la probabilit\u00e0 dell'evento \"almeno uno si verifica\" ($\\mathbb{P}(A \\cup B)$).\n> * Per semplificare il calcolo di eventi complessi passando al complementare: $\\mathbb{P}(\\text{\"almeno un successo\"}) = 1 - \\mathbb{P}(\\text{\"nessun successo\"})$.\n\n---\n\n### 1.2 Calcolo Combinatorio: Mappa di Scelta\nDati $n$ elementi distinti e gruppi di cardinalit\u00e0 $k$:\n\n| Tipo di raggruppamento | L'ordine conta? | Ripetizione ammessa? | Formula |\n| :--- | :---: | :---: | :--- |\n| **Disposizioni semplici** | **S\u00ec** | **No** | $D_{n, k} = \\frac{n!}{(n-k)!}$ |\n| **Disposizioni con ripetizione** | **S\u00ec** | **S\u00ec** | $D'_{n, k} = n^k$ |\n| **Permutazioni semplici** | **S\u00ec** ($k = n$) | **No** | $P_n = n!$ |\n| **Permutazioni con ripetizione** | **S\u00ec** | **S\u00ec** (gruppi $n_1, \\dots, n_r$) | $P_n^{n_1, \\dots, n_r} = \\frac{n!}{n_1! n_2! \\cdots n_r!}$ |\n| **Combinazioni semplici** | **No** | **No** | $C_{n, k} = \\binom{n}{k} = \\frac{n!}{k!(n-k)!}$ |\n| **Combinazioni con ripetizione** | **No** | **S\u00ec** | $C'_{n, k} = \\binom{n+k-1}{k}$ |\n\n> **Quando si usa all'esame:**\n> * Estrazioni in blocco o contemporanee (senza ordine, senza reimmissione) $\\to$ **Combinazioni semplici** $\\binom{n}{k}$.\n> * Estrazioni ordinate con reimmissione (es. generazione di sequenze di bit, stringhe, codici PIN) $\\to$ **Disposizioni con ripetizione** $n^k$.\n> * Estrazioni ordinate senza reimmissione (es. podio, classifica) $\\to$ **Disposizioni semplici**.\n> * Anagrammi o parole con lettere ripetute $\\to$ **Permutazioni con ripetizione**.\n\n---\n\n### 1.3 Probabilit\u00e0 Condizionata, Legge della Probabilit\u00e0 Totale e Teorema di Bayes\n\n#### Probabilit\u00e0 Condizionata\n$$\\mathbb{P}(A \\mid B) = \\frac{\\mathbb{P}(A \\cap B)}{\\mathbb{P}(B)}, \\quad \\text{con } \\mathbb{P}(B) > 0$$\n* **Regola della catena (prodotto):** $\\mathbb{P}(A \\cap B) = \\mathbb{P}(A \\mid B)\\mathbb{P}(B) = \\mathbb{P}(B \\mid A)\\mathbb{P}(A)$.\n\n#### Legge della Probabilit\u00e0 Totale\nSia $\\{E_1, E_2, \\dots, E_M\\}$ una partizione dello spazio campionario $\\Omega$ (disgiunti a due a due e $\\bigcup_{m=1}^M E_m = \\Omega$ con $\\mathbb{P}(E_m) > 0$):\n$$\\mathbb{P}(A) = \\sum_{m=1}^M \\mathbb{P}(A \\mid E_m)\\mathbb{P}(E_m)$$\n\n#### Teorema di Bayes\nPermette di \"invertire il condizionamento\" (probabilit\u00e0 a posteriori delle cause):\n$$\\mathbb{P}(E_k \\mid A) = \\frac{\\mathbb{P}(A \\mid E_k)\\mathbb{P}(E_k)}{\\mathbb{P}(A)} = \\frac{\\mathbb{P}(A \\mid E_k)\\mathbb{P}(E_k)}{\\sum_{m=1}^M \\mathbb{P}(A \\mid E_m)\\mathbb{P}(E_m)}$$\n\n#### Indipendenza Stocastica tra Eventi\nDue eventi $A$ e $B$ sono indipendenti ($A \\perp B$) se e solo se:\n$$\\mathbb{P}(A \\cap B) = \\mathbb{P}(A)\\mathbb{P}(B) \\iff \\mathbb{P}(A \\mid B) = \\mathbb{P}(A)$$\n\n> **Quando si usa all'esame:**\n> * Problemi di diagnosi medica (test positivo $\\to$ calcolare la probabilit\u00e0 di essere realmente malato).\n> * Trasmissione su canale rumoroso binario ($H_1, H_2$ ipotesi trasmesse, $Z$ simbolo ricevuto).\n> * Calcolo della probabilit\u00e0 di falso allarme e mancata rivelazione.\n\n---\n\n# Parte II: Variabili Aleatorie Discrete\n\nUna variabile aleatoria discreta $X: \\Omega \\to \\mathcal{X}$ assume valori in un alfabeto finito o numerabile $\\mathcal{X} = \\{x_1, x_2, \\dots\\}$.\n\n### 2.1 PMF, CDF e Momenti Discreti\n\n* **Probability Mass Function (PMF):**\n  $$p_X(x) = \\mathbb{P}(X = x), \\quad p_X(x) \\ge 0, \\quad \\sum_{x \\in \\mathcal{X}} p_X(x) = 1$$\n* **Cumulative Distribution Function (CDF):**\n  $$F_X(x) = \\mathbb{P}(X \\le x) = \\sum_{x_i \\le x} p_X(x_i)$$\n  \u00c8 una funzione a gradini, monotona non decrescente e continua a destra.\n* **Valore Atteso (Media Statistica):**\n  $$\\mathbb{E}[X] = \\sum_{x \\in \\mathcal{X}} x \\, p_X(x)$$\n* **Teorema del Valore Atteso per Trasformazioni (LOTUS discreto):**\n  Dato $Y = g(X)$:\n  $$\\mathbb{E}[g(X)] = \\sum_{x \\in \\mathcal{X}} g(x) \\, p_X(x)$$\n  *(Non serve calcolare esplicitamente la PMF di $Y$ per trovarne la media!)*\n\n---\n\n### 2.2 Distribuzioni Notevoli Discrete: Guida all'Uso e Significato Fisico\n\nLe distribuzioni notevoli non sono formule astratte, ma la formalizzazione matematica di precisi **meccanismi fisici di generazione dei dati**.\n\n#### Mappa di Scelta Immediata: \u00abCosa sta misurando la variabile $X$?\u00bb\n\n```text\n                         COSA MISURA LA VARIABILE X?\n                                     \u2502\n         \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n         \u25bc                           \u25bc                           \u25bc\nUn singolo evento            Una serie di prove           Eventi nel tempo/spazio\n (S\u00ec / No)                   ripetute (successi)                 continuo\n         \u2502                           \u2502                           \u2502\n   BERNOULLI                         \u2502                        POISSON\n                             \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n                             \u25bc               \u25bc\n                      Fisso le prove    Fisso il successo\n                       e conto quanti    e conto quante prove\n                          successi           devo fare\n                             \u2502               \u2502\n                         BINOMIALE       GEOMETRICA\n```\n\n---\n\n#### 1. Distribuzione di Bernoulli: $\\mathcal{B}(p)$\n* **L'intuizione fisica**: \u00c8 l'atomo elementare della probabilit\u00e0: una singola prova con due soli esiti possibili, codificati convenzionalmente come **Successo ($1$)** con probabilit\u00e0 $p$, o **Insuccesso ($0$)** con probabilit\u00e0 $1-p$.\n* **Perch\u00e9 esiste?** Perch\u00e9 rappresenta il \"mattoncino base\" per modellare qualsiasi fenomeno dicotomico e per costruire per somma le distribuzioni di conteggio.\n* **PMF e Momenti**:\n  $$p_X(1) = p, \\quad p_X(0) = 1-p \\implies p_X(k) = p^k (1-p)^{1-k} \\quad (k \\in \\{0, 1\\})$$\n  $$\\mathbb{E}[X] = p, \\qquad \\operatorname{Var}(X) = p(1-p)$$\n* **Quando si usa all'esame?**\n  * Singolo lancio di una moneta (anche non bilanciata).\n  * Trasmissione di un singolo bit attraverso un canale binario simmetrico ($1$ se errato, $0$ se corretto).\n  * **Variabile indicatrice**: data una partizione o un evento $A$, la variabile $I_A$ vale $1$ se $A$ accade e $0$ altrimenti ($\\mathbb{E}[I_A] = \\mathbb{P}(A)$).\n* **Segnali nel testo**: *\"Si consideri una prova con esito binario...\"*, *\"Sia $X \\in \\{0, 1\\}$...\"*.\n\n---\n\n#### 2. Distribuzione Binomiale: $\\mathcal{B}(n, p)$\n* **L'intuizione fisica**: Ripeti la prova di Bernoulli per un numero **fissato a priori** di $n$ volte, in modo indipendente e nelle stesse identiche condizioni. La variabile $X$ conta: **\u00abQuanti successi ho totalizzato su questi $n$ tentativi?\u00bb**\n* **Perch\u00e9 la formula \u00e8 strutturata cos\u00ec?**\n  $$p_X(k) = \\underbrace{\\binom{n}{k}}_{\\text{in quanti modi diversi}} \\cdot \\underbrace{p^k}_{\\text{i } k \\text{ successi}} \\cdot \\underbrace{(1-p)^{n-k}}_{\\text{gli } n-k \\text{ insuccessi}}, \\quad k \\in \\{0, 1, \\dots, n\\}$$\n  Il coefficiente binomiale $\\binom{n}{k}$ \u00e8 indispensabile perch\u00e9 non importa in quali posizioni temporali si presentino i $k$ successi, ma solo che il loro conteggio finale sia $k$.\n* **Le 3 condizioni per poterla applicare**:\n  1. Il numero di prove $n$ \u00e8 **costante e noto a priori**.\n  2. Gli esiti di ogni singola prova sono mutualmente indipendenti.\n  3. La probabilit\u00e0 di successo $p$ rimane rigorosamente costante ad ogni prova (estrazioni *con reimmissione*).\n* **Momenti**:\n  $$\\mathbb{E}[X] = np, \\qquad \\operatorname{Var}(X) = np(1-p)$$\n* **Quando si usa all'esame?**\n  * Trasmissione di pacchetti di $n$ bit: calcolare la probabilit\u00e0 che si verifichino esattamente $k$ errori di trasmissione.\n  * Controllo qualit\u00e0: estrazione di un campione di $n$ prodotti con probabilit\u00e0 $p$ che ciascuno sia difettoso.\n* **Segnali nel testo**: *\"Su $n$ prove indipendenti...\"*, *\"Si eseguono $n$ lanci...\"*, *\"Un blocco di $n$ simboli...\"*.\n\n---\n\n#### 3. Distribuzione Geometrica: $\\mathcal{G}(p)$\n* **L'intuizione fisica**: \u00c8 la dinamica complementare alla Binomiale.\n  * Nella Binomiale fissi le prove $n$ e conti i successi $k$.\n  * Nella Geometrica **fissi l'obiettivo (il primo successo!)** e la variabile aleatoria $X$ \u00e8 il **numero di tentativi necessari per ottenerlo**.\n* **Perch\u00e9 la formula \u00e8 strutturata cos\u00ec?**\n  $$p_X(k) = (1-p)^{k-1} \\cdot p, \\quad k \\in \\{1, 2, 3, \\dots\\}$$\n  Per fermarsi esattamente al tentativo $k$, devi aver necessariamente collezionato $k-1$ fallimenti consecutivi (ciascuno con probabilit\u00e0 $1-p$) e aver fatto centro al $k$-esimo tentativo (probabilit\u00e0 $p$). L'ordine qui \u00e8 rigidamente prefissato, perci\u00f2 **non c'\u00e8 alcun coefficiente binomiale**.\n* **Propriet\u00e0 Cardine: Assenza di Memoria (*Memoryless* discreta)**:\n  $$\\mathbb{P}(X > n + k \\mid X > n) = \\mathbb{P}(X > k)$$\n  Se hai gi\u00e0 fallito $n$ volte, la probabilit\u00e0 di dover fare altri $k$ tentativi \u00e8 identica a quella iniziale. Il sistema non accumula \"stanchezza\" o usura.\n* **Momenti**:\n  $$\\mathbb{E}[X] = \\frac{1}{p}, \\qquad \\operatorname{Var}(X) = \\frac{1-p}{p^2}$$\n* **Quando si usa all'esame?**\n  * Protocolli di ritrasmissione dati (ARQ): quanti tentativi servono affinch\u00e9 un frame venga ricevuto correttamente.\n  * Tentativi di accesso / login prima di inserire la credenziale esatta.\n  * Affidabilit\u00e0 a tempo discreto: cicli di accensione prima del primo guasto.\n* **Segnali nel testo**: *\"Si ripete la prova fino al primo successo...\"*, *\"Numero di tentativi necessari affinch\u00e9...\"*.\n\n---\n\n#### 4. Distribuzione di Poisson: $\\mathcal{P}(\\lambda)$\n* **L'intuizione fisica**: \u00c8 la **legge degli eventi rari nel tempo o nello spazio continuo**.\n  * Nasce come limite asintotico della Binomiale quando il numero potenziale di prove tende all'infinito ($n \\to \\infty$) e la probabilit\u00e0 del singolo evento diventa infinitesima ($p \\to 0$), mentre il numero medio di eventi attesi $\\lambda = n \\cdot p$ resta finito e costante.\n* **Perch\u00e9 \u00e8 essenziale in informatica e ingegneria?**\n  Perch\u00e9 nella realt\u00e0 non si conosce quasi mai il numero totale potenziale di utenti $n$ (quante persone nel mondo potrebbero inviare una richiesta a un server?), ma si pu\u00f2 misurare sperimentalmente la **frequenza media di arrivo $\\lambda$** (es. $\\lambda = 5$ richieste al secondo).\n* **PMF e Momenti**:\n  $$p_X(k) = \\frac{\\lambda^k}{k!} e^{-\\lambda}, \\quad k \\in \\mathbb{N}_0 = \\{0, 1, 2, \\dots\\}$$\n  $$\\mathbb{E}[X] = \\operatorname{Var}(X) = \\lambda$$\n  *(Media e varianza coincidono esattamente: questa \u00e8 la \"firma\" inconfondibile della Poisson).*\n* **Quando si usa all'esame?**\n  * Arrivo di chiamate a un centralino, accessi HTTP a un server web, arrivo di pacchetti su un'interfaccia di rete.\n  * Conteggio di difetti per unit\u00e0 di lunghezza (su fibra ottica) o per unit\u00e0 di superficie (su wafer di silicio).\n  * **Esercizio tipico d'esame (stile Mattera)**: Viene assegnata una PMF del tipo:\n    $$P(X = k) = A \\frac{c^k}{k!}, \\quad k \\in \\mathbb{N}_0$$\n    Riconoscendo la serie esponenziale $\\sum_{k=0}^{\\infty} \\frac{c^k}{k!} = e^c$, si impone la normalizzazione:\n    $$A \\sum_{k=0}^{\\infty} \\frac{c^k}{k!} = A e^c = 1 \\implies A = e^{-c}$$\n    e si deduce che $X \\sim \\mathcal{P}(c)$.\n* **Segnali nel testo**: *\"In media avvengono $\\lambda$ eventi per unit\u00e0 di tempo...\"*, *\"Eventi indipendenti e rari...\"*, *\"Formula con $k!$ a denominatore e potenze a numeratore\"*.\n\n---\n\n#### 5. Distribuzione Uniforme Discreta: $\\mathcal{U}(\\{x_1, \\dots, x_M\\})$\n* **L'intuizione fisica**: Discende dal *principio di ragione insufficiente* di Laplace: quando uno spazio di possibilit\u00e0 finite $M$ non presenta alcun elemento fisico, simmetrico o logico che favorisca un esito rispetto a un altro, ciascun esito ha la stessa identica probabilit\u00e0.\n* **PMF e Momenti**:\n  $$p_X(x_i) = \\frac{1}{M}, \\quad \\forall i \\in \\{1, \\dots, M\\}$$\n  $$\\mathbb{E}[X] = \\frac{1}{M} \\sum_{i=1}^M x_i$$\n  Se i valori sono gli interi consecutivi $\\{0, 1, \\dots, M-1\\}$:\n  $$\\mathbb{E}[X] = \\frac{M-1}{2}, \\qquad \\operatorname{Var}(X) = \\frac{M^2 - 1}{12}$$\n* **Quando si usa all'esame?**\n  * Lancio di dadi a $M$ facce non truccati o estrazione di carte.\n  * Scelta pseudo-casuale di un canale di trasmissione o di uno slot temporale (TDMA) tra $M$ disponibili.\n  * Funzioni hash ideali con partizionamento equo tra $M$ bucket.\n* **Segnali nel testo**: *\"Equiprobabili\"*, *\"Scelta puramente casuale tra $M$ opzioni\"*, *\"Dado non truccato\"*.\n\n---\n\n#### Tabella Riassuntiva Comparativa per le Prove d'Esame\n\n| Distribuzione | Cosa conta la variabile $X$? | Parametri | Alfabeto $\\mathcal{X}$ | PMF $p_X(k)$ | Firma distintiva |\n| :--- | :--- | :---: | :---: | :---: | :--- |\n| **Bernoulli** | Singola prova dicotomica (S\u00ec/No) | $p$ | $\\{0, 1\\}$ | $p^k (1-p)^{1-k}$ | $\\mathbb{E}[X] = p$ |\n| **Binomiale** | Numero di successi su $n$ prove | $n, p$ | $\\{0, 1, \\dots, n\\}$ | $\\binom{n}{k} p^k (1-p)^{n-k}$ | $n$ fissato a priori, con reimmissione |\n| **Geometrica** | Prove necessarie fino al 1\u00b0 successo | $p$ | $\\{1, 2, 3, \\dots\\}$ | $(1-p)^{k-1} p$ | Assenza di memoria a tempo discreto |\n| **Poisson** | Eventi in tempo/spazio continuo | $\\lambda$ | $\\{0, 1, 2, \\dots\\}$ | $\\frac{\\lambda^k}{k!} e^{-\\lambda}$ | $\\mathbb{E}[X] = \\operatorname{Var}(X) = \\lambda$ |\n| **Uniforme** | Scelta perfettamente equiprobabile | $M$ | $\\{x_1, \\dots, x_M\\}$ | $\\frac{1}{M}$ | Tutte le masse sono identiche |\n\n### 2.3 PMF Condizionale e Funzioni di Variabili Discrete\n\n#### PMF Condizionata da un evento $B$\n$$p_{X \\mid B}(x) = \\mathbb{P}(X = x \\mid B) = \\frac{\\mathbb{P}(\\{X = x\\} \\cap B)}{\\mathbb{P}(B)}$$\n* Media condizionata: $\\mathbb{E}[X \\mid B] = \\sum_{x} x \\, p_{X \\mid B}(x)$.\n\n#### Legge della Probabilit\u00e0 Totale per PMF e Medie\nData una partizione $\\{E_m\\}$ di $\\Omega$:\n$$p_X(x) = \\sum_{m=1}^M p_{X \\mid E_m}(x)\\mathbb{P}(E_m), \\qquad \\mathbb{E}[X] = \\sum_{m=1}^M \\mathbb{E}[X \\mid E_m]\\mathbb{P}(E_m)$$\n\n#### Trasformazione di variabile discreta $Y = g(X)$\n* Se $g$ \u00e8 **biunivoca** (invertibile): $p_Y(y) = p_X(g^{-1}(y))$.\n* Se $g$ **non \u00e8 iniettiva**:\n  $$p_Y(y) = \\sum_{x \\in \\mathcal{X} \\,:\\, g(x) = y} p_X(x)$$\n\n---\n\n# Parte III: Momenti, Disuguaglianze e Variabili Multiple Discrete\n\n### 3.1 Varianza e Propriet\u00e0 di Varianza\n$$\\operatorname{Var}(X) = \\sigma_X^2 = \\mathbb{E}[(X - \\mathbb{E}[X])^2] = \\mathbb{E}[X^2] - (\\mathbb{E}[X])^2$$\n* **Deviazione standard:** $\\sigma_X = \\sqrt{\\operatorname{Var}(X)}$\n* **Propriet\u00e0 di scala e traslazione:**\n  $$\\operatorname{Var}(aX + b) = a^2 \\operatorname{Var}(X)$$\n  $$\\sigma_{aX + b} = |a|\\sigma_X$$\n\n---\n\n### 3.2 Disuguaglianze Notevoli (Caratterizzazione Parziale)\n\n#### Disuguaglianza di Markov\nApplicabile **solo a variabili aleatorie non negative** ($X \\ge 0$) e per soglie $a > 0$:\n$$\\mathbb{P}(X \\ge a) \\le \\frac{\\mathbb{E}[X]}{a}$$\n\n#### Disuguaglianza di Chebyshev\nApplicabile a **qualsiasi variabile aleatoria** di cui si conoscano media $\\mu = \\mathbb{E}[X]$ e varianza $\\sigma^2 = \\operatorname{Var}(X)$, per ogni $\\epsilon > 0$:\n$$\\mathbb{P}(|X - \\mu| \\ge \\epsilon) \\le \\frac{\\sigma^2}{\\epsilon^2} \\iff \\mathbb{P}(|X - \\mu| < \\epsilon) \\ge 1 - \\frac{\\sigma^2}{\\epsilon^2}$$\n\n> **Quando si usa all'esame:**\n> * Quando il testo chiede di delimitare o maggiorare la probabilit\u00e0 di una coda (es. $\\mathbb{P}(|X - \\mu| \\ge 2\\sigma)$) **senza conoscere la distribuzione esatta** della variabile aleatoria.\n\n---\n\n### 3.3 Variabili Multiple Discrete $(X, Y)$\n\n#### PMF Congiunta\n$$p_{X, Y}(x, y) = \\mathbb{P}(X = x, Y = y), \\quad \\sum_{x \\in \\mathcal{X}} \\sum_{y \\in \\mathcal{Y}} p_{X, Y}(x, y) = 1$$\n\n#### Marginalizzazione\n$$p_X(x) = \\sum_{y \\in \\mathcal{Y}} p_{X, Y}(x, y), \\qquad p_Y(y) = \\sum_{x \\in \\mathcal{X}} p_{X, Y}(x, y)$$\n*(Nelle tabelle d'esame: basta sommare lungo le righe o le colonne!)*\n\n#### Criterio di Indipendenza Stocastica\nDue variabili discrete $X$ e $Y$ sono indipendenti ($X \\perp Y$) se e solo se:\n$$p_{X, Y}(x, y) = p_X(x) \\cdot p_Y(y) \\quad \\forall (x, y) \\in \\mathcal{X} \\times \\mathcal{Y}$$\n> **All'esame:** Per dimostrare che NON sono indipendenti, basta trovare **una sola coppia $(x_0, y_0)$** per cui $p_{X,Y}(x_0, y_0) \\neq p_X(x_0) p_Y(y_0)$. Spesso salta all'occhio un valore congiunto nullo ($p_{X,Y} = 0$) dove le due marginali sono invece strettamente positive!\n\n#### Covarianza e Correlazione\n* **Covarianza:**\n  $$\\operatorname{Cov}(X, Y) = \\mathbb{E}[XY] - \\mathbb{E}[X]\\mathbb{E}[Y]$$\n  dove $\\mathbb{E}[XY] = \\sum_x \\sum_y x \\cdot y \\cdot p_{X, Y}(x, y)$.\n* **Propriet\u00e0:**\n  * Se $X \\perp Y \\implies \\operatorname{Cov}(X, Y) = 0$ (v.a. incorrelate). *(Attenzione: l'inverso non \u00e8 sempre vero!)*\n  * $\\operatorname{Cov}(X, X) = \\operatorname{Var}(X)$.\n* **Varianza della somma:**\n  $$\\operatorname{Var}(aX + bY) = a^2 \\operatorname{Var}(X) + b^2 \\operatorname{Var}(Y) + 2ab\\operatorname{Cov}(X, Y)$$\n  Se $X$ e $Y$ sono indipendenti (o incorrelate, $\\operatorname{Cov}(X, Y) = 0$):\n  $$\\operatorname{Var}(X + Y) = \\operatorname{Var}(X) + \\operatorname{Var}(Y)$$\n* **Coefficiente di correlazione di Pearson:**\n  $$\\rho_{XY} = \\frac{\\operatorname{Cov}(X, Y)}{\\sigma_X \\sigma_Y}, \\quad -1 \\le \\rho_{XY} \\le 1$$\n\n---\n\n# Parte IV: Dal Discreto al Continuo (Capitolo 5, fino a 5.1.9)\n\n### 4.1 Il Passaggio Concettuale: Probabilit\u00e0 su un Intervallo (Sez. 5.1.1)\n\nQuando lo spazio campionario $\\Omega \\subseteq \\mathbb{R}$ \u00e8 continuo:\n* **La Regola d'Oro:** Per qualsiasi variabile aleatoria continua $X$, **la probabilit\u00e0 di assumere un singolo valore puntuale \u00e8 sempre nulla**:\n  $$\\mathbb{P}(X = x) = 0 \\quad \\forall x \\in \\mathbb{R}$$\n* Pertanto, ha senso calcolare la probabilit\u00e0 solo su **intervalli**:\n  $$\\mathbb{P}(a \\le X \\le b) = \\mathbb{P}(a < X \\le b) = \\mathbb{P}(a \\le X < b) = \\mathbb{P}(a < X < b)$$\n  *(Includere o escludere gli estremi non cambia il risultato numerico!)*\n\n---\n\n### 4.2 Densit\u00e0 di Probabilit\u00e0 - PDF (Sez. 5.1.2)\n\n#### Definizione Matematica\nLa PDF $f_X(x)$ \u00e8 definita tramite il limite del rapporto tra la massa di probabilit\u00e0 contenuta in un intorno centrato e l'ampiezza dell'intorno $\\Delta x$:\n$$\\boxed{f_X(x) = \\lim_{\\Delta x \\to 0} \\frac{\\mathbb{P}\\left(x - \\frac{\\Delta x}{2} \\le X \\le x + \\frac{\\Delta x}{2}\\right)}{\\Delta x}}$$\n\n#### Calcolo della Probabilit\u00e0 come Area\n$$\\mathbb{P}(a \\le X \\le b) = \\int_{a}^{b} f_X(x) dx$$\n\n#### I Due Vincoli Costitutivi della PDF\n1. **Non-negativit\u00e0:**\n   $$f_X(x) \\ge 0 \\quad \\forall x \\in \\mathbb{R}$$\n2. **Normalizzazione (Integrale Unitario):**\n   $$\\int_{-\\infty}^{+\\infty} f_X(x) dx = 1$$\n\n> **Errore tipico da evitare all'esame:**\n> La PDF $f_X(x)$ **NON \u00e8 una probabilit\u00e0**: pu\u00f2 benissimo essere maggiore di 1 (ad esempio, per una variabile uniforme su $[0, 0.1]$, la densit\u00e0 vale $f_X(x) = 10$). \u00c8 solo l'area sottesa all'integrale a dover valere 1.\n\n---\n\n### 4.3 Funzione di Ripartizione - CDF (Sez. 5.1.3)\n\n#### Definizione\n$$F_X(x) = \\mathbb{P}(X \\le x) = \\int_{-\\infty}^{x} f_X(t) dt$$\n\n#### Relazione Fondamentale con la PDF\nNei punti in cui $f_X(x)$ \u00e8 continua:\n$$f_X(x) = \\frac{d}{dx} F_X(x)$$\n\n#### Probabilit\u00e0 in un Intervallo tramite CDF\n$$\\mathbb{P}(a < X \\le b) = F_X(b) - F_X(a)$$\n\n#### CCDF (Complementary CDF / Funzione di Sopravvivenza)\n$$F_X^c(x) = \\mathbb{P}(X > x) = 1 - F_X(x) = \\int_{x}^{+\\infty} f_X(t) dt$$\n\n#### Propriet\u00e0 della CDF Continua\n1. $0 \\le F_X(x) \\le 1$ per ogni $x \\in \\mathbb{R}$.\n2. Monotona non decrescente: se $x_1 < x_2 \\implies F_X(x_1) \\le F_X(x_2)$.\n3. Continua su tutto $\\mathbb{R}$ (non presenta gradini/salti verticali, tipici invece delle variabili discrete).\n4. Limiti asintotici:\n   $$\\lim_{x \\to -\\infty} F_X(x) = 0, \\qquad \\lim_{x \\to +\\infty} F_X(x) = 1$$\n\n---\n\n### 4.4 Media Statistica per Variabili Continue (Sez. 5.1.4)\n\n$$\\mathbb{E}[X] = \\int_{-\\infty}^{+\\infty} x \\, f_X(x) dx$$\n* **Condizione di esistenza:** l'integrale deve convergere assolutamente:\n  $$\\int_{-\\infty}^{+\\infty} |x| f_X(x) dx < \\infty$$\n* **Valore atteso di una trasformazione (LOTUS continuo):**\n  $$\\mathbb{E}[g(X)] = \\int_{-\\infty}^{+\\infty} g(x) \\, f_X(x) dx$$\n\n---\n\n### 4.5 Distribuzioni Notevoli Continue (Sez. 5.1.5 - 5.1.8)\n\n#### 1. Distribuzione Uniforme Continua: $X \\sim \\mathcal{U}(a, b)$ con $a < b$\n* **Supporto:** $[a, b]$\n* **PDF:**\n  $$f_X(x) = \\begin{cases} \\frac{1}{b - a} & a \\le x \\le b \\\\ 0 & \\text{altrove} \\end{cases} = \\frac{1}{b - a} [u(x - a) - u(x - b)]$$\n* **CDF:**\n  $$F_X(x) = \\begin{cases} 0 & x < a \\\\ \\frac{x - a}{b - a} & a \\le x \\le b \\\\ 1 & x > b \\end{cases}$$\n* **Media:** $\\mathbb{E}[X] = \\frac{a + b}{2}$\n* **Varianza:** $\\operatorname{Var}(X) = \\frac{(b - a)^2}{12}$\n* **Quando si usa:** Errore di quantizzazione round-off, fase casuale di un segnale sinusoidale ($\\mathcal{U}(-\\pi, \\pi)$), arrivi casuali senza preferenza.\n\n---\n\n#### 2. Distribuzione Esponenziale: $X \\sim \\mathcal{E}(\\lambda)$ con $\\lambda > 0$\n* **Supporto:** $[0, +\\infty)$\n* **Cosa indica $\\lambda$ (Lambda)?**\n  * **Significato fisico:** $\\lambda$ \u00e8 il **tasso medio di accadimento** (*rate parameter* o frequenza media degli eventi per unit\u00e0 di tempo o di spazio). Ad esempio: $\\lambda = 3 \\text{ richieste/secondo}$ o $\\lambda = 0.01 \\text{ guasti/ora}$.\n  * **Unit\u00e0 di misura:** \u00e8 l'inverso dell'unit\u00e0 di misura di $X$, ovvero $[\\text{tempo}]^{-1}$.\n  * **Legame fondamentale con la media:** $\\mathbb{E}[X] = \\frac{1}{\\lambda}$. \n    * Se il tasso \u00e8 $\\lambda = 2 \\text{ pacchetti/secondo}$, il tempo medio di attesa tra due pacchetti \u00e8 $\\frac{1}{2} = 0.5 \\text{ secondi}$.\n    * *All'aumentare di $\\lambda$*, gli eventi avvengono pi\u00f9 frequentemente e il tempo medio di attesa si accorcia ($\\mathbb{E}[X] \\to 0$).\n  * **Effetto sulla forma della PDF:**\n    * L'altezza massima del picco in $x = 0$ \u00e8 pari proprio a $\\lambda$ ($f_X(0) = \\lambda$).\n    * Un $\\lambda$ alto genera una curva che parte molto in alto e decade ripidamente a zero (attese brevi concentrate vicino a 0).\n    * Un $\\lambda$ basso genera una curva piatta e allungata (attese mediamente pi\u00f9 lunghe).\n  * **Tasso di guasto costante (*Hazard rate*):** $h(x) = \\frac{f_X(x)}{1 - F_X(x)} = \\frac{\\lambda e^{-\\lambda x}}{e^{-\\lambda x}} = \\lambda$. Significa che l'intensit\u00e0 di rischio non varia nel tempo (nessun invecchiamento o usura).\n* **PDF:**\n  $$f_X(x) = \\lambda e^{-\\lambda x} u(x)$$\n* **CDF:**\n  $$F_X(x) = (1 - e^{-\\lambda x}) u(x)$$\n* **Coda (CCDF):** $\\mathbb{P}(X > x) = e^{-\\lambda x}$ (per $x \\ge 0$)\n* **Media:** $\\mathbb{E}[X] = \\frac{1}{\\lambda}$\n* **Varianza:** $\\operatorname{Var}(X) = \\frac{1}{\\lambda^2}$\n* **Propriet\u00e0 Cardine - Assenza di Memoria (*Memoryless*):**\n  $$\\mathbb{P}(X > s + t \\mid X > s) = \\mathbb{P}(X > t) \\quad \\forall s, t \\ge 0$$\n* **Quando si usa:** Tempo di attesa tra eventi in processi di Poisson, durata fino al guasto per shock esterni senza usura, tempo di servizio di una coda.\n\n---\n\n#### 3. Distribuzione Laplaciana (Doppia Esponenziale): $X \\sim \\mathcal{L}(\\lambda)$ con $\\lambda > 0$\n* **Supporto:** $\\mathbb{R} = (-\\infty, +\\infty)$\n* **Cosa indica $\\lambda$ (Lambda)?**\n  * **Significato matematico:** $\\lambda$ \u00e8 il **parametro di decadimento (o fattore di scala)** delle due ali esponenziali simmetriche attorno a zero ($e^{-\\lambda |x|}$).\n  * **Ruolo sulla dispersione:** Regola la larghezza della campana cuspidale (a punta):\n    * Poich\u00e9 la varianza \u00e8 $\\operatorname{Var}(X) = \\frac{2}{\\lambda^2}$, pi\u00f9 grande \u00e8 $\\lambda$, pi\u00f9 la campana \u00e8 stretta e appuntita attorno a $x = 0$ (minore incertezza/dispersione).\n    * Al contrario, un $\\lambda$ piccolo rende le code pi\u00f9 pesanti e allargate verso $\\pm\\infty$.\n  * Spesso in letteratura tecnica si usa il parametro di scala $b = \\frac{1}{\\lambda}$, per cui la densit\u00e0 si riscrive come $\\frac{1}{2b} e^{-|x|/b}$.\n* **PDF:**\n  $$f_X(x) = \\frac{\\lambda}{2} e^{-\\lambda |x|}$$\n* **CDF:**\n  $$F_X(x) = \\begin{cases} \\frac{1}{2} e^{\\lambda x} & x \\le 0 \\\\ 1 - \\frac{1}{2} e^{-\\lambda x} & x > 0 \\end{cases}$$\n* **Media:** $\\mathbb{E}[X] = 0$ (perch\u00e9 $x f_X(x)$ \u00e8 una funzione dispari integrata su intervallo simmetrico).\n* **Varianza:** $\\operatorname{Var}(X) = \\frac{2}{\\lambda^2}$\n* **Quando si usa:** Modellazione di rumore impulsivo, coefficienti di compressione audio/video (es. DCT/wavelet nel JPEG/MP3), errori a code pi\u00f9 larghe della Gaussiana.\n\n---\n\n#### 4. Distribuzione di Cauchy: $X \\sim \\mathcal{C}(a, b)$ con $a \\in \\mathbb{R}$ e $b > 0$\n* **Supporto:** $\\mathbb{R} = (-\\infty, +\\infty)$\n* **Parametri:** $a$ \u00e8 la posizione (picco/moda/mediana), $b$ \u00e8 la scala.\n* **PDF:**\n  $$f_X(x) = \\frac{1}{b\\pi} \\frac{1}{1 + \\left(\\frac{x - a}{b}\\right)^2}$$\n* **CDF:**\n  $$F_X(x) = \\frac{1}{2} + \\frac{1}{\\pi} \\arctan\\left(\\frac{x - a}{b}\\right)$$\n* **Media:** **NON DEFINITA** (l'integrale diverge: code pesanti $\\sim \\frac{1}{x^2}$).\n* **Valore Principale di Cauchy:**\n  $$\\lim_{H \\to \\infty} \\int_{-H}^{H} x f_X(x) dx = a$$\n* **Quando si usa:** Rapporto tra due variabili gaussiane standard $Z = X/Y$ con $X, Y \\sim \\mathcal{N}(0, 1)$; proiezione su parete di un fascio luminoso rotante ad angolo uniforme (problema del faro); risonanze quantistiche / decadimenti (distribuzione di Breit-Wigner).\n\n---\n\n### 4.6 Legge della Probabilit\u00e0 Totale per PDF e Medie (Sez. 5.1.9, Pag. 93)\n\nData una partizione $\\{E_m\\}_{m=1}^M$ dello spazio campionario $\\Omega$:\n\n#### 1. Per la Funzione di Densit\u00e0 (PDF)\n$$\\boxed{f_X(x) = \\sum_{m=1}^{M} f_{X \\mid E_m}(x) \\mathbb{P}(E_m)}$$\n\n#### 2. Per la Funzione di Ripartizione (CDF)\n$$\\boxed{F_X(x) = \\sum_{m=1}^{M} F_{X \\mid E_m}(x) \\mathbb{P}(E_m)}$$\n\n#### 3. Per il Valore Atteso (Medie Condizionate)\n$$\\boxed{\\mathbb{E}[X] = \\sum_{m=1}^{M} \\mathbb{E}[X \\mid E_m] \\mathbb{P}(E_m) = \\sum_{m=1}^{M} \\mathbb{P}(E_m) \\int_{\\mathbb{R}} x f_{X \\mid E_m}(x) dx}$$\n\n> **Quando si usa all'esame:**\n> * Sistemi a commutazione o canali di trasmissione che trasmettono segnali diversi a seconda dell'ipotesi attiva ($H_1$ o $H_2$ equiprobabili).\n> * Sorgenti miste in cui una componente viene scelta casualmente da pi\u00f9 generatori (modelli a mistura / *mixture models*).\n\n---\n\n# Parte V: Prontuario Operativo d'Esame \"Stile Mattera\"\n\nQuesta sezione sintetizza le risposte standard ai quesiti che si ripetono regolarmente nei compiti d'esame raccolti in `esami_calcolo_probabilita.pdf`.\n\n```\n                  \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n                  \u2502 TIPOLOGIA DI ESERCIZIO ALL'ESAME CPS         \u2502\n                  \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                                         \u2502\n                 \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n                 \u25bc                                               \u25bc\n     \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510                     \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n     \u2502   ESERCIZIO 1:         \u2502                     \u2502   ESERCIZIO 2:         \u2502\n     \u2502   Variabili Discrete   \u2502                     \u2502   Variabili Continue   \u2502\n     \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518                     \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n                 \u2502                                               \u2502\n     \u251c\u2500 Marginale: sommatoria righe/colonne          \u251c\u2500 Normalizzazione A: \u222b f(x)dx = 1\n     \u251c\u2500 Somma T = X + Y: unisci le coppie           \u251c\u2500 Prob. puntuale: SEMPRE ZERO\n     \u251c\u2500 Condizionata: P(T=t \u2229 Cond) / P(Cond)        \u251c\u2500 Trasformata Y = g(X)\n     \u2514\u2500 Indipendenza: P(X,Y) == P(X)P(Y)?           \u251c\u2500 Moda (f'=0) e Mediana (F=1/2)\n                                                     \u2514\u2500 Decisione Ottima: MAP / ML\n```\n\n---\n\n### Esercizio Tipico 1: Variabili Discrete (Tabelle Congiunte)\n\n**Dati tipici:** Alfabeti $X \\in \\{0, 1\\}$, $Y \\in \\{0, 2\\}$ con probabilit\u00e0 congiunte fornite.\n\n#### 1. Determinare le PMF Marginali di $X$ e $Y$\n* **Procedimento:** Costruisci la tabella a doppia entrata. La probabilit\u00e0 marginale $p_X(x)$ \u00e8 la somma degli elementi sulla riga corrispondente; $p_Y(y)$ \u00e8 la somma lungo la colonna.\n* **Verifica:** Assicurati sempre che $\\sum p_X(x) = 1$ e $\\sum p_Y(y) = 1$.\n\n#### 2. Determinare la PMF della Somma $T = X + Y$\n* **Procedimento:**\n  1. Elenca tutte le coppie $(x, y)$ con probabilit\u00e0 congiunta non nulla.\n  2. Calcola il valore di $t = x + y$ per ogni coppia.\n  3. Raggruppa i valori identici di $t$ sommando le relative probabilit\u00e0 congiunte:\n     $$p_T(t) = \\sum_{(x, y) \\,:\\, x + y = t} p_{X, Y}(x, y)$$\n\n#### 3. Determinare la PMF Condizionata dato un Evento (es. $X \\cdot Y = 0$ oppure $|V - 9/2| < 1$)\n* **Procedimento:**\n  1. Identifica l'evento condizionante $C$ (es. $C = \\{X \\cdot Y = 0\\}$).\n  2. Calcola $\\mathbb{P}(C)$ sommando le probabilit\u00e0 congiunte delle coppie che soddisfano la condizione.\n  3. Per ciascun valore $t$ di $T$, calcola l'intersezione $\\{T = t\\} \\cap C$.\n  4. Applica la formula:\n     $$p_{T \\mid C}(t) = \\frac{\\mathbb{P}(\\{T = t\\} \\cap C)}{\\mathbb{P}(C)}$$\n\n#### 4. Verificare se $X$ e $Y$ sono Indipendenti\n* **Procedimento:**\n  * Calcola il prodotto $p_X(x) \\cdot p_Y(y)$.\n  * Se per **anche una sola coppia** $(x, y)$ si ha $p_{X, Y}(x, y) \\neq p_X(x) \\cdot p_Y(y)$, rispondi formalmente:  \n    *\"Le variabili non sono indipendenti in quanto $p_{X, Y}(x_0, y_0) \\neq p_X(x_0) p_Y(y_0)$\"*.\n\n---\n\n### Esercizio Tipico 2: Variabili Continue\n\n**Dati tipici:** $f_X(x) = A x e^{-x^2} u(x)$, dove $u(x)$ \u00e8 il gradino unitario:\n$$u(x) = \\begin{cases} 1 & x \\ge 0 \\\\ 0 & x < 0 \\end{cases}$$\n\n#### 1. Calcolo del Parametro di Normalizzazione $A$\n* **Formula:**\n  $$\\int_{-\\infty}^{+\\infty} f_X(x) dx = 1$$\n* **Procedimento:**\n  * Il gradino $u(x)$ imposta l'estremo inferiore dell'integrale a $0$:\n    $$\\int_{0}^{+\\infty} A x e^{-x^2} dx = 1$$\n  * Sostituzione immediata: $t = x^2 \\implies dt = 2x dx \\implies x dx = \\frac{dt}{2}$:\n    $$\\frac{A}{2} \\int_{0}^{+\\infty} e^{-t} dt = \\frac{A}{2} \\left[ -e^{-t} \\right]_0^{+\\infty} = \\frac{A}{2} (0 - (-1)) = \\frac{A}{2}$$\n  * Imponendo $\\frac{A}{2} = 1$, si ottiene **$A = 2$**.\n\n---\n\n#### 2. La Domanda Tranello: Probabilit\u00e0 di Valori Discreti\n* **Domanda tipica:** *\"Determinare la probabilit\u00e0 che $Y \\in \\{0, \\ln 3\\}$\"*.\n* **Risposta istantanea e giustificazione d'esame:**\n  $$\\mathbb{P}(Y \\in \\{0, \\ln 3\\}) = \\mathbb{P}(Y = 0) + \\mathbb{P}(Y = \\ln 3) = 0 + 0 = \\mathbf{0}$$\n  *Motivazione:* $Y$ \u00e8 una variabile aleatoria continua, pertanto la probabilit\u00e0 associata a un qualsiasi insieme finito o numerabile di singoli punti \u00e8 **identicamente nulla**.\n\n---\n\n#### 3. Calcolo e Confronto tra Moda e Mediana\n\n##### A. Moda ($x_{\\text{mode}}$ o $y_{\\text{mode}}$)\nLa moda \u00e8 il punto in cui la PDF assume il suo **valore massimo globale**.\n* Si pone la derivata prima della PDF uguale a zero:\n  $$\\frac{d}{dx} f_X(x) = 0$$\n* *Trucco operativo:* se la densit\u00e0 contiene un esponenziale $f_X(x) = 2x e^{-x^2}$, conviene calcolare la derivata del logaritmo naturale $\\frac{d}{dx} \\ln f_X(x) = 0$, oppure derivare direttamente:\n  $$\\frac{d}{dx}[2x e^{-x^2}] = 2 e^{-x^2} + 2x(-2x)e^{-x^2} = 2 e^{-x^2} (1 - 2x^2) = 0$$\n  Poich\u00e9 $e^{-x^2} \\neq 0$, deve essere $1 - 2x^2 = 0 \\implies x^2 = \\frac{1}{2} \\implies \\mathbf{x_{\\text{mode}} = \\frac{1}{\\sqrt{2}} = \\frac{\\sqrt{2}}{2}}$.\n\n##### B. Mediana ($m$)\nLa mediana \u00e8 il punto che divide l'area sottesa alla PDF esattamente a met\u00e0 ($50\\%$ a sinistra e $50\\%$ a destra):\n$$F_X(m) = \\mathbb{P}(X \\le m) = \\int_{-\\infty}^{m} f_X(x) dx = \\frac{1}{2}$$\n* Calcolo dell'integrale:\n  $$\\int_{0}^{m} 2x e^{-x^2} dx = \\left[ -e^{-x^2} \\right]_0^m = 1 - e^{-m^2} = \\frac{1}{2}$$\n* Risoluzione:\n  $$e^{-m^2} = \\frac{1}{2} \\implies -m^2 = \\ln\\left(\\frac{1}{2}\\right) = -\\ln(2) \\implies m^2 = \\ln(2) \\implies \\mathbf{m = \\sqrt{\\ln(2)}}$$\n\n##### C. Confronto\nPer stabilire quale grandezza sia maggiore:\n* $\\text{Moda} = \\sqrt{\\frac{1}{2}} = \\sqrt{0.5} \\approx 0.7071$\n* $\\text{Mediana} = \\sqrt{\\ln(2)} \\approx \\sqrt{0.6931} \\approx 0.8325$\n* Conclusione: $\\mathbf{m > x_{\\text{mode}}}$ (la mediana \u00e8 strettamente maggiore della moda).\n\n---\n\n#### 4. Test di Decisione Binaria (MAP e ML)\nNel contesto delle prove d'esame con due ipotesi $H_1, H_2$ e osservazione $Z$:\n\n* **Rapporto di Verosimiglianza (Likelihood Ratio):**\n  $$\\Lambda(z) = \\frac{f_{Z \\mid H_1}(z)}{f_{Z \\mid H_2}(z)} \\begin{matrix} \\text{decidi } H_1 \\\\ \\gtrless \\\\ \\text{decidi } H_2 \\end{matrix} \\eta$$\n* **Soglia di decisione ottima (Criterio MAP - Maximum A Posteriori):**\n  $$\\eta_{\\text{MAP}} = \\frac{\\mathbb{P}(H_2)}{\\mathbb{P}(H_1)}$$\n* Se le ipotesi sono **equiprobabili** ($\\mathbb{P}(H_1) = \\mathbb{P}(H_2) = \\frac{1}{2}$), il decisore MAP coincide con il decisore **ML (Maximum Likelihood)** e la soglia \u00e8 unitaria:\n  $$\\eta_{\\text{ML}} = 1 \\implies \\text{si sceglie } H_1 \\text{ se } f_{Z \\mid H_1}(z) > f_{Z \\mid H_2}(z)$$\n";
+
+    function toggleTOC() {
+      const drawer = document.getElementById('toc-drawer');
+      const overlay = document.getElementById('toc-overlay');
+      drawer.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+
+    // Pre-processing to protect LaTeX equations from Markdown parser
+    function renderDoc() {
+      const mathBlocks = [];
+      const mathInlines = [];
+      
+      // 1. Protect display math ($$...$$)
+      let protectedMd = rawMarkdown.replace(/\$\$([\s\S]*?)\$\$/g, (match, eq) => {
+        const token = `__MATH_BLOCK_${mathBlocks.length}__`;
+        mathBlocks.push(match);
+        return '\n\n' + token + '\n\n';
+      });
+
+      // 2. Protect inline math ($...$)
+      protectedMd = protectedMd.replace(/\$([^$\n]+?)\$/g, (match) => {
+        const token = `__MATH_INLINE_${mathInlines.length}__`;
+        mathInlines.push(match);
+        return token;
+      });
+
+      // Configure Marked
+      marked.setOptions({
+        gfm: true,
+        breaks: false
+      });
+
+      let html = marked.parse(protectedMd);
+
+      // Restore protected math expressions
+      mathBlocks.forEach((math, idx) => {
+        html = html.replace(`__MATH_BLOCK_${idx}__`, math);
+      });
+
+      mathInlines.forEach((math, idx) => {
+        html = html.replace(`__MATH_INLINE_${idx}__`, math);
+      });
+
+      const container = document.getElementById('main-content');
+      container.innerHTML = html;
+
+      // Trigger MathJax typeset
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([container]).catch((err) => console.error('MathJax error:', err));
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof marked !== 'undefined') {
+        renderDoc();
+      } else {
+        setTimeout(renderDoc, 200);
+      }
+    });
+  </script>
+</body>
+</html>
